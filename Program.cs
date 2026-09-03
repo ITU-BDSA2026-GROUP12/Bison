@@ -7,12 +7,7 @@ if (args.Length == 0 || (args.Length > 0 && args[0] == "read")) {
     using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
     {
         var records = csv.GetRecords<Cheep>();
-        foreach(var cheep in records)
-        {
-            DateTimeOffset time = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).LocalDateTime;
-            string date = time.ToString("MM'/'dd'/'yy HH:mm:ss");
-            Console.WriteLine($"{cheep.Author} @ {date}: {cheep.Message}");
-        }
+        UserInterface.PrintObservations(records);
     }
 } else if (args.Length > 1 && args[0] == "observe") {
     string message = args[1];
