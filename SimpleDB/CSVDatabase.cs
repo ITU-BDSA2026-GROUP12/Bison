@@ -2,9 +2,6 @@ namespace SimpleDB;
 
 using System.Collections.Generic;
 using CsvHelper;
-
-
-
 // sealed is just a good practice to prevent inheritance, since this class is not designed to be inherited from.
 public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 {
