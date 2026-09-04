@@ -4,8 +4,7 @@
 // it eliminates redundant code and makes it easier to maintain and extend the codebase in the future.
 
 namespace SimpleDB;
-public interface IDatabaseRepository<T>
-{
-public IEnumerable<T> Read(int? limit = null);
-public void Store(T record);
+    public interface IDatabaseRepository<T>{
+    public IEnumerable<T> Read(int? limit = null);
+    public void Store(T record);
 }
