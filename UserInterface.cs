@@ -10,4 +10,8 @@ public static class UserInterface {
             Console.WriteLine($"{cheep.Author} @ {date}: {cheep.Message}");
         }
     }
+
+    public static void PrintObservationId(int ID) {
+        Console.WriteLine($"Observation stored with ID: {ID}");
+    }
 }

@@ -16,6 +16,7 @@ Usage:
 var arguments = new Docopt().Apply(usage, args, version:"1.0", exit:true)!;
 
 var database = new CSVDatabase<Cheep>("bison_observe_cli_db.csv");
+var observationDb = new CSVDatabase<Observation>("observations.csv");
 
 if (arguments["read"].IsTrue) {
     // we dont need streamreader its in the CSVDatabase class so this acts as that
@@ -28,7 +29,9 @@ else if (arguments["observe"].IsTrue) {
     string message = arguments["<message>"].ToString();
     string author = Environment.UserName;
     long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    int id = observationDb.Read().Count() + 1;
 
-    var record = new Cheep(author, message, timestamp);
-    database.Store(record);
+    var record = new Observation(id, author, message, timestamp);
+    observationDb.Store(record);
+    UserInterface.PrintObservationId(id);
 }
