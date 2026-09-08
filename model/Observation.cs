@@ -1,7 +1,7 @@
 namespace Model
 {
     public record Observation(
-        int Id,
+        int ObservationId,
         string Author,
         string Message,
         long Timestamp)

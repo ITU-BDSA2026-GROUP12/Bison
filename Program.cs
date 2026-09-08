@@ -9,29 +9,45 @@ const string usage = @"Bison CLI.
 Usage:
   bison read
   bison observe <message>
-
+    bison comment <message> <observationId>
 ";
 
 //parse command lines using Docopt
 var arguments = new Docopt().Apply(usage, args, version:"1.0", exit:true)!;
 
-var database = new CSVDatabase<Cheep>("bison_observe_cli_db.csv");
-var observationDb = new CSVDatabase<Observation>("observations.csv");
+var database = new CSVDatabase<Observation>("bison_observe_cli_db.csv");
+var commentDb = new CSVDatabase<Comment>("bison_comment_cli_db.csv");
 
+//lists all observations in the database
 if (arguments["read"].IsTrue) {
     // we dont need streamreader its in the CSVDatabase class so this acts as that
     var records = database.Read();
     UserInterface.PrintObservations(records);
 } 
 
-else if (arguments["observe"].IsTrue) {
+if (arguments["observe"].IsTrue) {
     // this is also refactored to use the CSVDatabase class, so we dont need to open the file here
     string message = arguments["<message>"].ToString();
     string author = Environment.UserName;
     long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-    int id = observationDb.Read().Count() + 1;
+    int id = database.Read().Count() + 1;
 
     var record = new Observation(id, author, message, timestamp);
-    observationDb.Store(record);
+    database.Store(record);
     UserInterface.PrintObservationId(id);
+}
+
+else if (arguments["comment"].IsTrue) {
+    // this reuses the CSVDatabase class to store comments.
+    string message = arguments["<message>"].ToString();
+    string author = Environment.UserName;
+    long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    int observationId = int.Parse(arguments["<observationId>"].ToString());
+    
+    if (database.Read().Any(o => o.ObservationId == observationId)) {
+        var record = new Comment(observationId, author, message, timestamp);
+        commentDb.Store(record);
+    } else {
+        Console.WriteLine($"Observation with ID {observationId} does not exist.");
+    }
 }

@@ -11,7 +11,11 @@ public static class UserInterface {
         }
     }
 
-    public static void PrintObservationId(int ID) {
-        Console.WriteLine($"Observation stored with ID: {ID}");
+    public static void PrintObservationId(int id) {
+        Console.WriteLine($"Observation stored with ID: {id}");
+    }
+
+    public static void PrintDiscussion(int id) {
+        
     }
 }
