@@ -15,7 +15,12 @@ public static class UserInterface {
         Console.WriteLine($"Observation stored with ID: {id}");
     }
 
-    public static void PrintDiscussion(int id) {
-        
+    public static void PrintDiscussion(IEnumerable<Comment> comments) {
+        foreach (var comment in comments) {
+            DateTimeOffset time = DateTimeOffset.FromUnixTimeSeconds(comment.Timestamp).LocalDateTime;
+            string date = time.ToString("MM'/'dd'/'yy HH:mm:ss");
+
+            Console.WriteLine($"{comment.Author} @ {date}: {comment.Message}");
+        }
     }
 }

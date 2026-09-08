@@ -4,6 +4,6 @@ namespace Model
         int ObservationId,
         string Author,
         string Message,
-        long Timestamp)
-        :Cheep(Author, Message, Timestamp);
+        long Timestamp
+        ):Cheep(Author, Message, Timestamp);
 }

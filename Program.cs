@@ -7,8 +7,9 @@ using DocoptNet;
 const string usage = @"Bison CLI.
 
 Usage:
-  bison read
-  bison observe <message>
+    bison read
+    bison discussion <observationId>
+    bison observe <message>
     bison comment <message> <observationId>
 ";
 
@@ -23,7 +24,21 @@ if (arguments["read"].IsTrue) {
     // we dont need streamreader its in the CSVDatabase class so this acts as that
     var records = database.Read();
     UserInterface.PrintObservations(records);
-} 
+}
+
+//lists all comments for a specific observation
+if (arguments["discussion"].IsTrue) {
+    int observationId = int.Parse(arguments["<observationId>"].ToString());
+    
+    if (commentDb.Read().Any(o => o.ObservationId == observationId)) {
+        var comments = commentDb.Read().Where(c => c.ObservationId == observationId);
+        Console.WriteLine($"Comment/s for Observation {observationId}:");
+        UserInterface.PrintDiscussion(comments);
+    } else {
+        Console.WriteLine($"Observation with ID {observationId} does not exist.");
+        return;
+    }
+}
 
 if (arguments["observe"].IsTrue) {
     // this is also refactored to use the CSVDatabase class, so we dont need to open the file here
@@ -49,5 +64,6 @@ else if (arguments["comment"].IsTrue) {
         commentDb.Store(record);
     } else {
         Console.WriteLine($"Observation with ID {observationId} does not exist.");
+        return;
     }
 }

@@ -5,5 +5,5 @@ namespace Model
         string Author,
         string Message,
         long Timestamp
-    ):Cheep(Author, Message, Timestamp);
+        ):Cheep(Author, Message, Timestamp);
 }
