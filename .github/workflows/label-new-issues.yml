@@ -27,14 +27,21 @@ jobs: #defines the work that workflow should perform
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest
     steps:
-     - name: Add label for closed issues
-    uses: actions/github-script@v7
-    with: 
-        script: |
-          github.rest.issues.addLabels({
+      - name: Add label for closed issues
+        uses: actions/github-script@v7
+        with: 
+          script: |
+            github.rest.issues.removeLabel({ //Removes label saying 'new-issue'
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              name: 'new-issue'
+            })
+            github.rest.issues.addLabels({ //adds label saying 'finished'
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number, 
               labels: ['finished']
             })
+            
 
