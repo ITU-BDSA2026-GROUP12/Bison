@@ -8,8 +8,8 @@ public class UnitTestProgram
     [Fact]
     public void CommentsReferencingNonExistingObservationIDsWillNotGetStored() {
         //Arrange
-        var database = new CSVDatabase<Observation>("bison_observe_cli_db.csv");
-        var commentDb = new CSVDatabase<Comment>("bison_comment_cli_db.csv");
+        var database = CSVDatabase<Observation>.getInstance(Config.ObservationDatabase);
+        var commentDb = CSVDatabase<Comment>.getInstance(Config.CommentDatabase);
 
         //Act
         var result = Program.Comment("", -1, database, commentDb);
@@ -32,7 +32,7 @@ public class UnitTestProgram
     [Fact]
     public void FirstObservationInDBIsCorrect() {
         //Arrange
-        var database = new CSVDatabase<Observation>("bison_observe_cli_db.csv");
+        var database = CSVDatabase<Observation>.getInstance(Config.ObservationDatabase);
         var records = database.Read();
 
         //Act
