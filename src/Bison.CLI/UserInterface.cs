@@ -3,8 +3,11 @@ using Model;
 public static class UserInterface {
     public static void PrintObservations(IEnumerable<Cheep> obs) {
         foreach (var cheep in obs) {
-            string dateString = TimestampToLocalDateString(cheep.Timestamp);
-            Console.WriteLine($"{cheep.Author} @ {dateString}: {cheep.Message}");
+            // Convert the stored Unix timestamp into local time.
+            DateTimeOffset time = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).LocalDateTime;
+            string date = time.ToString("MM'/'dd'/'yy HH:mm:ss");
+
+            Console.WriteLine($"{cheep.Author} @ {date}: {cheep.Message}");
         }
     }
 
@@ -14,19 +17,10 @@ public static class UserInterface {
 
     public static void PrintDiscussion(IEnumerable<Comment> comments) {
         foreach (var comment in comments) {
-            string dateString = TimestampToLocalDateString(comment.Timestamp);
-            Console.WriteLine($"{comment.Author} @ {dateString}: {comment.Message}");
-        }
-    }
+            DateTimeOffset time = DateTimeOffset.FromUnixTimeSeconds(comment.Timestamp).LocalDateTime;
+            string date = time.ToString("MM'/'dd'/'yy HH:mm:ss");
 
-    /// <summary>
-    /// Converts Unix timestamp to human readable local date string
-    /// </summary>
-    /// <param name="timestamp">Unix timestamp</param>
-    /// <returns></returns>
-    public static string TimestampToLocalDateString(long timestamp) {
-        DateTimeOffset time = DateTimeOffset.FromUnixTimeSeconds(timestamp).LocalDateTime;
-        string dateString = time.ToString("MM'/'dd'/'yy HH':'mm':'ss");
-        return dateString;
+            Console.WriteLine($"{comment.Author} @ {date}: {comment.Message}");
+        }
     }
 }

@@ -53,34 +53,17 @@ if (arguments["observe"].IsTrue) {
 }
 
 else if (arguments["comment"].IsTrue) {
+    // this reuses the CSVDatabase class to store comments.
     string message = arguments["<message>"].ToString();
+    string author = Environment.UserName;
+    long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
     int observationId = int.Parse(arguments["<observationId>"].ToString());
-    Comment(message, observationId, database, commentDb);
-}
-
-public partial class Program {
     
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="observationId"></param>
-    /// <param name="database">We can probably delete this parameter when it becomes a singleton</param>
-    /// <param name="commentDb">We can probably delete this parameter when it becomes a singleton</param>
-    /// <returns>True if the comment is stored, False otherwise</returns>
-    public static bool Comment(string message, int observationId, CSVDatabase<Observation>? database, CSVDatabase<Comment>? commentDb) {
-        // this reuses the CSVDatabase class to store comments.
-        string author = Environment.UserName;
-        long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-
-        if (database != null && database.Read().Any(o => o.ObservationId == observationId)) {
-            var record = new Comment(observationId, author, message, timestamp);
-            //the "?" after commentDb means it only calls commentDb.Store() if commentDb is not null
-            commentDb?.Store(record);
-            return true;
-        } else {
-            Console.WriteLine($"Observation with ID {observationId} does not exist.");
-            return false;
-        }
+    if (database.Read().Any(o => o.ObservationId == observationId)) {
+        var record = new Comment(observationId, author, message, timestamp);
+        commentDb.Store(record);
+    } else {
+        Console.WriteLine($"Observation with ID {observationId} does not exist.");
+        return;
     }
 }
