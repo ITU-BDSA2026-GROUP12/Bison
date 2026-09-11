@@ -11,7 +11,7 @@
     <Compile Remove="..\SimpleDB\**" />
     <Compile Remove="..\model\**" />
   </ItemGroup>
-
+  
   <ItemGroup>
   <None Update="bison_observe_cli_db.csv">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

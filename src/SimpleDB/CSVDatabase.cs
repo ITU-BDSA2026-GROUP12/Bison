@@ -1,16 +1,35 @@
-namespace SimpleDB;
 
 using System.Collections.Generic;
 using CsvHelper;
+namespace SimpleDB;
 // sealed is just a good practice to prevent inheritance, since this class is not designed to be inherited from.
+// refactor into a singleton 
 public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 {
-    private readonly string _filePath;
 
-    public CSVDatabase(string filePath)
+    private readonly string _filePath;
+    private static CSVDatabase<T>? _instance;
+
+
+    private CSVDatabase(string filePath)
     {
         _filePath = filePath;
     }
+
+    // this is where we make sure there only comes one instance of the CSVDatabase class, and we return that instance when this method is called.
+    public static CSVDatabase<T> getInstance()
+    {
+        // basically here it checks if the object exist or not
+        //if it does not exist it creates a new instance of it
+        //if if does exist then it just reutns the existing one
+        // in this way we can ensure there is only one instance of the obkect we wanna make. 
+        if (_instance == null)
+        {
+            _instance = new CSVDatabase<T>("bison_cli_db.csv");
+        }
+        return _instance;
+    }
+
 
     public IEnumerable<T> Read(int? limit = null)
     {

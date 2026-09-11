@@ -1,4 +1,4 @@
-using Model;
+using model;
 
 public static class UserInterface {
     public static void PrintObservations(IEnumerable<Cheep> obs) {
