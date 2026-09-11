@@ -1,5 +1,5 @@
 ﻿using DocoptNet;
-using model;
+using Model;
 using SimpleDB;
 
 //Defines rules/valid ways to use the CLI. Very whitespace sensitive here.
