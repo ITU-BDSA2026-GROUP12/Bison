@@ -1,10 +1,10 @@
-﻿
+﻿using DocoptNet;
 using Model;
 using SimpleDB;
-using DocoptNet;
 
 //Defines rules/valid ways to use the CLI. Very whitespace sensitive here.
 const string usage = @"Bison CLI.
+
 
 Usage:
     bison read
@@ -13,11 +13,13 @@ Usage:
     bison comment <message> <observationId>
 ";
 
+
+
 //parse command lines using Docopt
 var arguments = new Docopt().Apply(usage, args, version:"1.0", exit:true)!;
 
-var database = new CSVDatabase<Observation>("bison_observe_cli_db.csv");
-var commentDb = new CSVDatabase<Comment>("bison_comment_cli_db.csv");
+var database = CSVDatabase<Observation>.getInstance(Config.ObservationDatabase);
+var commentDb = CSVDatabase<Comment>.getInstance(Config.CommentDatabase);
 
 //lists all observations in the database
 if (arguments["read"].IsTrue) {
