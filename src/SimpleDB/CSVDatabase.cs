@@ -1,4 +1,5 @@
-
+using CsvHelper.Configuration;
+using System.Globalization;
 using System.Collections.Generic;
 using CsvHelper;
 namespace SimpleDB;
@@ -38,9 +39,12 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     public IEnumerable<T> Read(int? limit = null)
     
     {
-        // this two line we use to open our file 
+        // reader and csv open the file, while config turns missing fields into "null" (to accompany for location-less observations)
         using var reader = new StreamReader(_filePath);
-        using var csv = new CsvReader(reader, System.Globalization.CultureInfo.InvariantCulture);
+        var config = new CsvConfiguration(CultureInfo.InvariantCulture) {
+            MissingFieldFound = null
+        };
+        using var csv = new CsvReader(reader, config);
         
         // we create a list to store the records we read from the CSV file
         var result = new List<T>();
@@ -64,6 +68,18 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     // this method is used to store a record in the CSV file
     public void Store(T record)
     {
+        string[] headers;
+
+        // Reads the existing CSV header so records can be written in exactly the same column order.
+        using (var reader = new StreamReader(_filePath))
+        using (var headerCsv = new CsvReader(reader, CultureInfo.InvariantCulture)) {
+            headerCsv.Read();
+            headerCsv.ReadHeader();
+
+            // Store the column names for use when writing the new record.
+            headers = headerCsv.HeaderRecord ?? throw new InvalidOperationException("CSV file has no header.");
+        }
+
         // here we open the file in append mode, so that we can add new records to the end of the file without overwriting existing records
         using var writer = new StreamWriter(_filePath, append: true);
 
@@ -71,8 +87,22 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         // this wrap the writer in a CsvWriter, which is a class provided by the CsvHelper library that makes it easy to write records to a CSV file
         using var csv = new CsvWriter(writer, System.Globalization.CultureInfo.InvariantCulture);
 
-        // here it formats the record as a CSV row and writes it to the file
-        csv.WriteRecord(record);
+        // Gets the actual runtime type of the record so we can access its properties by name.
+        var recordType = record!.GetType();
+
+        // Writes each property in the same order as the columns in the CSV header.
+        foreach (var header in headers) {
+            var property = recordType.GetProperty(header);
+
+            if (property == null) {
+                throw new InvalidOperationException($"Property '{header}' was not found on type '{recordType.Name}'.");
+            }
+
+            // Gets the value of the matching property and writes it into the current CSV column.
+            csv.WriteField(property.GetValue(record));
+        }
+
+        // Finishes the current CSV row and moves to the next record.
         csv.NextRecord();
     }
 }

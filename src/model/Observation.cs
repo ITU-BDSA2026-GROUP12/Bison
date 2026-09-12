@@ -4,6 +4,11 @@ namespace Model
         int ObservationId,
         string Author,
         string Message,
-        long Timestamp
-        ):Cheep(Author, Message, Timestamp);
+        long Timestamp,
+        string? Location = null // optional location
+        ):Cheep(Author, Message, Timestamp)
+        {
+            public string Location { get; init; } =
+                string.IsNullOrWhiteSpace(Location) ? "unknown" : Location!;    // No location = "unknown"
+        }
 }
