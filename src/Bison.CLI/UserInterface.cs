@@ -29,4 +29,15 @@ public static class UserInterface {
         string dateString = time.ToString("MM'/'dd'/'yy HH':'mm':'ss");
         return dateString;
     }
+
+    /// <summary>
+    /// Converts Unix timestamp to human readable Unix date string
+    /// </summary>
+    /// <param name="timestamp">Unix timestamp</param>
+    /// <returns></returns>
+    public static string TimestampToUnixDateString(long timestamp) {
+        DateTimeOffset time = DateTimeOffset.FromUnixTimeSeconds(timestamp);
+        string dateString = time.ToString("MM'/'dd'/'yy HH':'mm':'ss");
+        return dateString;
+    }
 }
