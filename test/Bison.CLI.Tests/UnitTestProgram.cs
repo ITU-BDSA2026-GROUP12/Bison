@@ -23,10 +23,10 @@ public class UnitTestProgram
         //No Arrange
 
         //Act
-        var result = UserInterface.TimestampToLocalDateString(0);
+        var result = UserInterface.TimestampToUnixDateString(0);
 
         //Assert
-        Assert.Equal("01/01/70 01:00:00", result);
+        Assert.Equal("01/01/70 00:00:00", result);
     }
 
     [Fact]
