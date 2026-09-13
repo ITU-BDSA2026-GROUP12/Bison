@@ -79,13 +79,7 @@ public class UnitTestProgram
     [Fact]
     public void PrintObservationsDisplaysLocation() {
         // Arrange
-        var observation = new Observation(
-            1,
-            "testAuthor",
-            "I don't even know what I saw",
-            1234567890,
-            "Næstved"
-        );
+        var observation = new Observation(1, "testAuthor", "I don't even know what I saw", 1234567890, "Næstved");
 
         var output = new StringWriter();    // Stores captured console output.
         var originalOutput = Console.Out;   // Save the normal console output.
