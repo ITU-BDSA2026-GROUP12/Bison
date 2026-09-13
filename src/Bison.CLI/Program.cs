@@ -35,12 +35,7 @@ if (arguments["read"].IsTrue) {
 if (arguments["location"].IsTrue) {
     string location = arguments["<location>"].ToString();
 
-    var records = database.Read()
-        .Where(o => string.Equals(
-            o.Location,
-            location,
-            StringComparison.OrdinalIgnoreCase))
-        .ToList();
+    var records = Program.GetObservationsForLocation(database.Read(), location).ToList();
 
     if (records.Count > 0) {
         UserInterface.PrintObservations(records);
@@ -108,5 +103,10 @@ public partial class Program {
             Console.WriteLine($"Observation with ID {observationId} does not exist.");
             return false;
         }
+    }
+
+    // A getter method to make it easier to get observations for a certain location (makes unit tests easier)
+    public static IEnumerable<Observation> GetObservationsForLocation(IEnumerable<Observation> observations, string location) {
+        return observations.Where(o => string.Equals(o.Location, location, StringComparison.OrdinalIgnoreCase));
     }
 }
