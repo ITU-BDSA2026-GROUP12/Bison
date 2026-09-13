@@ -22,6 +22,10 @@ public static class UserInterface {
         }
     }
 
+    public static void PrintNoObsservationForLocation(string location) {
+        Console.WriteLine($"No observations found for location '{location}'.");
+    }
+
     /// <summary>
     /// Converts Unix timestamp to human readable local date string
     /// </summary>

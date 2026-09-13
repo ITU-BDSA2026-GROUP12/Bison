@@ -46,7 +46,7 @@ if (arguments["location"].IsTrue) {
         UserInterface.PrintObservations(records);
     }
     else {
-        Console.WriteLine($"No observations found for location '{location}'.");
+        UserInterface.PrintNoObsservationForLocation(location);
     }
 }
 
