@@ -1,4 +1,4 @@
-ObservationId,Author,Message,Timestamp
+ObservationId,Author,Message,Timestamp,Location
 1,ropf,A bird at DR Byen,1690891760
 2,adho,I think that is a Heron at DR Byen,1690978778
 3,edka,Ardea cinerea at DR Byen,1690979858
@@ -6,3 +6,4 @@ ObservationId,Author,Message,Timestamp
 5,home,"Something with a comma, yes, a comma. Also some æøå",1788434047
 6,alexsaini,test to see if the simpleDB works,1788472564
 7,Mega Dan,"jeg så en lyderød fugl på taget, med pels",1788871488
+8,frede,I found some strange bird,1789218699,Vordingborg
