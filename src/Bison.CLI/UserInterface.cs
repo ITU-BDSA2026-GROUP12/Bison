@@ -4,7 +4,10 @@ public static class UserInterface {
     public static void PrintObservations(IEnumerable<Cheep> obs) {
         foreach (var cheep in obs) {
             string dateString = TimestampToLocalDateString(cheep.Timestamp);
-            Console.WriteLine($"{cheep.Author} @ {dateString}: {cheep.Message}");
+            // Observations inherit from Cheep, but Location only exists on Observation.
+            if (cheep is Observation observation) {
+                Console.WriteLine($"{cheep.Author} @ {dateString}: {cheep.Message} - Location: {observation.Location}");
+            }
         }
     }
 
@@ -17,6 +20,10 @@ public static class UserInterface {
             string dateString = TimestampToLocalDateString(comment.Timestamp);
             Console.WriteLine($"{comment.Author} @ {dateString}: {comment.Message}");
         }
+    }
+
+    public static void PrintNoObsservationForLocation(string location) {
+        Console.WriteLine($"No observations found for location '{location}'.");
     }
 
     /// <summary>

@@ -2,14 +2,17 @@
 using Model;
 using SimpleDB;
 
-//Defines rules/valid ways to use the CLI. Very whitespace sensitive here.
+// Defines rules/valid ways to use the CLI. 
+// For now, location is optional for "observe" due to old data lacking a location.
+// Very whitespace sensitive here.
 const string usage = @"Bison CLI.
 
 
 Usage:
     bison read
     bison discussion <observationId>
-    bison observe <message>
+    bison location <location>
+    bison observe <message> [<location>]
     bison comment <message> <observationId>
 ";
 
@@ -26,6 +29,20 @@ if (arguments["read"].IsTrue) {
     // we dont need streamreader its in the CSVDatabase class so this acts as that
     var records = database.Read();
     UserInterface.PrintObservations(records);
+}
+
+// Lists observations from a specific location
+if (arguments["location"].IsTrue) {
+    string location = arguments["<location>"].ToString();
+
+    var records = Program.GetObservationsForLocation(database.Read(), location).ToList();
+
+    if (records.Count > 0) {
+        UserInterface.PrintObservations(records);
+    }
+    else {
+        UserInterface.PrintNoObsservationForLocation(location);
+    }
 }
 
 //lists all comments for a specific observation
@@ -45,11 +62,13 @@ if (arguments["discussion"].IsTrue) {
 if (arguments["observe"].IsTrue) {
     // this is also refactored to use the CSVDatabase class, so we dont need to open the file here
     string message = arguments["<message>"].ToString();
+    string location = args.Length >= 3 ? args[2]: "unknown";
+
     string author = Environment.UserName;
     long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
     int id = database.Read().Count() + 1;
 
-    var record = new Observation(id, author, message, timestamp);
+    var record = new Observation(id, author, message, timestamp, location);
     database.Store(record);
     UserInterface.PrintObservationId(id);
 }
@@ -84,5 +103,10 @@ public partial class Program {
             Console.WriteLine($"Observation with ID {observationId} does not exist.");
             return false;
         }
+    }
+
+    // A getter method to make it easier to get observations for a certain location (makes unit tests easier)
+    public static IEnumerable<Observation> GetObservationsForLocation(IEnumerable<Observation> observations, string location) {
+        return observations.Where(o => string.Equals(o.Location, location, StringComparison.OrdinalIgnoreCase));
     }
 }
