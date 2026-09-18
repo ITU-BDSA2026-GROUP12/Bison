@@ -1,6 +1,9 @@
 ﻿using DocoptNet;
 using Model;
 using SimpleDB;
+using System.Net.Http.Json;
+using HttpClient client = new HttpClient();
+
 
 // Defines rules/valid ways to use the CLI. 
 // For now, location is optional for "observe" due to old data lacking a location.
@@ -20,6 +23,7 @@ Usage:
 
 //parse command lines using Docopt
 var arguments = new Docopt().Apply(usage, args, version:"1.0", exit:true)!;
+var baseURL = "http://localhost:5256";
 
 var database = CSVDatabase<Observation>.getInstance(Config.ObservationDatabase);
 var commentDb = CSVDatabase<Comment>.getInstance(Config.CommentDatabase);
@@ -27,7 +31,7 @@ var commentDb = CSVDatabase<Comment>.getInstance(Config.CommentDatabase);
 //lists all observations in the database
 if (arguments["read"].IsTrue) {
     // we dont need streamreader its in the CSVDatabase class so this acts as that
-    var records = database.Read();
+    var records = await client.GetFromJsonAsync<Observation>("observations");
     UserInterface.PrintObservations(records);
 }
 
