@@ -2,7 +2,6 @@
 using Model;
 using SimpleDB;
 using System.Net.Http.Json;
-using HttpClient client = new HttpClient();
 
 
 // Defines rules/valid ways to use the CLI. 
@@ -19,20 +18,26 @@ Usage:
     bison comment <message> <observationId>
 ";
 
-
+HttpClient client = new HttpClient
+{
+BaseAddress = new Uri("http://localhost:5256")
+};
 
 //parse command lines using Docopt
 var arguments = new Docopt().Apply(usage, args, version:"1.0", exit:true)!;
-var baseURL = "http://localhost:5256";
 
 var database = CSVDatabase<Observation>.getInstance(Config.ObservationDatabase);
 var commentDb = CSVDatabase<Comment>.getInstance(Config.CommentDatabase);
 
 //lists all observations in the database
 if (arguments["read"].IsTrue) {
-    // we dont need streamreader its in the CSVDatabase class so this acts as that
-    var records = await client.GetFromJsonAsync<Observation>("observations");
+var records = await client.GetFromJsonAsync<IEnumerable<Observation>>(
+"/observations"
+);
+
+if (records != null) {
     UserInterface.PrintObservations(records);
+}
 }
 
 // Lists observations from a specific location
