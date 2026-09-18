@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SimpleDB\SimpleDB.csproj" />
     <ProjectReference Include="..\model\Model.csproj" />
+     <ProjectReference Include="..\Bison.WebService\Bison.WebService.csproj" />
   </ItemGroup>
 
 </Project>
