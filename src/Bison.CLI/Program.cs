@@ -1,6 +1,5 @@
 ﻿using DocoptNet;
 using Model;
-using SimpleDB;
 using System.Net.Http.Json;
 
 
@@ -26,9 +25,6 @@ BaseAddress = new Uri("http://localhost:5256")
 //parse command lines using Docopt
 var arguments = new Docopt().Apply(usage, args, version:"1.0", exit:true)!;
 
-var database = CSVDatabase<Observation>.getInstance(Config.ObservationDatabase);
-var commentDb = CSVDatabase<Comment>.getInstance(Config.CommentDatabase);
-
 //lists all observations in the database
 if (arguments["read"].IsTrue) {
 var records = await client.GetFromJsonAsync<IEnumerable<Observation>>(
@@ -40,6 +36,7 @@ if (records != null) {
 }
 }
 
+/*
 // Lists observations from a specific location
 if (arguments["location"].IsTrue) {
     string location = arguments["<location>"].ToString();
@@ -53,7 +50,9 @@ if (arguments["location"].IsTrue) {
         UserInterface.PrintNoObsservationForLocation(location);
     }
 }
+*/
 
+/*
 //lists all comments for a specific observation
 if (arguments["discussion"].IsTrue) {
     int observationId = int.Parse(arguments["<observationId>"].ToString());
@@ -67,7 +66,8 @@ if (arguments["discussion"].IsTrue) {
         return;
     }
 }
-
+*/
+/*
 if (arguments["observe"].IsTrue) {
     // this is also refactored to use the CSVDatabase class, so we dont need to open the file here
     string message = arguments["<message>"].ToString();
@@ -81,13 +81,15 @@ if (arguments["observe"].IsTrue) {
     database.Store(record);
     UserInterface.PrintObservationId(id);
 }
-
+*/
+/*
 else if (arguments["comment"].IsTrue) {
     string message = arguments["<message>"].ToString();
     int observationId = int.Parse(arguments["<observationId>"].ToString());
     Comment(message, observationId, database, commentDb);
 }
-
+*/
+/*
 public partial class Program {
     
     /// <summary>
@@ -118,4 +120,6 @@ public partial class Program {
     public static IEnumerable<Observation> GetObservationsForLocation(IEnumerable<Observation> observations, string location) {
         return observations.Where(o => string.Equals(o.Location, location, StringComparison.OrdinalIgnoreCase));
     }
+    
 }
+*/
