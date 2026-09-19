@@ -1,4 +1,5 @@
-﻿using DocoptNet;
+﻿using CsvHelper.Configuration.Attributes;
+using DocoptNet;
 using Model;
 using System.Net.Http.Json;
 
@@ -17,17 +18,12 @@ Usage:
     bison comment <message> <observationId>
 ";
 
-HttpClient client = new HttpClient
-{
-BaseAddress = new Uri("http://localhost:5256")
-};
-
 //parse command lines using Docopt
 var arguments = new Docopt().Apply(usage, args, version:"1.0", exit:true)!;
 
 //lists all observations in the database
 if (arguments["read"].IsTrue) {
-var records = await client.GetFromJsonAsync<IEnumerable<Observation>>(
+var records = await Program.Client.GetFromJsonAsync<IEnumerable<Observation>>(
 "/observations"
 );
 
@@ -36,29 +32,40 @@ if (records != null) {
 }
 }
 
-/*
 // Lists observations from a specific location
 if (arguments["location"].IsTrue) {
     string location = arguments["<location>"].ToString();
 
-    var records = Program.GetObservationsForLocation(database.Read(), location).ToList();
 
-    if (records.Count > 0) {
+    var allRecords = await Program.Client.GetFromJsonAsync<IEnumerable<Observation>>(
+        "/observations"
+    );
+
+    // allrecords can be null so just return if its null
+    if (allRecords == null)
+    {
+        return;
+    }
+    var records = Program.GetObservationsForLocation(allRecords, location).ToList();
+
+
+    if (records.Count > 0 && records != null) {
         UserInterface.PrintObservations(records);
     }
     else {
         UserInterface.PrintNoObsservationForLocation(location);
     }
 }
-*/
 
-/*
-//lists all comments for a specific observation
+
+// lists all comments for a specific observation
 if (arguments["discussion"].IsTrue) {
     int observationId = int.Parse(arguments["<observationId>"].ToString());
+    var comments = await Program.Client.GetFromJsonAsync<IEnumerable<Comment>>(
+        $"/comments?ObservationId={observationId}"
+    );
     
-    if (commentDb.Read().Any(o => o.ObservationId == observationId)) {
-        var comments = commentDb.Read().Where(c => c.ObservationId == observationId);
+    if (comments != null && comments.Any()) {
         Console.WriteLine($"Comment/s for Observation {observationId}:");
         UserInterface.PrintDiscussion(comments);
     } else {
@@ -66,8 +73,7 @@ if (arguments["discussion"].IsTrue) {
         return;
     }
 }
-*/
-/*
+
 if (arguments["observe"].IsTrue) {
     // this is also refactored to use the CSVDatabase class, so we dont need to open the file here
     string message = arguments["<message>"].ToString();
@@ -75,51 +81,51 @@ if (arguments["observe"].IsTrue) {
 
     string author = Environment.UserName;
     long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-    int id = database.Read().Count() + 1;
 
-    var record = new Observation(id, author, message, timestamp, location);
-    database.Store(record);
-    UserInterface.PrintObservationId(id);
+    var record = new ObservationRequest(author, message, timestamp, location);
+    var response = await Program.Client.PostAsJsonAsync("/observation", record);
+
+    // Ensure the request was successful if its not it will throw a exception
+    response.EnsureSuccessStatusCode();
 }
-*/
-/*
 else if (arguments["comment"].IsTrue) {
     string message = arguments["<message>"].ToString();
     int observationId = int.Parse(arguments["<observationId>"].ToString());
-    Comment(message, observationId, database, commentDb);
+    await CommentAsync(message, observationId);
 }
-*/
-/*
+
 public partial class Program {
+    public static HttpClient Client { get; } = new HttpClient
+    {
+        BaseAddress = new Uri("http://localhost:5256")
+    };
+
     
     /// <summary>
     /// 
     /// </summary>
     /// <param name="message"></param>
     /// <param name="observationId"></param>
-    /// <param name="database">We can probably delete this parameter when it becomes a singleton</param>
-    /// <param name="commentDb">We can probably delete this parameter when it becomes a singleton</param>
     /// <returns>True if the comment is stored, False otherwise</returns>
-    public static bool Comment(string message, int observationId, CSVDatabase<Observation>? database, CSVDatabase<Comment>? commentDb) {
+    public static async Task<bool> CommentAsync(string message, int observationId) {
         // this reuses the CSVDatabase class to store comments.
         string author = Environment.UserName;
         long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-        if (database != null && database.Read().Any(o => o.ObservationId == observationId)) {
-            var record = new Comment(observationId, author, message, timestamp);
-            //the "?" after commentDb means it only calls commentDb.Store() if commentDb is not null
-            commentDb?.Store(record);
-            return true;
-        } else {
-            Console.WriteLine($"Observation with ID {observationId} does not exist.");
-            return false;
-        }
+        var request = new CommentRequest(observationId, author, message, timestamp);
+        var response = await Client.PostAsJsonAsync("/comment", request);
+        response.EnsureSuccessStatusCode();
+
+        return true;
+
+       
     }
 
     // A getter method to make it easier to get observations for a certain location (makes unit tests easier)
     public static IEnumerable<Observation> GetObservationsForLocation(IEnumerable<Observation> observations, string location) {
         return observations.Where(o => string.Equals(o.Location, location, StringComparison.OrdinalIgnoreCase));
     }
+    public record ObservationRequest(string Author, string Message, long Timestamp, string? Location = null);
+    public record CommentRequest(int ObservationId, string Author, string Message, long Timestamp);
     
 }
-*/
