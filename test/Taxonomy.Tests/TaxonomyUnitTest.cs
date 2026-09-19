@@ -9,6 +9,7 @@ public class TaxonomyUnitTest {
     private const string ArdeaId = "ardea";
     private const string ArdeaCinereaId = "ardea-cinerea";
 
+    // Creates a small in-memory taxonomy so the unit tests can test lookup and parent/child logic without using the real CSV.
     private static TaxonomyStore CreateTaxonomy() {
         var taxa = new List<Taxon> {
             new() {
