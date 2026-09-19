@@ -1,7 +1,6 @@
 namespace Model;
 
-public class Taxon
-{
+public class Taxon {
     public string TaxonId { get; set; } = string.Empty;
 
     public string? ParentNameUsageId { get; set; }

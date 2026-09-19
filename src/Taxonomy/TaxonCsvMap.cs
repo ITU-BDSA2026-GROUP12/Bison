@@ -3,10 +3,8 @@ using Model;
 
 namespace Taxonomy;
 
-public sealed class TaxonCsvMap : ClassMap<Taxon>
-{
-    public TaxonCsvMap()
-    {
+public sealed class TaxonCsvMap : ClassMap<Taxon> {
+    public TaxonCsvMap() {
         Map(t => t.TaxonId)
             .Name("dwc:taxonID");
 
