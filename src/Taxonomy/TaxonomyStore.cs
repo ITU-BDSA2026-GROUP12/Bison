@@ -6,6 +6,8 @@ using Model;
 namespace Taxonomy;
 
 public sealed class TaxonomyStore {
+    private const string TaxonomyResourceName = "Taxonomy.joined.csv";
+
     private readonly Dictionary<string, Taxon> _taxaById;
 
     private readonly Dictionary<string, Taxon> _taxaByVernacularName;
@@ -69,7 +71,7 @@ public sealed class TaxonomyStore {
     private static List<Taxon> LoadTaxa() {
         Assembly assembly = typeof(TaxonomyStore).Assembly;
 
-        using Stream stream = assembly.GetManifestResourceStream("Taxonomy.joined.csv")
+        using Stream stream = assembly.GetManifestResourceStream(TaxonomyResourceName)
             ?? throw new InvalidOperationException("Could not find embedded taxonomy CSV.");
 
         using var reader = new StreamReader(stream);
