@@ -6,7 +6,7 @@ public class UnitTestProgram
 {
     [Fact]
     public async Task CommentsReferencingNonExistingObservationIDsWillNotGetStored() {
-        // Test no longer applicable, since webservice now has comments.
+        // Test no longer applicable here, webservice will need this test
     }
 
     [Fact]
