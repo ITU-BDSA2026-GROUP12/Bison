@@ -119,7 +119,5 @@ public partial class Program {
     public static IEnumerable<Observation> GetObservationsForLocation(IEnumerable<Observation> observations, string location) {
         return observations.Where(o => string.Equals(o.Location, location, StringComparison.OrdinalIgnoreCase));
     }
-    public record ObservationRequest(string Author, string Message, long Timestamp, string? Location = null);
-    public record CommentRequest(int ObservationId, string Author, string Message, long Timestamp);
-    
+
 }
