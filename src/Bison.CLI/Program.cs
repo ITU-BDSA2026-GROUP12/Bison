@@ -21,19 +21,19 @@ var arguments = new Docopt().Apply(usage, args, version:"1.0", exit:true)!;
 
 //lists all observations in the database
 if (arguments["read"].IsTrue) {
-var records = await Program.Client.GetFromJsonAsync<IEnumerable<Observation>>(
-"/observations"
-);
+    
+    var records = await Program.Client.GetFromJsonAsync<IEnumerable<Observation>>(
+    "/observations"
+    );
 
-if (records != null) {
-    UserInterface.PrintObservations(records);
-}
-}
+    if (records != null) {
+        UserInterface.PrintObservations(records);
+    }
+    }
 
 // Lists observations from a specific location
 if (arguments["location"].IsTrue) {
     string location = arguments["<location>"].ToString();
-
 
     var allRecords = await Program.Client.GetFromJsonAsync<IEnumerable<Observation>>(
         "/observations"
@@ -46,7 +46,6 @@ if (arguments["location"].IsTrue) {
     }
     var records = Program.GetObservationsForLocation(allRecords, location).ToList();
 
-
     if (records.Count > 0) {
         UserInterface.PrintObservations(records);
     }
@@ -58,6 +57,7 @@ if (arguments["location"].IsTrue) {
 // lists all comments for a specific observation
 if (arguments["discussion"].IsTrue) {
     int observationId = int.Parse(arguments["<observationId>"].ToString());
+
     var comments = await Program.Client.GetFromJsonAsync<IEnumerable<Comment>>(
         $"/comments?ObservationId={observationId}"
     );
@@ -73,7 +73,6 @@ if (arguments["discussion"].IsTrue) {
 
 // Stores a new observation in the database
 if (arguments["observe"].IsTrue) {
-    // this is also refactored to use the CSVDatabase class, so we dont need to open the file here
     string message = arguments["<message>"].ToString();
     string location = arguments["<location>"]?.ToString() ?? "unknown";
 
