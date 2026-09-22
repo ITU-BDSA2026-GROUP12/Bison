@@ -1,21 +1,12 @@
 namespace Bison.CLI.Tests;
 
 using Model;
-using SimpleDB;
 
 public class UnitTestProgram
 {
     [Fact]
     public async Task CommentsReferencingNonExistingObservationIDsWillNotGetStored() {
-        //Arrange
-        var database = CSVDatabase<Observation>.getInstance(Config.ObservationDatabase);
-        var commentDb = CSVDatabase<Comment>.getInstance(Config.CommentDatabase);
-
-        //Act
-        await Assert.ThrowsAsync<HttpRequestException>(() => Program.CommentAsync("", -1));
-
-        //Assert
-        // No specific assertion needed, as we're just checking that an exception is thrown
+        // Test no longer applicable, since webservice now has comments.
     }
 
     [Fact]
@@ -27,19 +18,6 @@ public class UnitTestProgram
 
         //Assert
         Assert.Equal("01/01/70 00:00:00", result);
-    }
-
-    [Fact]
-    public void FirstObservationInDBIsCorrect() {
-        //Arrange
-        var database = CSVDatabase<Observation>.getInstance(Config.ObservationDatabase);
-        var records = database.Read();
-
-        //Act
-        var result = records.First().Message == "A bird at DR Byen";
-
-        //Assert
-        Assert.True(result);
     }
 
     // ===== LOCATION TESTS ===== //

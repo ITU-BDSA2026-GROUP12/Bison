@@ -37,6 +37,3 @@ app.MapPost("/comment", (CommentRequest request) =>
 app.MapGet("/comments", (int ObservationId) => { return commentDb.Read().Where(comment => comment.ObservationId == ObservationId); });
 
 app.Run();
-
-public record ObservationRequest(string Author, string Message, long Timestamp, string? Location = null);
-public record CommentRequest(int ObservationId, string Author, string Message, long Timestamp);
