@@ -6,16 +6,16 @@ using SimpleDB;
 public class UnitTestProgram
 {
     [Fact]
-    public void CommentsReferencingNonExistingObservationIDsWillNotGetStored() {
+    public async Task CommentsReferencingNonExistingObservationIDsWillNotGetStored() {
         //Arrange
         var database = CSVDatabase<Observation>.getInstance(Config.ObservationDatabase);
         var commentDb = CSVDatabase<Comment>.getInstance(Config.CommentDatabase);
 
         //Act
-        var result = Program.Comment("", -1, database, commentDb);
+        await Assert.ThrowsAsync<HttpRequestException>(() => Program.CommentAsync("", -1));
 
         //Assert
-        Assert.False(result);
+        // No specific assertion needed, as we're just checking that an exception is thrown
     }
 
     [Fact]

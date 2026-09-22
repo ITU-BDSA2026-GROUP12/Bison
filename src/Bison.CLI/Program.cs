@@ -3,12 +3,10 @@ using DocoptNet;
 using Model;
 using System.Net.Http.Json;
 
-
 // Defines rules/valid ways to use the CLI. 
 // For now, location is optional for "observe" due to old data lacking a location.
 // Very whitespace sensitive here.
 const string usage = @"Bison CLI.
-
 
 Usage:
     bison read
@@ -49,14 +47,13 @@ if (arguments["location"].IsTrue) {
     var records = Program.GetObservationsForLocation(allRecords, location).ToList();
 
 
-    if (records.Count > 0 && records != null) {
+    if (records.Count > 0) {
         UserInterface.PrintObservations(records);
     }
     else {
         UserInterface.PrintNoObsservationForLocation(location);
     }
 }
-
 
 // lists all comments for a specific observation
 if (arguments["discussion"].IsTrue) {
@@ -74,10 +71,11 @@ if (arguments["discussion"].IsTrue) {
     }
 }
 
+// Stores a new observation in the database
 if (arguments["observe"].IsTrue) {
     // this is also refactored to use the CSVDatabase class, so we dont need to open the file here
     string message = arguments["<message>"].ToString();
-    string location = args.Length >= 3 ? args[2]: "unknown";
+    string location = arguments["<location>"]?.ToString() ?? "unknown";
 
     string author = Environment.UserName;
     long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -88,6 +86,8 @@ if (arguments["observe"].IsTrue) {
     // Ensure the request was successful if its not it will throw a exception
     response.EnsureSuccessStatusCode();
 }
+
+// Stores a new comment for a specific observation
 else if (arguments["comment"].IsTrue) {
     string message = arguments["<message>"].ToString();
     int observationId = int.Parse(arguments["<observationId>"].ToString());
@@ -100,10 +100,6 @@ public partial class Program {
         BaseAddress = new Uri("http://localhost:5256")
     };
 
-    
-    /// <summary>
-    /// 
-    /// </summary>
     /// <param name="message"></param>
     /// <param name="observationId"></param>
     /// <returns>True if the comment is stored, False otherwise</returns>
@@ -118,7 +114,6 @@ public partial class Program {
 
         return true;
 
-       
     }
 
     // A getter method to make it easier to get observations for a certain location (makes unit tests easier)
