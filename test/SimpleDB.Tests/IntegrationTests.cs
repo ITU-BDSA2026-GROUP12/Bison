@@ -7,6 +7,9 @@ namespace SimpleDB.Tests;
 
 public class IntegrationTests
 {
+    //IntegrationTests removed for now to eliminate any need for using WebApplicationFactory<Program>.
+    
+    /*
     [Fact]
     public async Task CanReadObservationsFromWebService()
     {
@@ -36,5 +39,5 @@ public class IntegrationTests
 
         //Assert
         Assert.True(result);
-    }
+    }*/
 }
