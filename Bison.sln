@@ -15,9 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bison.CLI.Tests", "test\Bis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDB.Tests", "test\SimpleDB.Tests\SimpleDB.Tests.csproj", "{1454F793-2F62-41BD-BCB9-3386E0BCB26E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "model", "model", "{FAF49D83-B35D-ACFD-48AF-4E56541CB749}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{FAF49D83-B35D-ACFD-48AF-4E56541CB749}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "src\model\Model.csproj", "{2EEAD382-7E53-41AC-A238-52F0D38FAF21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "src\Model\Model.csproj", "{2EEAD382-7E53-41AC-A238-52F0D38FAF21}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taxonomy", "src\Taxonomy\Taxonomy.csproj", "{CAC88E8E-2EAF-4C4A-B503-529794DC6E32}"
 EndProject
