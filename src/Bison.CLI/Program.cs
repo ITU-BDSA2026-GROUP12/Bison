@@ -29,7 +29,7 @@ if (arguments["read"].IsTrue) {
     if (records != null) {
         UserInterface.PrintObservations(records);
     }
-    }
+}
 
 // Lists observations from a specific location
 if (arguments["location"].IsTrue) {
