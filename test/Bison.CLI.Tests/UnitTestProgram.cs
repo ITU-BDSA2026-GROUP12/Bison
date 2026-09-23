@@ -4,11 +4,13 @@ using Model;
 
 public class UnitTestProgram
 {
+    /*
     [Fact]
     public async Task CommentsReferencingNonExistingObservationIDsWillNotGetStored() {
         // Test no longer applicable here, webservice will need this test
     }
-
+    */
+    
     [Fact]
     public void UnixTimestampPrintsCorrectlyInHumanReadableLocalTime() {
         //No Arrange
