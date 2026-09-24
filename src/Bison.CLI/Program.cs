@@ -2,6 +2,7 @@
 using DocoptNet;
 using Model;
 using System.Net.Http.Json;
+using Taxonomy;
 
 // Defines rules/valid ways to use the CLI. 
 // For now, location is optional for "observe" due to old data lacking a location.
@@ -14,6 +15,8 @@ Usage:
     bison location <location>
     bison observe <message> [<location>]
     bison comment <message> <observationId>
+    bison proposal <taxonName> <observationId>
+    bison proposals <observationId>
 ";
 
 //parse command lines using Docopt
@@ -92,6 +95,48 @@ else if (arguments["comment"].IsTrue) {
     int observationId = int.Parse(arguments["<observationId>"].ToString());
     await CommentAsync(message, observationId);
 }
+
+// Stores a new proposal for a specific observation
+if (arguments["proposal"].IsTrue) {
+    string taxonName = arguments["<taxonName>"].ToString();
+    var taxons = new TaxonomyStore();
+    var taxon = taxons.GetByVernacularName(taxonName);
+    
+    if(taxon == null) {
+        return;
+    }
+
+    int observationId = int.Parse(arguments["<observationId>"].ToString());
+    string author = Environment.UserName;
+    long timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+    var request = new ProposalRequest(observationId, author, taxon.TaxonId, timestamp);
+    var response = await Client.PostAsJsonAsync("/proposal", request);
+
+    response.EnsureSuccessStatusCode();
+
+    return;
+}
+
+// lists all proposals for a specific observation
+if (arguments["proposals"].IsTrue) {
+    int observationId = int.Parse(arguments["<observationId>"].ToString());
+
+    var proposals = await Program.Client.GetFromJsonAsync<IEnumerable<Proposal>>(
+        $"/proposals?ObservationId={observationId}"
+    );
+
+    if (proposals != null && proposals.Any()) {
+        UserInterface.PrintMessage($"Proposal/s for Observation {observationId}:");
+        UserInterface.PrintProposals(proposals);
+        
+    } else {
+        UserInterface.PrintMessage($"Observation with ID {observationId} does not exist.");
+    }
+
+    return;
+}
+
 
 public partial class Program {
     public static HttpClient Client { get; } = new HttpClient
