@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SimpleDB\SimpleDB.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
+    <ProjectReference Include="..\Taxonomy\Taxonomy.csproj" />
   </ItemGroup>
 
 </Project>
