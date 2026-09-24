@@ -6,5 +6,6 @@ public static class Config
 {
 	public const string ObservationDatabase = "bison_observe_cli_db.csv";
 	public const string CommentDatabase = "bison_comment_cli_db.csv";
+	public const string ProposalDatabase = "bison_proposal_cli_db.csv";
 }
 

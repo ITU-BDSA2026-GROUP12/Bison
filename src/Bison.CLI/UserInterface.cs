@@ -1,6 +1,10 @@
 using Model;
 
 public static class UserInterface {
+    public static void PrintMessage(string message) {
+        Console.WriteLine(message);
+    }
+
     public static void PrintObservations(IEnumerable<Cheep> obs) {
         foreach (var cheep in obs) {
             string dateString = TimestampToLocalDateString(cheep.Timestamp);
@@ -24,6 +28,13 @@ public static class UserInterface {
 
     public static void PrintNoObsservationForLocation(string location) {
         Console.WriteLine($"No observations found for location '{location}'.");
+    }
+
+    public static void PrintProposals(IEnumerable<Proposal> proposals) {
+        foreach (var proposal in proposals) {
+            string dateString = TimestampToLocalDateString(proposal.Timestamp);
+            Console.WriteLine($"{proposal.Author} @ {dateString}: {proposal.TaxonId}");
+        }
     }
 
     /// <summary>
