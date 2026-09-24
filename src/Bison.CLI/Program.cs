@@ -99,6 +99,8 @@ else if (arguments["comment"].IsTrue) {
 // Stores a new proposal for a specific observation
 if (arguments["proposal"].IsTrue) {
     string taxonName = arguments["<taxonName>"].ToString();
+    //You could argue if we need to load taxons more than once.
+    //On the other hand it might get updated while the app is running...
     var taxons = new TaxonomyStore();
     var taxon = taxons.GetByVernacularName(taxonName);
     
