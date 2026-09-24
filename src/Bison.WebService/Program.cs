@@ -39,9 +39,11 @@ app.MapPost("/comment", (CommentRequest request) =>
 app.MapGet("/comments", (int ObservationId) => { return commentDb.Read().Where(comment => comment.ObservationId == ObservationId); });
 
 //POST a proposal belonging to an excisting observation
-app.MapPost("/proposal", (ProposalRequest request) => {
+app.MapPost("/proposal", (ProposalRequest request) =>
+{
     //check if observation that is being proposed to exists.
-    if (database.Read().Any(o => o.ObservationId == request.ObservationId)) {
+    if (database.Read().Any(o => o.ObservationId == request.ObservationId))
+    {
         var proposal = new Proposal(request.ObservationId, request.Author, request.TaxonId, request.Timestamp);
         proposalDb.Store(proposal);
     }
