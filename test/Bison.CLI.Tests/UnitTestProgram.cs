@@ -111,4 +111,51 @@ public class UnitTestProgram
         // Assert
         Assert.Empty(result);
     }
+
+    // ===== PROPOSAL TESTS ===== //
+    [Fact]
+    public void ProposalModelBehavesAsExpected() {
+        // Arrange & Act
+        var proposal = new Proposal(1, "testAuthor", "taxonId", 1234567890);
+
+        // Assert
+        Assert.Equal(1, proposal.ObservationId);
+        Assert.Equal("taxonId", proposal.TaxonId);
+        Assert.Equal("testAuthor", proposal.Author);
+        Assert.Equal(1234567890, proposal.Timestamp);
+    }
+
+    [Fact]
+    public void ProposalRequestBehavesAsExpected() {
+        // Arrange & Act
+        var proposal = new Proposal(1, "testAuthor", "taxonId", 1234567890);
+        var request = new ProposalRequest(proposal.ObservationId, proposal.Author, proposal.TaxonId, proposal.Timestamp);
+
+        // Assert
+        Assert.Equal(1, request.ObservationId);
+        Assert.Equal("taxonId", request.TaxonId);
+        Assert.Equal("testAuthor", request.Author);
+        Assert.Equal(1234567890, request.Timestamp);
+    }
+
+    [Fact]
+    public void PrintProposalsDisplaysTaxonId() {
+        // Arrange
+        var proposal = new Proposal(1, "testAuthor", "taxonId", 1234567890);
+
+        var output = new StringWriter();    // Stores captured console output.
+        var originalOutput = Console.Out;   // Save the normal console output.
+
+        try {
+            Console.SetOut(output);
+
+            // Act
+            UserInterface.PrintProposals(new List<Proposal> { proposal });
+        } finally {
+            Console.SetOut(originalOutput);
+        }
+
+        // Assert
+        Assert.Contains("taxonId", output.ToString());
+    }
 }
