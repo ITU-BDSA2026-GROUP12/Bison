@@ -1,6 +1,3 @@
-using System.Net.Http.Json;
-using Model;
-
 
 public class ObservationTest
 {
@@ -15,7 +12,7 @@ public class ObservationTest
         var random = new Random();
         var expectedObservations = new List<ObservationRequest>();
 
-        //Lav 10 forskellige observations
+        //Make 10 observations
         for (int i = 0; i < 10; i++)
         {
             //generate random data for the observation

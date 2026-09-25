@@ -1,5 +1,4 @@
-using System.Net.Http.Json;
-using Model;
+
 using Taxonomy;
 
 
@@ -13,7 +12,7 @@ public class ProposalsTest
         var client = new HttpClient();
         client.BaseAddress = new Uri("http://localhost:5256");
 
-        //set up taxonomy store and random generator
+        //set up taxonomy store (proposal needs to have a valid TaxonId) and random generator
         var taxonomyStore = new TaxonomyStore();
         var random = new Random();
 
@@ -24,7 +23,7 @@ public class ProposalsTest
               "Skarv"
             };
 
-        //keep track of the proposals
+        //keep track of the newly generated proposals
         var expectedProposals = new List<ProposalRequest>();
 
         //get existing observations so proposals use valid ObservationIds
@@ -36,25 +35,26 @@ public class ProposalsTest
             //select random existing observation
             var randomObservation = observations![random.Next(observations.Count)];
 
-            //select a random valid taxon
+            //select a random valid taxon. Here fiskehejre or skarv...
             var randomTaxonName = taxonNames[random.Next(taxonNames.Length)];
 
+            //Find the taxon with given name
             var randomTaxon = taxonomyStore.GetByVernacularName(randomTaxonName);
-            Assert.NotNull(randomTaxon);
+            Assert.NotNull(randomTaxon); //test fails if name cannot be found
 
             //create a proposal with randomized data
             var proposal = new ProposalRequest(
-                ObservationId: randomObservation.ObservationId,
-                Author: $"User{random.Next(1, 1000)}",
+                ObservationId: randomObservation.ObservationId, //proposal connects with observation
+                Author: $"User{random.Next(1, 1000)}", //random username
                 TaxonId: randomTaxon!.TaxonId,
                 Timestamp: DateTimeOffset.UtcNow.ToUnixTimeSeconds()
                 );
 
-            //send proposal
+            //send proposal - POST
             var response = await client.PostAsJsonAsync("/proposal", proposal);
             response.EnsureSuccessStatusCode();
 
-            //store
+            //store in list
             expectedProposals.Add(proposal);
         }
         //retrieve the proposals and verify that each generated proposal was stored
