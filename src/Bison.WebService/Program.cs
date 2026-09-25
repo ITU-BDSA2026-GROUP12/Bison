@@ -5,11 +5,13 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
 var filePath = "../Bison.CLI/bison_observe_cli_db.csv";
-var database = CSVDatabase<Observation>.getInstance(filePath);
+IDatabaseRepository<Observation> database = CSVDatabase<Observation>.getInstance(filePath);
+
 var filePath2 = "../Bison.CLI/bison_comment_cli_db.csv";
-var commentDb = CSVDatabase<Comment>.getInstance(filePath2);
+IDatabaseRepository<Comment> commentDb = CSVDatabase<Comment>.getInstance(filePath2);
+
 var filePath3 = "../Bison.CLI/bison_proposal_cli_db.csv";
-var proposalDb = CSVDatabase<Proposal>.getInstance(filePath3);
+IDatabaseRepository<Proposal> proposalDb = CSVDatabase<Proposal>.getInstance(filePath3);
 
 //GET all observations from the database
 app.MapGet("/observations", () => database.Read());
