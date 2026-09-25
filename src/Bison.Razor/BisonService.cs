@@ -1,4 +1,5 @@
 using Model;
+using Bison.SQLite;
 
 public interface IObservationService
 {
@@ -8,22 +9,22 @@ public interface IObservationService
 
 public class ObservationService : IObservationService
 {
-    // These would normally be loaded from a database for example
-    private static readonly List<ObservationViewModel> _obs = new()
-        {
-            new ObservationViewModel("Peter", "I saw a heron", UnixTimeStampToDateTimeString(1690892208)),
-            new ObservationViewModel("Paul", "There is a bison on Amager", UnixTimeStampToDateTimeString(1690895308)),
-        };
+    private readonly DBFacade _dbFacade;
+
+    public ObservationService(DBFacade dbFacade)
+    {
+        _dbFacade = dbFacade;
+    }
 
     public List<ObservationViewModel> GetObservations()
     {
-        return _obs;
+        return _dbFacade.GetObservations();
     }
 
     public List<ObservationViewModel> GetObservationsFromAuthor(string author)
     {
         // filter by the provided author name
-        return _obs.Where(x => x.Author == author).ToList();
+        return _dbFacade.GetObservations().Where(x => x.Author == author).ToList();
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)

@@ -51,6 +51,8 @@ public class DBFacade
                 )
             );
         }
+
+        return observations;
     }
 
     public void TestConnection()
