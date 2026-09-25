@@ -1,4 +1,4 @@
-public record ObservationViewModel(string Author, string Message, string Timestamp);
+using Model;
 
 public interface IObservationService
 {

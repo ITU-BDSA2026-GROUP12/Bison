@@ -1,4 +1,5 @@
 using Microsoft.Data.Sqlite;
+using Model;
 
 namespace Bison.SQLite;
 
@@ -16,7 +17,7 @@ public class DBFacade
         return new SqliteConnection($"Data Source={_dbPath}");
     }
 
-    public void GetObservations()
+    public List<ObservationViewModel> GetObservations()
     {
         using var connection = CreateConnection();
 
@@ -33,12 +34,22 @@ public class DBFacade
         ";
 
         using var reader = command.ExecuteReader();
-        
+
+        var observations = new List<ObservationViewModel>();
+
         while (reader.Read())
         {
             var username = reader.GetString(0);
             var text = reader.GetString(1);
             var timestamp = reader.GetInt64(2);
+
+            observations.Add(
+                new ObservationViewModel(
+                    username,
+                    text,
+                    timestamp.ToString()
+                )
+            );
         }
     }
 
