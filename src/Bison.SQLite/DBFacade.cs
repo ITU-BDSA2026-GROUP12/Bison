@@ -16,6 +16,32 @@ public class DBFacade
         return new SqliteConnection($"Data Source={_dbPath}");
     }
 
+    public void GetObservations()
+    {
+        using var connection = CreateConnection();
+
+        connection.Open();
+
+        var command = connection.CreateCommand();
+
+        // We need to determine if we want SQL queries to be capital or lower-case
+        command.CommandText = @"
+            SELECT username, text, pub_date
+            FROM observation
+            JOIN user
+            ON observation.author_id = user.user_id;
+        ";
+
+        using var reader = command.ExecuteReader();
+        
+        while (reader.Read())
+        {
+            var username = reader.GetString(0);
+            var text = reader.GetString(1);
+            var timestamp = reader.GetInt64(2);
+        }
+    }
+
     public void TestConnection()
     {
         
