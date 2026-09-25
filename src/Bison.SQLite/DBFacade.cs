@@ -55,8 +55,43 @@ public class DBFacade
         return observations;
     }
 
-    public void TestConnection()
+    public List<ObservationViewModel> GetObservationsFromAuthor(string author)
     {
-        
+        using var connection = CreateConnection();
+
+        connection.Open();
+
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+            SELECT username, text, pub_date
+            FROM observation
+            JOIN user
+            ON observation.author_id = user.user_id
+            WHERE username = $author;
+        ";
+
+        command.Parameters.AddWithValue("$author", author);
+
+        using var reader = command.ExecuteReader();
+
+        var observations = new List<ObservationViewModel>();
+
+        while (reader.Read())
+        {
+            var username = reader.GetString(0);
+            var text = reader.GetString(1);
+            var timestamp = reader.GetInt64(2);
+
+            observations.Add(
+                new ObservationViewModel(
+                    username,
+                    text,
+                    timestamp.ToString()
+                )
+            );
+        }
+
+        return observations;
     }
 }
