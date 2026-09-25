@@ -4,7 +4,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddSingleton<DBFacade>( _ => new DBFacade("../Bison.SQLite/data/bison.db"));
+builder.Services.AddSingleton<DBFacade>(_ =>
+{
+    var dbPath =
+        Environment.GetEnvironmentVariable("BISONDBPATH")
+        ?? Path.Combine(Path.GetTempPath(), "bison.db");
+
+    return new DBFacade(dbPath);
+});
 builder.Services.AddSingleton<IObservationService, ObservationService>();
 
 
