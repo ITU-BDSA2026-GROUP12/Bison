@@ -5,7 +5,7 @@ public interface IObservationService
 {
     public List<ObservationViewModel> GetObservations(int page);
     public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page);
-    public ObservationDetailsViewModel? GetObservationDetails(int observationId, int page);
+    public ObservationDetailsViewModel? GetObservationDetails(int observationId);
 }
 
 public class ObservationService : IObservationService
@@ -28,7 +28,7 @@ public class ObservationService : IObservationService
     }
 
     // Collects all information needed for the observation details page.
-    public ObservationDetailsViewModel? GetObservationDetails(int observationId, int page) {
+    public ObservationDetailsViewModel? GetObservationDetails(int observationId) {
         var observation = _dbFacade.GetObservation(observationId);
 
         if (observation == null) {
