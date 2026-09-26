@@ -3,11 +3,9 @@ using Bison.SQLite;
 
 public interface IObservationService
 {
-    public List<ObservationViewModel> GetObservations();
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author);
-    public ObservationDetailsViewModel? GetObservationDetails(int observationId);
     public List<ObservationViewModel> GetObservations(int page);
     public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page);
+    public ObservationDetailsViewModel? GetObservationDetails(int observationId, int page);
 }
 
 public class ObservationService : IObservationService
@@ -30,7 +28,7 @@ public class ObservationService : IObservationService
     }
 
     // Collects all information needed for the observation details page.
-    public ObservationDetailsViewModel? GetObservationDetails(int observationId) {
+    public ObservationDetailsViewModel? GetObservationDetails(int observationId, int page) {
         var observation = _dbFacade.GetObservation(observationId);
 
         if (observation == null) {
