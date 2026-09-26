@@ -16,4 +16,42 @@
             &mdash; @Model.Observation.Timestamp
         </small>
     </p>
+
+    <h3>Comments</h3>
+
+    @if (Model.Observation.Comments.Any()) {
+        <ul>
+            @foreach (var comment in Model.Observation.Comments) {
+                <li>
+                    <strong>@comment.Author</strong>
+                    @comment.Message
+                    <small>
+                        &mdash; @comment.Timestamp
+                    </small>
+                </li>
+            }
+        </ul>
+    }
+    else {
+        <p>No comments.</p>
+    }
+
+    <h3>Proposals</h3>
+
+    @if (Model.Observation.Proposals.Any()) {
+        <ul>
+            @foreach (var proposal in Model.Observation.Proposals) {
+                <li>
+                    <strong>@proposal.Author</strong>
+                    proposed @proposal.TaxonId
+                    <small>
+                        &mdash; @proposal.Timestamp
+                    </small>
+                </li>
+            }
+        </ul>
+    }
+    else {
+        <p>No proposals.</p>
+    }
 </div>
