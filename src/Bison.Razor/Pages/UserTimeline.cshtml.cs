@@ -14,9 +14,11 @@ public class UserTimelineModel : PageModel
         _service = service;
     }
 
-    public ActionResult OnGet(string author)
+        // this method gets called everytime a person sends a http get request
+    // for now we just tell ASP.NET which page we are on. you do it by /?page=(page number)
+    public ActionResult OnGet( string author, [FromQuery] int page = 1)
     {
-        Observations = _service.GetObservationsFromAuthor(author);
+        Observations = _service.GetObservationsFromAuthor(author,page);
         return Page();
     }
 }

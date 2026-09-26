@@ -49,7 +49,7 @@ public class DBFacade
     }
 
     // Gets observations through SQL and makes a list of them to return.
-    public List<ObservationViewModel> GetObservations()
+    public List<ObservationViewModel> GetObservations(int page)
     {
         using var connection = CreateConnection();
 
@@ -62,8 +62,11 @@ public class DBFacade
             SELECT observation_id, username, text, pub_date
             FROM observation
             JOIN user
-            ON observation.author_id = user.user_id;
+            ON observation.author_id = user.user_id
+            limit 32 offset $offset;
         ";
+
+        command.Parameters.AddWithValue("$offset", (page - 1) * 32);
 
         using var reader = command.ExecuteReader();
 
@@ -90,7 +93,7 @@ public class DBFacade
     }
 
     // Gets observations from specific author through SQL and makes a list of them to return.
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author)
+    public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page)
     {
         using var connection = CreateConnection();
 
@@ -98,15 +101,18 @@ public class DBFacade
 
         var command = connection.CreateCommand();
 
+
+        
         command.CommandText = @"
             SELECT observation_id, username, text, pub_date
             FROM observation
             JOIN user
             ON observation.author_id = user.user_id
-            WHERE username = $author;
+            WHERE username = $author
+            limit 32 offset $offset;
         ";
-
         command.Parameters.AddWithValue("$author", author);
+        command.Parameters.AddWithValue("$offset", (page - 1) * 32);
 
         using var reader = command.ExecuteReader();
 

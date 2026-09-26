@@ -6,6 +6,8 @@ public interface IObservationService
     public List<ObservationViewModel> GetObservations();
     public List<ObservationViewModel> GetObservationsFromAuthor(string author);
     public ObservationDetailsViewModel? GetObservationDetails(int observationId);
+    public List<ObservationViewModel> GetObservations(int page);
+    public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page);
 }
 
 public class ObservationService : IObservationService
@@ -17,14 +19,14 @@ public class ObservationService : IObservationService
         _dbFacade = dbFacade;
     }
 
-    public List<ObservationViewModel> GetObservations()
+    public List<ObservationViewModel> GetObservations(int page)
     {
-        return _dbFacade.GetObservations();
+        return _dbFacade.GetObservations(page);
     }
 
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author)
+    public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page)
     {
-        return _dbFacade.GetObservationsFromAuthor(author);
+        return _dbFacade.GetObservationsFromAuthor(author, page);
     }
 
     // Collects all information needed for the observation details page.
