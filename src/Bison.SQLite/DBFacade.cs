@@ -68,6 +68,8 @@ public class DBFacade
 
         var command = connection.CreateCommand();
 
+
+        
         command.CommandText = @"
             SELECT username, text, pub_date
             FROM observation
