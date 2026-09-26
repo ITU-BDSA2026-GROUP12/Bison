@@ -9,7 +9,7 @@
 <div>
     <h2> @routeName's Observations </h2>
 
-    @if (Model.Observations.Any())
+    @if (Model.Observations?.Any() == true)
     {
         <ul id="messagelist" class="observations">
             @foreach (var ob in Model.Observations)

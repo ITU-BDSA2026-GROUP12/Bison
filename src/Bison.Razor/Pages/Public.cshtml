@@ -8,7 +8,7 @@
 <div>
     <h2> Public Timeline </h2>
 
-    @if (Model.Observations.Any())
+    @if (Model.Observations?.Any() == true)
     {
         <ul id="messagelist" class="observations">
             @foreach (var obs in Model.Observations)
