@@ -4,6 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Uses BISONPATH, if no path is found uses bison.db on you temp
 builder.Services.AddSingleton<DBFacade>(_ =>
 {
     var dbPath =
@@ -26,6 +28,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();

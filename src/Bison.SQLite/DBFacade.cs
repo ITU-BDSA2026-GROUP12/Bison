@@ -17,6 +17,7 @@ public class DBFacade
         return new SqliteConnection($"Data Source={_dbPath}");
     }
 
+    // Gets observations through SQL and makes a list of them to return.
     public List<ObservationViewModel> GetObservations()
     {
         using var connection = CreateConnection();
@@ -55,6 +56,7 @@ public class DBFacade
         return observations;
     }
 
+    // Gets observations from specific author through SQL and makes a list of them to return.
     public List<ObservationViewModel> GetObservationsFromAuthor(string author)
     {
         using var connection = CreateConnection();
