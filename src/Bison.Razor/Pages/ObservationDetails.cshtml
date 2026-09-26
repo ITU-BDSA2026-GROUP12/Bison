@@ -1,0 +1,19 @@
+@page "/ob/{id:int?}"
+@model Bison.Razor.Pages.ObservationDetailsModel
+
+@{
+    ViewData["Title"] = "Observation";
+    Layout = "Shared/_Layout";
+}
+
+<div>
+    <h2>Observation</h2>
+
+    <p>
+        <strong>@Model.Observation!.Author</strong>
+        @Model.Observation.Message
+        <small>
+            &mdash; @Model.Observation.Timestamp
+        </small>
+    </p>
+</div>
