@@ -8,7 +8,7 @@
 <div>
     <h2> Public Timeline </h2>
 
-    @if (Model.Observations.Any())
+    @if (Model.Observations?.Any() == true)
     {
         <ul id="messagelist" class="observations">
             @foreach (var obs in Model.Observations)
@@ -18,7 +18,9 @@
                         <strong>
                             <a href="/@obs.Author">@obs.Author</a>
                         </strong>
-                        @obs.Message
+                        <a href="/ob/@obs.ObservationId">
+                            @obs.Message
+                        </a>
                         <small>&mdash; @obs.Timestamp</small>
                     </p>
                 </li>
