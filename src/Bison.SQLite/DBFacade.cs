@@ -25,7 +25,7 @@ public class DBFacade
         var command = connection.CreateCommand();
 
         command.CommandText = @"
-            SELECT username, text, pub_date
+            SELECT observation_id, username, text, pub_date
             FROM observation
             JOIN user
             ON observation.author_id = user.user_id
@@ -41,9 +41,10 @@ public class DBFacade
         }
 
         return new ObservationViewModel(
-            reader.GetString(0),
+            reader.GetInt32(0),
             reader.GetString(1),
-            reader.GetInt64(2).ToString()
+            reader.GetString(2),
+            reader.GetInt64(3).ToString()
         );
     }
 
@@ -58,7 +59,7 @@ public class DBFacade
 
         // We need to determine if we want SQL queries to be capital or lower-case
         command.CommandText = @"
-            SELECT username, text, pub_date
+            SELECT observation_id, username, text, pub_date
             FROM observation
             JOIN user
             ON observation.author_id = user.user_id;
@@ -70,12 +71,14 @@ public class DBFacade
 
         while (reader.Read())
         {
-            var username = reader.GetString(0);
-            var text = reader.GetString(1);
-            var timestamp = reader.GetInt64(2);
+            var observationId = reader.GetInt32(0);
+            var username = reader.GetString(1);
+            var text = reader.GetString(2);
+            var timestamp = reader.GetInt64(3);
 
             observations.Add(
                 new ObservationViewModel(
+                    observationId,
                     username,
                     text,
                     timestamp.ToString()
@@ -96,7 +99,7 @@ public class DBFacade
         var command = connection.CreateCommand();
 
         command.CommandText = @"
-            SELECT username, text, pub_date
+            SELECT observation_id, username, text, pub_date
             FROM observation
             JOIN user
             ON observation.author_id = user.user_id
@@ -111,12 +114,14 @@ public class DBFacade
 
         while (reader.Read())
         {
-            var username = reader.GetString(0);
-            var text = reader.GetString(1);
-            var timestamp = reader.GetInt64(2);
+            var observationId = reader.GetInt32(0);
+            var username = reader.GetString(1);
+            var text = reader.GetString(2);
+            var timestamp = reader.GetInt64(3);
 
             observations.Add(
                 new ObservationViewModel(
+                    observationId,
                     username,
                     text,
                     timestamp.ToString()
