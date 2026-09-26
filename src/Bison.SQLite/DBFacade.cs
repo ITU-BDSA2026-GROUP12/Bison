@@ -17,6 +17,36 @@ public class DBFacade
         return new SqliteConnection($"Data Source={_dbPath}");
     }
 
+    // Get individual observation from the database using its ID.
+    public ObservationViewModel? GetObservation(int observationId) {
+        using var connection = CreateConnection();
+        connection.Open();
+
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+            SELECT username, text, pub_date
+            FROM observation
+            JOIN user
+            ON observation.author_id = user.user_id
+            WHERE observation.observation_id = $observationId;
+        ";
+
+        command.Parameters.AddWithValue("$observationId", observationId);
+
+        using var reader = command.ExecuteReader();
+
+        if (!reader.Read()) {
+            return null;
+        }
+
+        return new ObservationViewModel(
+            reader.GetString(0),
+            reader.GetString(1),
+            reader.GetInt64(2).ToString()
+        );
+    }
+
     // Gets observations through SQL and makes a list of them to return.
     public List<ObservationViewModel> GetObservations()
     {
@@ -95,5 +125,77 @@ public class DBFacade
         }
 
         return observations;
+    }
+
+    // Gets all comments belonging to a specific observation.
+    public List<Comment> GetComments(int observationId) {
+        using var connection = CreateConnection();
+        connection.Open();
+
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+            SELECT username, text, pub_date
+            FROM comment
+            JOIN user
+            ON comment.author_id = user.user_id
+            WHERE comment.observation_id = $observationId;
+        ";
+
+        command.Parameters.AddWithValue("$observationId", observationId);
+
+        using var reader = command.ExecuteReader();
+
+        var comments = new List<Comment>();
+
+        // Creates a Comment object for each matching row in the database.
+        while (reader.Read()) {
+            comments.Add(
+                new Comment(
+                    observationId,
+                    reader.GetString(0),
+                    reader.GetString(1),
+                    reader.GetInt64(2)
+                )
+            );
+        }
+
+        return comments;
+    }
+
+    // Gets all taxon proposals belonging to a specific observation.
+    public List<Proposal> GetProposals(int observationId) {
+        using var connection = CreateConnection();
+        connection.Open();
+
+        var command = connection.CreateCommand();
+
+        command.CommandText = @"
+            SELECT username, taxon_id, pub_date
+            FROM proposal
+            JOIN user
+            ON proposal.author_id = user.user_id
+            WHERE proposal.observation_id = $observationId;
+        ";
+
+        command.Parameters.AddWithValue("$observationId", observationId);
+
+        using var reader = command.ExecuteReader();
+
+        var proposals = new List<Proposal>();
+
+        // Creates a Proposal object for each matching row in the database.
+        while (reader.Read()) {
+            proposals.Add(
+                new Proposal(
+                    observationId,
+                    reader.GetString(0),
+                    reader.GetString(1),
+                    reader.GetInt64(2)
+                )
+            );
+        }
+
+        return proposals;
     }
 }
