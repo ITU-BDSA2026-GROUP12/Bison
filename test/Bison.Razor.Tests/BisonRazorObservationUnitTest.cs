@@ -10,12 +10,17 @@ public class BisonRazorObservationUnitTest {
         Assert.Equal("Thea tests above this fact. Tommy tests below", "Thea tests above this fact. Tommy tests below");
     }
 
+    //TODO: Definition placed down here to avoid merge conflicts. Will be tidied up after merge
+    private readonly string _dbPath = Path.GetFullPath(Path.Combine(
+            AppContext.BaseDirectory,
+            "..", "..", "..", "..", "..",
+            "src", "Bison.SQLite", "data", "bison.db"));
+
     [Fact]
     public async Task PeterFoundABigBird() {
 
         // Arrange
-        var dbPath = Path.Combine(Path.GetTempPath(), "bison.db");
-        DBFacade facade = new DBFacade(dbPath);
+        DBFacade facade = new DBFacade(_dbPath);
         IObservationService service = new ObservationService(facade);
 
         // Act
@@ -36,8 +41,7 @@ public class BisonRazorObservationUnitTest {
     public async Task EduardFoundAHeron() {
 
         // Arrange
-        var dbPath = Path.Combine(Path.GetTempPath(), "bison.db");
-        DBFacade facade = new DBFacade(dbPath);
+        DBFacade facade = new DBFacade(_dbPath);
         IObservationService service = new ObservationService(facade);
 
         // Act
