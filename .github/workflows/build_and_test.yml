@@ -22,8 +22,8 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y sqlite3
     - name: Create test database
       run: |
-        sqlite3 /tmp/bison.db < data/schema.sql
-        sqlite3 /tmp/bison.db < data/dump.sql
+        sqlite3 /tmp/bison.db < src/Bison.SQLite/data/schema.sql
+        sqlite3 /tmp/bison.db < src/Bison.SQLite/data/dump.sql
 
     - name: Verify database
       run: sqlite3 /tmp/bison.db ".tables"
