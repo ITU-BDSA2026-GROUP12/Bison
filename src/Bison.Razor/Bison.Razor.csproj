@@ -5,10 +5,15 @@
     <ProjectReference Include="..\Bison.SQLite\Bison.SQLite.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
 </Project>
