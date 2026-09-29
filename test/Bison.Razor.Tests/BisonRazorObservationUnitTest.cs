@@ -4,11 +4,8 @@ using Bison.SQLite;
 
 public class BisonRazorObservationUnitTest {
 
-    private readonly string _dbPath = Environment.GetEnvironmentVariable("BISONDBPATH") ??
-            Path.GetFullPath(Path.Combine(
-            AppContext.BaseDirectory,
-            "..", "..", "..", "..", "..",
-            "src", "Bison.SQLite", "data", "bison.db"));
+    private readonly string _dbPath = Environment.GetEnvironmentVariable("BISONDBPATH")
+            ?? Path.Combine(Path.GetTempPath(), "bison.db");
 
     [Fact]
     public async Task PeterFoundABigBird() {
