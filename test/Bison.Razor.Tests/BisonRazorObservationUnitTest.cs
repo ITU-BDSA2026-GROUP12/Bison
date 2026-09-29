@@ -3,15 +3,9 @@ namespace Bison.Razor.Tests;
 using Bison.SQLite;
 
 public class BisonRazorObservationUnitTest {
-    
-    
-    [Fact]
-    public void TheaTommySplitTest() {
-        Assert.Equal("Thea tests above this fact. Tommy tests below", "Thea tests above this fact. Tommy tests below");
-    }
 
-    //TODO: Definition placed down here to avoid merge conflicts. Will be tidied up after merge
-    private readonly string _dbPath = Path.GetFullPath(Path.Combine(
+    private readonly string _dbPath = Environment.GetEnvironmentVariable("BISONDBPATH") ??
+            Path.GetFullPath(Path.Combine(
             AppContext.BaseDirectory,
             "..", "..", "..", "..", "..",
             "src", "Bison.SQLite", "data", "bison.db"));
