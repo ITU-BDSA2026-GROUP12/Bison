@@ -36,3 +36,7 @@ app.UseRouting();
 app.MapRazorPages();
 
 app.Run();
+
+//Needed for Razor pages integration tests to locate the program
+public partial class Program {
+}

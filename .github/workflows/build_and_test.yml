@@ -4,6 +4,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,5 +18,17 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+    - name: Install SQLite
+      run: sudo apt-get update && sudo apt-get install -y sqlite3
+    - name: Create test database
+      run: |
+        sqlite3 /tmp/bison.db < src/Bison.SQLite/data/schema.sql
+        sqlite3 /tmp/bison.db < src/Bison.SQLite/data/dump.sql
+
+    - name: Verify database
+      run: sqlite3 /tmp/bison.db ".tables"
+
     - name: Test
+      env:
+        BISONDBPATH: /tmp/bison.db
       run: dotnet test --no-build --verbosity normal
