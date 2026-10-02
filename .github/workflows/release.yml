@@ -26,6 +26,8 @@ jobs:
         run: dotnet build --no-restore -c Release
 
       - name: Test
+        env:
+          BISONDBPATH: /tmp/bison.db
         run: dotnet test --no-build -c Release --verbosity normal
 
       - name: Publish Windows
