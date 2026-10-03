@@ -1,6 +1,6 @@
 namespace Bison.Razor.Tests;
 
-using Bison.SQLite;
+using Bison.Razor;
 
 public class BisonRazorObservationUnitTest {
 
@@ -8,7 +8,7 @@ public class BisonRazorObservationUnitTest {
             ?? Path.Combine(Path.GetTempPath(), "bison.db");
 
     [Fact]
-    public async Task PeterFoundABigBird() {
+    public void PeterFoundABigBird() {
 
         // Arrange
         DBFacade facade = new DBFacade(_dbPath);
@@ -29,7 +29,7 @@ public class BisonRazorObservationUnitTest {
     }
 
     [Fact]
-    public async Task EduardFoundAHeron() {
+    public void EduardFoundAHeron() {
 
         // Arrange
         DBFacade facade = new DBFacade(_dbPath);
