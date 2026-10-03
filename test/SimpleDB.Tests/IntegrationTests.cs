@@ -1,3 +1,4 @@
+/*
 using System.Net.Http.Json;
 using Model;
 using SimpleDB;
@@ -9,7 +10,7 @@ public class IntegrationTests
 {
     //IntegrationTests removed for now to eliminate any need for using WebApplicationFactory<Program>.
     
-    /*
+    
     [Fact]
     public async Task CanReadObservationsFromWebService()
     {
@@ -39,5 +40,6 @@ public class IntegrationTests
 
         //Assert
         Assert.True(result);
-    }*/
+    }
 }
+*/
