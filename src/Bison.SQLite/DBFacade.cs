@@ -4,6 +4,8 @@ using Model;
 namespace Bison.SQLite;
 
 public class DBFacade
+
+
 {
     private readonly string _dbPath;
 
@@ -210,3 +212,6 @@ public class DBFacade
         return proposals;
     }
 }
+
+
+

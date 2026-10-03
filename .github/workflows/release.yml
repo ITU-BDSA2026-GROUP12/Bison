@@ -24,18 +24,29 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore -c Release
+      - name: Install SQLite
+        run: sudo apt-get update && sudo apt-get install -y sqlite3
+      - name: Create test database
+        run: |
+          sqlite3 /tmp/bison.db < src/Bison.SQLite/data/schema.sql
+          sqlite3 /tmp/bison.db < src/Bison.SQLite/data/dump.sql
+
+      - name: Verify database
+        run: sqlite3 /tmp/bison.db ".tables"
 
       - name: Test
+        env:
+          BISONDBPATH: /tmp/bison.db
         run: dotnet test --no-build -c Release --verbosity normal
 
       - name: Publish Windows
-        run: dotnet publish Bison.CLI.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o ./publish/win-x64
+        run: dotnet publish src/Bison.Razor/Bison.Razor.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o ./publish/win-x64
 
       - name: Publish macOS
-        run: dotnet publish Bison.CLI.csproj -c Release -r osx-x64 --self-contained false -p:PublishSingleFile=true -o ./publish/osx-x64
+        run: dotnet publish src/Bison.Razor/Bison.Razor.csproj -c Release -r osx-x64 --self-contained false -p:PublishSingleFile=true -o ./publish/osx-x64
 
       - name: Publish Linux
-        run: dotnet publish Bison.CLI.csproj -c Release -r linux-x64 --self-contained false -p:PublishSingleFile=true -o ./publish/linux-x64
+        run: dotnet publish src/Bison.Razor/Bison.Razor.csproj -c Release -r linux-x64 --self-contained false -p:PublishSingleFile=true -o ./publish/linux-x64
 
       - name: Zip Windows build
         run: cd publish/win-x64 && zip -r ../../bison-win-x64.zip .
