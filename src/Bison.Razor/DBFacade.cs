@@ -1,7 +1,7 @@
 using Microsoft.Data.Sqlite;
 using Model;
 
-namespace Bison.SQLite;
+namespace Bison.Razor;
 
 public class DBFacade
 
