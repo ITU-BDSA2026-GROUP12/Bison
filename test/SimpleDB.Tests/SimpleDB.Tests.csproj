@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SimpleDB\SimpleDB.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
   <ProjectReference Include="..\..\src\Model\Model.csproj" />
   </ItemGroup>
 
