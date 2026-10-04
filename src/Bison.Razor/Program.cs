@@ -1,4 +1,5 @@
 using Bison.Razor;
+using Bison.Razor.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddSingleton<DBFacade>(_ =>
     return new DBFacade(dbPath);
 });
 builder.Services.AddSingleton<IObservationService, ObservationService>();
+builder.Services.AddSingleton<IPostRepository, PostRepository>();
 
 
 var app = builder.Build();
