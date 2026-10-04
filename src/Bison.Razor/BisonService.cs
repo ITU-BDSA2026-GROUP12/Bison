@@ -30,7 +30,24 @@ public class ObservationService : IObservationService
 
     // Collects all information needed for the observation details page.
     public ObservationDetailsViewModel? GetObservationDetails(int observationId) {
-        return _repository.GetObservationDetails(observationId);
+        var observation = _repository.GetObservation(observationId);
+
+        if (observation == null) {
+            return null;
+        }
+
+        var comments = _repository.GetComments(observationId);
+
+        var proposals = _repository.GetProposals(observationId);
+
+        return new ObservationDetailsViewModel(
+            observationId,
+            observation.Author,
+            observation.Message,
+            observation.Timestamp,
+            comments,
+            proposals
+        );
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
