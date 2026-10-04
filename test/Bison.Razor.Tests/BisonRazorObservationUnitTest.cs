@@ -1,6 +1,7 @@
 namespace Bison.Razor.Tests;
 
 using Bison.Razor;
+using Bison.Razor.Repositories;
 
 public class BisonRazorObservationUnitTest {
 
@@ -12,7 +13,8 @@ public class BisonRazorObservationUnitTest {
 
         // Arrange
         DBFacade facade = new DBFacade(_dbPath);
-        IObservationService service = new ObservationService(facade);
+        IPostRepository repository = new PostRepository(facade);
+        IObservationService service = new ObservationService(repository);
 
         // Act
         bool observationFound = false;
@@ -33,7 +35,8 @@ public class BisonRazorObservationUnitTest {
 
         // Arrange
         DBFacade facade = new DBFacade(_dbPath);
-        IObservationService service = new ObservationService(facade);
+        IPostRepository repository = new PostRepository(facade);
+        IObservationService service = new ObservationService(repository);
 
         // Act
         bool observationFound = false;

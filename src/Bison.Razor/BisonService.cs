@@ -1,5 +1,6 @@
 using Model;
 using Bison.Razor;
+using Bison.Razor.Repositories;
 
 public interface IObservationService
 {
@@ -10,43 +11,26 @@ public interface IObservationService
 
 public class ObservationService : IObservationService
 {
-    private readonly DBFacade _dbFacade;
+    private readonly IPostRepository _repository;
 
-    public ObservationService(DBFacade dbFacade)
+    public ObservationService(IPostRepository repository)
     {
-        _dbFacade = dbFacade;
+        _repository = repository;
     }
 
     public List<ObservationViewModel> GetObservations(int page)
     {
-        return _dbFacade.GetObservations(page);
+        return _repository.GetObservations(page);
     }
 
     public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page)
     {
-        return _dbFacade.GetObservationsFromAuthor(author, page);
+        return _repository.GetObservationsFromAuthor(author, page);
     }
 
     // Collects all information needed for the observation details page.
     public ObservationDetailsViewModel? GetObservationDetails(int observationId) {
-        var observation = _dbFacade.GetObservation(observationId);
-
-        if (observation == null) {
-            return null;
-        }
-
-        var comments = _dbFacade.GetComments(observationId);
-
-        var proposals = _dbFacade.GetProposals(observationId);
-
-        return new ObservationDetailsViewModel(
-            observationId,
-            observation.Author,
-            observation.Message,
-            observation.Timestamp,
-            comments,
-            proposals
-        );
+        return _repository.GetObservationDetails(observationId);
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
