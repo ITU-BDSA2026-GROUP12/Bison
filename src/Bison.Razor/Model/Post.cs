@@ -4,9 +4,9 @@ using System;
 
 public abstract class Post
 {
-    String text{get; set;}
-    Author author{get; set;}
-    DateTime timestamp{get;}
+    public String text{get; set;}
+    public Author author{get; set;}
+    public DateTime timestamp{get;}
 
 protected Post(Author author, String text, DateTime timestamp)
     {

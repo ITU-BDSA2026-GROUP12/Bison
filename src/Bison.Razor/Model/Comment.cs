@@ -7,7 +7,7 @@ public class Comment : Post
 
     int observationId;
 
-    public Observation observation{get;}
+    public Observation? observation{get;}
 
     // base is the super call to the Post constructor
     public Comment(Author author, String text, DateTime timestamp, int observationId) : base(author, text, timestamp)

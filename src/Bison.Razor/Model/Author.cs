@@ -3,11 +3,11 @@ using System;
 
 public class Author
 {
-    String name{get; set;}
-    String email{get; set;}
+     public String name{get; set;}
+    public String email{get; set;}
 
 
-// this list is private, so it can only be accessed from inside the class
+    // this list is private, so it can only be accessed from inside the class
     private readonly List<Post> _posts = new();
 
     // this list is read-only, so it can be accessed from outside the class, but not modified

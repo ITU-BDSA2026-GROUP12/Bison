@@ -1,4 +1,3 @@
-// Taxon.cs
 namespace Bison.Razor.Model;
 
 public class Taxon
