@@ -1,7 +1,6 @@
 namespace Bison.Razor.DTOs;
 
-public record ObservationDTO(
-    int ObservationId,
+public record CommentDTO(
     string Author,
     string Message,
     string Timestamp
