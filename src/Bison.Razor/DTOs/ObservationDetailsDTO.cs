@@ -1,5 +1,6 @@
 namespace Bison.Razor.DTOs;
 
+//contains all information needed to display observation page
 public record ObservationDetailsDTO(
     int ObservationId,
     string Author,

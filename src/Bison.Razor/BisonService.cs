@@ -24,8 +24,10 @@ public class ObservationService : IObservationService
         //get our original observations so we can turn them into DTOs
         var observations = _repository.GetObservations(page);
 
+        //empty list for the DTOs that will be sent to the view
         var observationDTOs = new List<ObservationDTO>();
 
+        //convert each observation into a ObservationDTO
         foreach (var observation in observations)
         {
             var dto = new ObservationDTO(
@@ -38,14 +40,18 @@ public class ObservationService : IObservationService
             observationDTOs.Add(dto);
         }
 
+        //return observationDTOs instead of original observations
         return observationDTOs;
     }
 
     public List<ObservationDTO> GetObservationsFromAuthor(string author, int page)
     {
+        //get observations for a specific author
         var observations = _repository.GetObservationsFromAuthor(author, page);
+        //empty list for the DTOs 
         var observationDTOs = new List<ObservationDTO>();
 
+        //Convert observation into ObservationDTO
         foreach (var observation in observations)
         {
             var dto = new ObservationDTO(
@@ -57,15 +63,15 @@ public class ObservationService : IObservationService
 
             observationDTOs.Add(dto);
         }
-
+        //return observationDTOs instead of original observations
         return observationDTOs;
 
     }
 
-    // Collects all information needed for the observation details page.
+    // Collects all information needed for the observation page.
     public ObservationDetailsDTO? GetObservationDetails(int observationId)
     {
-        //get observations
+        //get observation from repository
         var observation = _repository.GetObservation(observationId);
 
         if (observation == null)
@@ -73,15 +79,12 @@ public class ObservationService : IObservationService
             return null;
         }
 
-        //get comments
+        //get comments and proposals belonging to the observation
         var comments = _repository.GetComments(observationId);
-        //get proposals
         var proposals = _repository.GetProposals(observationId);
 
         //convert comments to DTOs
         var commentDTOs = new List<CommentDTO>();
-
-        //convert proposals to DTOs
         foreach (var comment in comments)
         {
             var dto = new CommentDTO(
@@ -95,7 +98,6 @@ public class ObservationService : IObservationService
 
         //convert proposals to DTOs
         var proposalDTOs = new List<ProposalDTO>();
-
         foreach (var proposal in proposals)
         {
             var dto = new ProposalDTO(
@@ -106,7 +108,7 @@ public class ObservationService : IObservationService
             proposalDTOs.Add(dto);
         }
 
-        //return everything as one ObservationDetailsDTO
+        //Combine observation, comments and proposals into one DTO
         return new ObservationDetailsDTO(
             observationId,
             observation.Author,
