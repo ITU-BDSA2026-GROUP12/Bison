@@ -1,25 +1,31 @@
 using Bison.Razor;
 using Bison.Razor.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-// Uses BISONPATH, if no path is found uses bison.db on you temp
-builder.Services.AddSingleton<DBFacade>(_ =>
-{
-    var dbPath =
-        Environment.GetEnvironmentVariable("BISONDBPATH")
-        ?? Path.Combine(Path.GetTempPath(), "bison.db");
+// Use BISONDBPATH if provided, otherwise store the EF Core SQLite database in the system temp directory.
+var dbPath = Environment.GetEnvironmentVariable("BISONDBPATH") ?? Path.Combine(Path.GetTempPath(), "bison-ef.db");
 
-    return new DBFacade(dbPath);
-});
-builder.Services.AddSingleton<IObservationService, ObservationService>();
-builder.Services.AddSingleton<IPostRepository, PostRepository>();
+builder.Services.AddDbContext<BisonDBContext>(options => options.UseSqlite($"Data Source={dbPath}"));
+
+builder.Services.AddScoped<IObservationService, ObservationService>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 
 var app = builder.Build();
+
+// Ensure the database exists, then seed it with the example data from DbInitializer.
+using (var scope = app.Services.CreateScope()) {
+    var context = scope.ServiceProvider.GetRequiredService<BisonDBContext>();
+
+    context.Database.EnsureCreated();
+
+    DbInitializer.SeedDatabase(context);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
