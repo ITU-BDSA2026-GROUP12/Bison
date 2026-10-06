@@ -77,7 +77,7 @@ public class PostRepository : IPostRepository {
                 observationId,
                 comment.Author.Name,
                 comment.Text,
-                new DateTimeOffset(comment.TimeStamp).ToUnixTimeSeconds()
+                new DateTimeOffset(DateTime.SpecifyKind(comment.TimeStamp, DateTimeKind.Utc)).ToUnixTimeSeconds()   // UTC time
             ))
             .ToList();
     }
@@ -93,8 +93,8 @@ public class PostRepository : IPostRepository {
             .Select(proposal => new Proposal(
                 observationId,
                 proposal.Author.Name,
-                proposal.Taxon.DwcTaxonId,
-                new DateTimeOffset(proposal.TimeStamp).ToUnixTimeSeconds()
+                proposal.Taxon.VernacularName ?? proposal.Taxon.DwcTaxonId,
+                new DateTimeOffset(DateTime.SpecifyKind(proposal.TimeStamp, DateTimeKind.Utc)).ToUnixTimeSeconds()  // UTC time
             ))
             .ToList();
     }
