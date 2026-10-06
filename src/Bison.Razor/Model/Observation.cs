@@ -3,14 +3,14 @@ using System;
 
 public class Observation : Post
 {
-    int observationId;
-    public Taxon? taxon{get; set;}
+    public Taxon? Taxon { get; set; }
+    public List<Comment> Comments { get; set; } = new();
+    public List<Proposal> Proposals { get; set; } = new();
+
+    public Observation() {}
+    
     public Observation(Author author, String text, DateTime timestamp, Taxon? taxon = null) : base(author, text, timestamp)
     {
-        this.taxon = taxon;
+        Taxon = taxon;
     }
-
-
-
-
 }

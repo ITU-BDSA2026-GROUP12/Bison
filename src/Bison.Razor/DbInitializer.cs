@@ -1,4 +1,5 @@
-using System;
+namespace Bison.Razor;
+using Bison.Razor.Model;
 
 public static class DbInitializer
 {
