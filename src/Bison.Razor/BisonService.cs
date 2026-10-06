@@ -1,12 +1,13 @@
 using Model;
 using Bison.Razor;
 using Bison.Razor.Repositories;
+using Bison.Razor.DTOs;
 
 public interface IObservationService
 {
-    public List<ObservationViewModel> GetObservations(int page);
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page);
-    public ObservationDetailsViewModel? GetObservationDetails(int observationId);
+    public List<ObservationDTO> GetObservations(int page);
+    public List<ObservationDTO> GetObservationsFromAuthor(string author, int page);
+    public ObservationDetailsDTO? GetObservationDetails(int observationId);
 }
 
 public class ObservationService : IObservationService
@@ -18,35 +19,103 @@ public class ObservationService : IObservationService
         _repository = repository;
     }
 
-    public List<ObservationViewModel> GetObservations(int page)
+    public List<ObservationDTO> GetObservations(int page)
     {
-        return _repository.GetObservations(page);
+        //get our original observations so we can turn them into DTOs
+        var observations = _repository.GetObservations(page);
+
+        //empty list for the DTOs that will be sent to the view
+        var observationDTOs = new List<ObservationDTO>();
+
+        //convert each observation into a ObservationDTO
+        foreach (var observation in observations)
+        {
+            var dto = new ObservationDTO(
+                observation.ObservationId,
+                observation.Author,
+                observation.Message,
+                observation.Timestamp
+            );
+
+            observationDTOs.Add(dto);
+        }
+
+        //return observationDTOs instead of original observations
+        return observationDTOs;
     }
 
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page)
+    public List<ObservationDTO> GetObservationsFromAuthor(string author, int page)
     {
-        return _repository.GetObservationsFromAuthor(author, page);
+        //get observations for a specific author
+        var observations = _repository.GetObservationsFromAuthor(author, page);
+        //empty list for the DTOs 
+        var observationDTOs = new List<ObservationDTO>();
+
+        //Convert observation into ObservationDTO
+        foreach (var observation in observations)
+        {
+            var dto = new ObservationDTO(
+                observation.ObservationId,
+                observation.Author,
+                observation.Message,
+                observation.Timestamp
+            );
+
+            observationDTOs.Add(dto);
+        }
+        //return observationDTOs instead of original observations
+        return observationDTOs;
+
     }
 
-    // Collects all information needed for the observation details page.
-    public ObservationDetailsViewModel? GetObservationDetails(int observationId) {
+    // Collects all information needed for the observation page.
+    public ObservationDetailsDTO? GetObservationDetails(int observationId)
+    {
+        //get observation from repository
         var observation = _repository.GetObservation(observationId);
 
-        if (observation == null) {
+        if (observation == null)
+        {
             return null;
         }
 
+        //get comments and proposals belonging to the observation
         var comments = _repository.GetComments(observationId);
-
         var proposals = _repository.GetProposals(observationId);
 
-        return new ObservationDetailsViewModel(
+        //convert comments to DTOs
+        var commentDTOs = new List<CommentDTO>();
+        foreach (var comment in comments)
+        {
+            var dto = new CommentDTO(
+            comment.Author,
+            comment.Message,
+            UnixTimeStampToDateTimeString(comment.Timestamp)
+             );
+
+            commentDTOs.Add(dto);
+        }
+
+        //convert proposals to DTOs
+        var proposalDTOs = new List<ProposalDTO>();
+        foreach (var proposal in proposals)
+        {
+            var dto = new ProposalDTO(
+                proposal.Author,
+                proposal.TaxonId,
+                UnixTimeStampToDateTimeString(proposal.Timestamp)
+            );
+            proposalDTOs.Add(dto);
+        }
+
+        //Combine observation, comments and proposals into one DTO
+        return new ObservationDetailsDTO(
             observationId,
             observation.Author,
             observation.Message,
             observation.Timestamp,
-            comments,
-            proposals
+            commentDTOs,
+            proposalDTOs
         );
     }
 
