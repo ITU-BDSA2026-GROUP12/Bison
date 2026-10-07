@@ -5,13 +5,15 @@ public class Comment : Post
 {
     // Timestamp, author and text is already in post
 
-    int observationId;
+    public int ObservationId { get; set; }
 
-    public Observation? observation{get;}
+    public Observation Observation { get; set; } = null!;
 
+    public Comment() {}
+    
     // base is the super call to the Post constructor
     public Comment(Author author, String text, DateTime timestamp, int observationId) : base(author, text, timestamp)
     {
-        this.observationId = observationId;
+        ObservationId = observationId;
     }
 }

@@ -3,27 +3,25 @@ using System;
 
 public class Author
 {
-     public String name{get; set;}
-    public String email{get; set;}
+    public int AuthorId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public List<Post> Posts { get; set; } = new();
 
+    public Author() {}
 
-    // this list is private, so it can only be accessed from inside the class
-    private readonly List<Post> _posts = new();
-
-    // this list is read-only, so it can be accessed from outside the class, but not modified
-    public IReadOnlyList<Post> Posts => _posts;
-
-    public Author(String name, String email)
+    public Author(int authorId, String name, String email, List<Post> posts)
     {
-        this.name = name;
-        this.email = email;
+        AuthorId = authorId;
+        Name = name;
+        Email = email;
+        Posts = posts;
     }
 
-
-// this is method where the post is added to the list of posts for the author
+    // this is method where the post is added to the list of posts for the author
     internal void AddPost(Post post)
     {
-        _posts.Add(post);
+        Posts.Add(post);
     }
 
 }

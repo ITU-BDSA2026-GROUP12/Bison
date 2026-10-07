@@ -2,16 +2,24 @@ namespace Bison.Razor.Model;
 
 public class Taxon
 {
-    public string DwcTaxonId { get; }
+    public int TaxonId { get; set; }
+    public string DwcTaxonId { get; set; } = string.Empty;
+    public string dwc_TaxonID {
+        get => DwcTaxonId;
+        set => DwcTaxonId = value;
+    }
     public string? VernacularName { get; set; } 
-
-    public Taxon? Parent { get; }
-
+    public int? ParentId { get; set; }
+    public Taxon? Parent { get; set; }
     private readonly List<Taxon> _children = new();
-    public IReadOnlyList<Taxon> Children => _children;
+    public List<Taxon> Children => _children;
 
-    public Taxon(string dwcTaxonId, string? vernacularName = null, Taxon? parent = null)
+    public Taxon() {}
+    
+    
+    public Taxon(int taxonId, string dwcTaxonId, string? vernacularName = null, Taxon? parent = null)
     {
+        TaxonId = taxonId;
         DwcTaxonId = dwcTaxonId;
         VernacularName = vernacularName;
         Parent = parent;

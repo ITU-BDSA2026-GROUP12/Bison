@@ -2,54 +2,102 @@ namespace Bison.Razor.Tests;
 
 using Bison.Razor;
 using Bison.Razor.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 public class BisonRazorObservationUnitTest {
 
-    private readonly string _dbPath = Environment.GetEnvironmentVariable("BISONDBPATH")
-            ?? Path.Combine(Path.GetTempPath(), "bison.db");
+    private static BisonDBContext CreateContext() {
+        var options = new DbContextOptionsBuilder<BisonDBContext>().UseSqlite("Data Source=:memory:").Options;
+
+        var context = new BisonDBContext(options);
+
+        context.Database.OpenConnection();
+        context.Database.EnsureCreated();
+
+        DbInitializer.SeedDatabase(context);
+
+        return context;
+    }
 
     [Fact]
-    public void PeterFoundABigBird() {
-
+    public void SeededObservationCanBeFound() {
         // Arrange
-        DBFacade facade = new DBFacade(_dbPath);
-        IPostRepository repository = new PostRepository(facade);
+        using var context = CreateContext();
+
+        IPostRepository repository = new PostRepository(context);
         IObservationService service = new ObservationService(repository);
 
         // Act
-        bool observationFound = false;
         var observations = service.GetObservations(1);
-        foreach (var obs in observations) {
-            if (obs.Author == "Peter" && obs.Message.ToLower() == "a big bird") {
-                observationFound = true;
-                break;
-            }
-        }
 
         // Assert
-        Assert.True(observationFound);
+        Assert.NotEmpty(observations);
     }
 
     [Fact]
-    public void EduardFoundAHeron() {
-
+    public void KnownSeededObservationCanBeFound() {
         // Arrange
-        DBFacade facade = new DBFacade(_dbPath);
-        IPostRepository repository = new PostRepository(facade);
+        using var context = CreateContext();
+
+        IPostRepository repository = new PostRepository(context);
         IObservationService service = new ObservationService(repository);
 
         // Act
-        bool observationFound = false;
-        var observations = service.GetObservationsFromAuthor("Eduard", 1);
-        foreach (var obs in observations) {
-            if (obs.Message.ToLower() == "a heron") {
-                observationFound = true;
-                break;
-            }
-        }
+        var observations = service.GetObservations(1);
 
         // Assert
-        Assert.True(observationFound);
+        Assert.Contains(
+            observations,
+            observation => observation.Author == "Wendell Ballan"
+        );
     }
 
+    [Fact]
+    public void ObservationsCanBeFilteredByAuthor() {
+        // Arrange
+        using var context = CreateContext();
+
+        IPostRepository repository = new PostRepository(context);
+        IObservationService service = new ObservationService(repository);
+
+        // Act
+        var observations = service.GetObservationsFromAuthor("Wendell Ballan", 1);
+
+        // Assert
+        Assert.NotEmpty(observations);
+
+        Assert.All(
+            observations,
+            observation => Assert.Equal("Wendell Ballan", observation.Author)
+        );
+    }
+
+    [Fact]
+    public void ObservationCanBeRetrievedById() {
+        // Arrange
+        using var context = CreateContext();
+
+        IPostRepository repository = new PostRepository(context);
+
+        // Act
+        var observation = repository.GetObservation(3);
+
+        // Assert
+        Assert.NotNull(observation);
+        Assert.Equal(3, observation.ObservationId);
+    }
+    
+    [Fact]
+    public void ObservationHasSeededComments() {
+        // Arrange
+        using var context = CreateContext();
+
+        IPostRepository repository = new PostRepository(context);
+
+        // Act
+        var comments = repository.GetComments(3);
+
+        // Assert
+        Assert.NotEmpty(comments);
+    }
 }
