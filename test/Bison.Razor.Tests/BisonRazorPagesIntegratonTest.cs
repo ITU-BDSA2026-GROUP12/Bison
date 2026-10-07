@@ -14,7 +14,7 @@ public class BisonRazorPagesIntegratonTest : IClassFixture<WebApplicationFactory
     }
 
     [Fact]
-    public async Task PeterFoundABigBirdPageTest() {
+    public async Task PeterFoundABigBirdNoPageTest() {
 
         // no Arrange
 
@@ -27,12 +27,12 @@ public class BisonRazorPagesIntegratonTest : IClassFixture<WebApplicationFactory
 
         // Assert
         //TODO: Is this enough? Peter might have made another observation and another person might have observed "a big bird".
-        Assert.Contains("Peter", html);
-        Assert.Contains("a big bird", html.ToLower());
+        Assert.DoesNotContain("Peter", html);
+        Assert.DoesNotContain("a big bird", html.ToLower());
     }
 
     [Fact]
-    public async Task EduardFoundAHeronPageTest() {
+    public async Task EduardFoundAHeronNoPageTest() {
 
         // no Arrange
 
@@ -44,6 +44,6 @@ public class BisonRazorPagesIntegratonTest : IClassFixture<WebApplicationFactory
         _output.WriteLine(html);
 
         // Assert
-        Assert.Contains("a heron", html.ToLower());
+        Assert.DoesNotContain("a heron", html.ToLower());
     }
 }
