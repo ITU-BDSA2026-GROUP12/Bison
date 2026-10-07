@@ -28,8 +28,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y sqlite3
       - name: Create test database
         run: |
-          sqlite3 /tmp/bison.db < src/Bison.Razor/Data/schema.sql
-          sqlite3 /tmp/bison.db < src/Bison.Razor/Data/dump.sql
+          sqlite3 /tmp/bison.db < src/Data/schema.sql
+          sqlite3 /tmp/bison.db < src/Data/dump.sql
 
       - name: Verify database
         run: sqlite3 /tmp/bison.db ".tables"
