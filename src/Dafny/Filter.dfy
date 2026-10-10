@@ -1,3 +1,5 @@
+
+module Filtering{
 class {:extern} Taxon {
 function {:extern} isSubTaxon(ancestor: Taxon): bool
 }
@@ -42,7 +44,5 @@ function FilterBy(root: Taxon, obs: seq<Observation>): seq<Observation>
             [obs[0]] + FilterBy(root, obs[1..])
         else
             FilterBy(root, obs[1..])
-
-
-    
+}
 }
