@@ -1,14 +1,19 @@
+module {:extern "DafnyAdapters"} BisonModel {
+
+    class {:extern "TaxonAdapter"} Taxon {
+        function {:extern} isSubTaxon(ancestor: Taxon): bool
+    }
+
+    class {:extern "ObservationAdapter"} Observation {
+        function {:extern} getTaxon(): Taxon
+    }
+}
+
 
 module Filtering{
-class {:extern} Taxon {
-function {:extern} isSubTaxon(ancestor: Taxon): bool
-}
-class {:extern} Observation {
+    import opened BisonModel
+    function FilterBy(root: Taxon, obs: seq<Observation>): seq<Observation>
 
-function {:extern} getTaxon(): Taxon
-
-}
-function FilterBy(root: Taxon, obs: seq<Observation>): seq<Observation>
 
 
 // this ensures clause is here to make sure that the result of a sequence of observations is a sub taxon
