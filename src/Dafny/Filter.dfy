@@ -1,3 +1,5 @@
+//This file contains dafny implementation of our observation filter
+//Defines external classes that can connect the dafny filter to our C# adapters
 module {:extern "DafnyAdapters"} BisonModel {
 
     class {:extern "TaxonAdapter"} Taxon {
