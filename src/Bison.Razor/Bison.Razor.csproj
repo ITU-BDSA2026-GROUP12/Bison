@@ -19,5 +19,20 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../Dafny/WrappedModule.cs"
+             Link="Generated/WrappedModule.cs" />
 
+    <Compile Include="../Dafny/TaxonAdapter.cs"
+             Link="Generated/TaxonAdapter.cs" />
+
+    <Compile Include="../Dafny/ObservationAdapter.cs"
+             Link="Generated/ObservationAdapter.cs" />
+</ItemGroup>
+
+<ItemGroup>
+    <Reference Include="DafnyRuntime">
+        <HintPath>../Dafny/lib/DafnyRuntime.dll</HintPath>
+    </Reference>
+</ItemGroup>
 </Project>
