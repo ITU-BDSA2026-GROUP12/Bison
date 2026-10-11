@@ -19,7 +19,8 @@ builder.Services.AddScoped<IPostRepository, PostRepository>();
 var app = builder.Build();
 
 // Ensure the database exists, then seed it with the example data from DbInitializer.
-using (var scope = app.Services.CreateScope()) {
+using (var scope = app.Services.CreateScope())
+{
     var context = scope.ServiceProvider.GetRequiredService<BisonDBContext>();
 
     context.Database.EnsureCreated();
@@ -46,5 +47,6 @@ app.MapRazorPages();
 app.Run();
 
 //Needed for Razor pages integration tests to locate the program
-public partial class Program {
+public partial class Program
+{
 }

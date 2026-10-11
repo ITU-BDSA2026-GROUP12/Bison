@@ -1,12 +1,21 @@
-class {:extern} Taxon {
-function {:extern} isSubTaxon(ancestor: Taxon): bool
-}
-class {:extern} Observation {
+//This file contains dafny implementation of our observation filter
+//Defines external classes that can connect the dafny filter to our C# adapters
+module {:extern "DafnyAdapters"} BisonModel {
 
-function {:extern} getTaxon(): Taxon
+    class {:extern "TaxonAdapter"} Taxon {
+        function {:extern} isSubTaxon(ancestor: Taxon): bool
+    }
 
+    class {:extern "ObservationAdapter"} Observation {
+        function {:extern} getTaxon(): Taxon
+    }
 }
-function FilterBy(root: Taxon, obs: seq<Observation>): seq<Observation>
+
+
+module Filtering{
+    import opened BisonModel
+    function FilterBy(root: Taxon, obs: seq<Observation>): seq<Observation>
+
 
 
 // this ensures clause is here to make sure that the result of a sequence of observations is a sub taxon
@@ -42,7 +51,5 @@ function FilterBy(root: Taxon, obs: seq<Observation>): seq<Observation>
             [obs[0]] + FilterBy(root, obs[1..])
         else
             FilterBy(root, obs[1..])
-
-
-    
+}
 }
