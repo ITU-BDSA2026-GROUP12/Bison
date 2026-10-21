@@ -26,13 +26,13 @@ jobs:
       run: |
         dafny verify src/Dafny/WrappedModule.dfy \
           --verify-included-files
+          --allow-external-contracts
     - name: Generate C# from Dafny
       run: |
         dafny translate cs src/Dafny/WrappedModule.dfy \
           --output src/Dafny/WrappedModule.cs \
           --verify-included-files \
-          --allow-warnings \
-          --allow-external-contracts
+          --allow-warnings 
 
     # Restore and compile dotnet
     - name: Restore dependencies
