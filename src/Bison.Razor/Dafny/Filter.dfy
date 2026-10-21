@@ -7,7 +7,7 @@ module {:extern "DafnyAdapters"} BisonModel {
     }
 
     class {:extern "ObservationAdapter"} Observation {
-        function {:extern} getTaxon(): Taxon
+        function {:extern} {:axiom} getTaxon(): Taxon
     }
 }
 

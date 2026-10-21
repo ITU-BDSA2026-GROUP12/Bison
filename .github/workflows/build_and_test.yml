@@ -1,4 +1,4 @@
-name: .NET Build and Test
+name: .NET Build, Dafny and Test 
 on:
   push:
     branches: [ main ]
@@ -14,9 +14,31 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
+
+    # Dafny stuff
+    - name: Setup Dafny
+      uses: dafny-lang/setup-dafny-action@v1.9.1
+      with:
+        dafny-version: '4.11.0'
+    - name: Check Dafny installation
+      run: dafny --version
+    - name: Verify Dafny code
+      run: |
+        dafny verify src/Dafny/WrappedModule.dfy \
+          --verify-included-files
+    - name: Generate C# from Dafny
+      run: |
+        dafny translate cs src/Dafny/WrappedModule.dfy \
+          --output src/Dafny/WrappedModule.cs \
+          --verify-included-files \
+          --allow-warnings 
+
+    # Restore and compile dotnet
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+    
+    # Run tests
     - name: Test
       run: dotnet test --no-build --verbosity normal
