@@ -31,7 +31,8 @@ jobs:
         dafny translate cs src/Dafny/WrappedModule.dfy \
           --output src/Dafny/WrappedModule.cs \
           --verify-included-files \
-          --allow-warnings
+          --allow-warnings \
+          --allow-external-contracts
 
     # Restore and compile dotnet
     - name: Restore dependencies
