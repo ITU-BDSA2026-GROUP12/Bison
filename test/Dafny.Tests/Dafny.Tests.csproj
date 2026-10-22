@@ -19,5 +19,27 @@
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="../../src/Bison.Razor/Bison.Razor.csproj" />
+</ItemGroup>
+
+<ItemGroup>
+    <Compile Include="../../src/Dafny/WrappedModule.cs"
+             Link="Generated/WrappedModule.cs" />
+
+    <Compile Include="../../src/Dafny/TaxonAdapter.cs"
+             Link="Generated/TaxonAdapter.cs" />
+
+    <Compile Include="../../src/Dafny/ObservationAdapter.cs"
+             Link="Generated/ObservationAdapter.cs" />
+</ItemGroup>
+
+<ItemGroup>
+    <Reference Include="DafnyRuntime">
+        <HintPath>../../src/Dafny/lib/DafnyRuntime.dll</HintPath>
+    </Reference>
+</ItemGroup>
+
 
 </Project>
