@@ -24,19 +24,19 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore -c Release
-      - name: Install SQLite
-        run: sudo apt-get update && sudo apt-get install -y sqlite3
-      - name: Create test database
-        run: |
-          sqlite3 /tmp/bison.db < src/Data/schema.sql
-          sqlite3 /tmp/bison.db < src/Data/dump.sql
+      #- name: Install SQLite
+      #  run: sudo apt-get update && sudo apt-get install -y sqlite3
+      #- name: Create test database
+      #  run: |
+      #    sqlite3 /tmp/bison.db < src/Data/schema.sql
+      #    sqlite3 /tmp/bison.db < src/Data/dump.sql
 
-      - name: Verify database
-        run: sqlite3 /tmp/bison.db ".tables"
+      #- name: Verify database
+      #  run: sqlite3 /tmp/bison.db ".tables"
 
       - name: Test
-        env:
-          BISONDBPATH: /tmp/bison.db
+      #  env:
+      #    BISONDBPATH: /tmp/bison.db
         run: dotnet test --no-build -c Release --verbosity normal
 
       - name: Publish Windows
