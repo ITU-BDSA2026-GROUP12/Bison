@@ -1,9 +1,10 @@
 using Bison.Razor.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Bison.Razor;
 
-public class BisonDBContext : DbContext {
+public class BisonDBContext : IdentityDbContext<ApplicationUser> {
     public BisonDBContext(DbContextOptions<BisonDBContext> options) : base(options) {}
 
     public DbSet<Post> Posts => Set<Post>();
