@@ -12,6 +12,10 @@ var dbPath = Environment.GetEnvironmentVariable("BISONDBPATH") ?? Path.Combine(P
 
 builder.Services.AddDbContext<BisonDBContext>(options => options.UseSqlite($"Data Source={dbPath}"));
 
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+ options.SignIn.RequireConfirmedAccount = true)
+.AddEntityFrameworkStores<BisonDBContext>();
+
 builder.Services.AddScoped<IObservationService, ObservationService>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ITaxonFilterService, TaxonFilterService>();
@@ -41,6 +45,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.MapRazorPages();
 
