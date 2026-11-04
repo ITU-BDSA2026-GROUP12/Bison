@@ -1,6 +1,7 @@
 using Bison.Razor;
 using Bison.Razor.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,13 +21,17 @@ builder.Services.AddScoped<IObservationService, ObservationService>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ITaxonFilterService, TaxonFilterService>();
 
-builder.Services.AddAuthentication() 
-    .AddGitHub(options => 
-    { 
-        options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"]!; 
-        options.ClientSecret = 
-builder.Configuration["Authentication:GitHub:ClientSecret"]!; 
-    });
+builder.Services.AddAuthentication(options => {
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = "GitHub";
+})
+.AddCookie()
+.AddGitHub(o => {
+    o.ClientId = builder.Configuration["authentication:github:clientId"];
+    o.ClientSecret = builder.Configuration["authentication:github:clientSecret"];
+    o.CallbackPath = "/signin-github";
+});
 
 var app = builder.Build();
 
@@ -55,6 +60,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.UseSession();
 
 app.MapRazorPages();
 
