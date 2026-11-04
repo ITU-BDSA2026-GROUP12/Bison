@@ -20,6 +20,14 @@ builder.Services.AddScoped<IObservationService, ObservationService>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ITaxonFilterService, TaxonFilterService>();
 
+builder.Services.AddAuthentication() 
+    .AddGitHub(options => 
+    { 
+        options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"]!; 
+        options.ClientSecret = 
+builder.Configuration["Authentication:GitHub:ClientSecret"]!; 
+    });
+
 var app = builder.Build();
 
 // Ensure the database exists, then seed it with the example data from DbInitializer.

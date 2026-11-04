@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="8.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -16,8 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles
-    Include="CodeMetricsConfig.txt" />
+    <AdditionalFiles Include="CodeMetricsConfig.txt" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -25,6 +25,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <PreserveCompilationContext>true</PreserveCompilationContext>
+    <UserSecretsId>e7f886c0-94bf-4be3-834a-4a3e1beabbc1</UserSecretsId>
   </PropertyGroup>
 
 <ItemGroup>
