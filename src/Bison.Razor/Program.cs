@@ -14,7 +14,12 @@ var dbPath = Environment.GetEnvironmentVariable("BISONDBPATH") ?? Path.Combine(P
 builder.Services.AddDbContext<BisonDBContext>(options => options.UseSqlite($"Data Source={dbPath}"));
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
- options.SignIn.RequireConfirmedAccount = true)
+{
+    options.SignIn.RequireConfirmedAccount = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireDigit = false;
+})
 .AddEntityFrameworkStores<BisonDBContext>();
 
 builder.Services.AddScoped<IObservationService, ObservationService>();
