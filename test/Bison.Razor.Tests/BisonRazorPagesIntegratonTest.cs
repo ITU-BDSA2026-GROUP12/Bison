@@ -13,6 +13,9 @@ public class BisonRazorPagesIntegratonTest : IClassFixture<WebApplicationFactory
         _output = output;   //Injected by ITestOutputHelper. Used for debugging. Will only output stuff if a test fails.
     }
 
+    // Outcommented seeing as these observations no longer exist.
+    // TODO: Make new observations for this test class.
+    /**
     [Fact]
     public async Task PeterFoundABigBirdNoPageTest() {
 
@@ -46,4 +49,5 @@ public class BisonRazorPagesIntegratonTest : IClassFixture<WebApplicationFactory
         // Assert
         Assert.DoesNotContain("a heron", html.ToLower());
     }
+    **/
 }

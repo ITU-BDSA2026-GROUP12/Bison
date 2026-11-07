@@ -287,3 +287,13 @@ ul.nav li a {
 ul.nav li a:hover {
     background-color: #8b4949;
 }
+
+.observation-picture {
+    display: block;
+    max-width: 100%;
+    width: 400px;
+    height: auto;
+    margin: 10px 0;
+    border-radius: 6px;
+    object-fit: contain;
+}

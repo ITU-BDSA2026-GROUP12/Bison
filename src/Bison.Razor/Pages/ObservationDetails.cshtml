@@ -16,6 +16,12 @@
             &mdash; @Model.Observation.Timestamp
         </small>
     </p>
+    @if (!string.IsNullOrWhiteSpace(Model.Observation.PictureUrl)) {
+            <img src="@Model.Observation.PictureUrl"
+                alt="Animal observed by @Model.Observation.Author"
+                class="observation-picture"
+                loading="lazy" />
+        }
 
     <h3>Comments</h3>
 

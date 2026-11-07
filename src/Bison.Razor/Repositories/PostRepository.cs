@@ -25,7 +25,8 @@ public class PostRepository : IPostRepository {
             observation.PostId,
             observation.Author.Name,
             observation.Text,
-            observation.TimeStamp.ToString()
+            observation.TimeStamp.ToString(),
+            observation.PictureUrl
         );
     }
 
@@ -42,7 +43,8 @@ public class PostRepository : IPostRepository {
                 observation.PostId,
                 observation.Author.Name,
                 observation.Text,
-                observation.TimeStamp.ToString()
+                observation.TimeStamp.ToString(),
+                observation.PictureUrl
             ))
             .ToList();
     }
@@ -61,7 +63,8 @@ public class PostRepository : IPostRepository {
                 observation.PostId,
                 observation.Author.Name,
                 observation.Text,
-                observation.TimeStamp.ToString()
+                observation.TimeStamp.ToString(),
+                observation.PictureUrl
             ))
             .ToList();
     }

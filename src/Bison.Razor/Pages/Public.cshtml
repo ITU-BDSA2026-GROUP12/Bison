@@ -6,7 +6,7 @@
 }
 
 <div class=navigation>
-    @if (User.Identity.IsAuthenticated)
+    @if (User.Identity?.IsAuthenticated == true)
     {
         <div>
             <a href="/@(User.Identity.Name)">My Observations</a> |
@@ -43,6 +43,12 @@
                         </a>
                         <small>&mdash; @obs.Timestamp</small>
                     </p>
+                    @if (!string.IsNullOrWhiteSpace(obs.PictureUrl)) {
+                        <img src="@obs.PictureUrl"
+                            alt="Animal observed by @obs.Author"
+                            class="observation-picture"
+                            loading="lazy" />
+                    }
                 </li>
             }
         </ul>

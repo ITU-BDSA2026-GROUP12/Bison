@@ -34,7 +34,8 @@ public class ObservationService : IObservationService
                 observation.ObservationId,
                 observation.Author,
                 observation.Message,
-                observation.Timestamp
+                observation.Timestamp,
+                observation.PictureUrl
             );
 
             observationDTOs.Add(dto);
@@ -58,7 +59,8 @@ public class ObservationService : IObservationService
                 observation.ObservationId,
                 observation.Author,
                 observation.Message,
-                observation.Timestamp
+                observation.Timestamp,
+                observation.PictureUrl
             );
 
             observationDTOs.Add(dto);
@@ -115,7 +117,8 @@ public class ObservationService : IObservationService
             observation.Message,
             observation.Timestamp,
             commentDTOs,
-            proposalDTOs
+            proposalDTOs,
+            observation.PictureUrl
         );
     }
 

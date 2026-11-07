@@ -22,6 +22,12 @@
                         @ob.Message
                         <small>&mdash; @ob.Timestamp</small>
                     </p>
+                    @if (!string.IsNullOrWhiteSpace(ob.PictureUrl)) {
+                        <img src="@ob.PictureUrl"
+                            alt="Animal observed by @ob.Author"
+                            class="observation-picture"
+                            loading="lazy" />
+                    }
                 </li>
             }
         </ul>
