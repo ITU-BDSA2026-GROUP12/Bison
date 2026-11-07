@@ -79,4 +79,36 @@
     {
         <em>There are no observations so far.</em>
     }
+
+    <nav class="pagination" aria-label="Observation pages">
+
+        @* Previous page *@
+        @if (Model.CurrentPage > 1) {
+            <a href="/?page=@(Model.CurrentPage - 1)@(
+                Model.SelectedTaxonId.HasValue
+                    ? $"&taxonId={Model.SelectedTaxonId}"
+                    : "")"
+            class="page-button">
+                Previous
+            </a>
+        }
+        else {
+            <span class="page-button disabled">Previous</span>
+        }
+
+        @* Next page *@
+        @if (Model.HasNextPage) {
+            <a href="/?page=@(Model.CurrentPage + 1)@(
+                Model.SelectedTaxonId.HasValue
+                    ? $"&taxonId={Model.SelectedTaxonId}"
+                    : "")"
+            class="page-button">
+                Next
+            </a>
+        }
+        else {
+            <span class="page-button disabled">Next</span>
+        }
+
+    </nav>
 </div>
