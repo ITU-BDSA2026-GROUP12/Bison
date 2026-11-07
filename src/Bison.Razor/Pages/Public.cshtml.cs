@@ -26,5 +26,11 @@ public class PublicModel : PageModel
         return Page();
     }
 
+
+    // so this method is used to post.
+    public ActionResult OnPost(string description) {
+            return RedirectToPage("Public");
+    }
+
 }
 
