@@ -9,4 +9,6 @@ public interface IPostRepository {
     List<ObservationViewModel> GetObservationsFromAuthor(string author, int page);
     List<Comment> GetComments(int observationId);
     List<Proposal> GetProposals(int observationId);
+    List<Model.Taxon> GetTaxons();
+    List<Model.Observation> GetObservationsForFiltering(string? author = null);
 }

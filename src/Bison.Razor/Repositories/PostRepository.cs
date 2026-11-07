@@ -89,16 +89,41 @@ public class PostRepository : IPostRepository {
         return _context.Proposals
             .AsNoTracking()
             .Include(proposal => proposal.Author)
-            .Include(proposal => proposal.Taxon)
+            .Include(proposal => proposal.Taxon).ThenInclude(taxon => taxon.Parent)
             .Where(proposal => proposal.ObservationId == observationId)
             .OrderBy(proposal => proposal.PostId)
             .AsEnumerable()
             .Select(proposal => new Proposal(
                 observationId,
                 proposal.Author.Name,
-                proposal.Taxon.VernacularName ?? proposal.Taxon.DwcTaxonId,
+                proposal.Taxon.VernacularName
+                    ?? proposal.Taxon.Parent?.VernacularName
+                    ?? proposal.Taxon.DwcTaxonId,
                 new DateTimeOffset(DateTime.SpecifyKind(proposal.TimeStamp, DateTimeKind.Utc)).ToUnixTimeSeconds()  // UTC time
             ))
             .ToList();
+    }
+    public List<Model.Taxon> GetTaxons() {
+    return _context.Taxons
+        .AsNoTracking()
+        .OrderBy(taxon => taxon.TaxonId)
+        .ToList();
+    }
+
+public List<Model.Observation>
+    GetObservationsForFiltering(string? author = null) {
+        // Load all taxa so EF Core can connect each taxon with its ancestors.
+        _context.Taxons.Load();
+
+        var query = _context.Observations
+            .Include(observation => observation.Author)
+            .Include(observation => observation.Taxon)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(author)) {
+            query = query.Where(observation => observation.Author.Name == author);
+        }
+
+        return query.OrderBy(observation => observation.PostId).ToList();
     }
 }

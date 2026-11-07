@@ -27,6 +27,28 @@
 
 <div>
     <h2> Public Timeline </h2>
+    
+    <form method="get">
+        <label for="taxonId">Filter by taxon:</label>
+
+        <select name="taxonId"
+                id="taxonId"
+                onchange="this.form.submit()">
+
+            <option value="">All taxa</option>
+
+            @* Only display taxa with readable names. *@
+            @foreach (var taxon in Model.Taxons
+                .Where(t => !string.IsNullOrWhiteSpace(t.VernacularName)))
+            {
+                <option value="@taxon.TaxonId"
+                        selected="@(Model.SelectedTaxonId == taxon.TaxonId)">
+                    @taxon.VernacularName
+                </option>
+            }
+        </select>
+    </form>
+
 
     @if (Model.Observations?.Any() == true)
     {
