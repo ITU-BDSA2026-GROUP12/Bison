@@ -22,17 +22,31 @@
             <a href="/Identity/Account/Login">Login</a>
         </div>
 
-        <div class="observationbox">
+        
+        
+    }
+</div>
+
+
+<div>
+    @if(User.Identity.IsAuthenticated == false)
+    {
+        <h2> Log in to post a what you saw</h2>
+        
+    }
+    
+@if(User.Identity.IsAuthenticated == true)
+        {
+
+            <div class="observationbox">
             <h3>What did you see, @(User.Identity.Name)?</h3>
             <form method="post">
             <input style="float: left" type="text" asp-for="Text">
             <input type="submit" value="Share">
             </form>
-        </div>
-    }
+        </div>   
+        }
 </div>
-
-
 <div>
     <h2> Public Timeline </h2>
 

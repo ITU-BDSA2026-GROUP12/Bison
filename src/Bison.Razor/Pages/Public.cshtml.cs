@@ -9,6 +9,7 @@ public class PublicModel : PageModel
 {
     private readonly IObservationService _service;
     public List<ObservationDTO>? Observations { get; set; }
+    
 
     public PublicModel(IObservationService service)
     {
@@ -28,7 +29,11 @@ public class PublicModel : PageModel
 
 
     // so this method is used to post.
-    public ActionResult OnPost(string description) {
+
+    [BindProperty]
+
+    public string description{get; set;}
+    public ActionResult OnPost() {
             return RedirectToPage("Public");
     }
 
