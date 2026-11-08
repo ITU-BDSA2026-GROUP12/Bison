@@ -7,5 +7,6 @@ public record ObservationDetailsDTO(
     string Message,
     string Timestamp,
     List<CommentDTO> Comments,
-    List<ProposalDTO> Proposals
+    List<ProposalDTO> Proposals,
+    string? PictureUrl = null
 );

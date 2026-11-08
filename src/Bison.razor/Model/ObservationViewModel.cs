@@ -4,6 +4,7 @@ namespace Bison.Razor.Model
         int ObservationId,
         string Author,
         string Message,
-        string Timestamp
+        string Timestamp,
+        string? PictureUrl = null
     );
 }

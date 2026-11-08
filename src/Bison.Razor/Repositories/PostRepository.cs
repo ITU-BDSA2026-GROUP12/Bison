@@ -26,7 +26,8 @@ public class PostRepository : IPostRepository {
             observation.PostId,
             observation.Author.Name,
             observation.Text,
-            observation.TimeStamp.ToString()
+            observation.TimeStamp.ToString(),
+            observation.PictureUrl
         );
     }
 
@@ -43,7 +44,8 @@ public class PostRepository : IPostRepository {
                 observation.PostId,
                 observation.Author.Name,
                 observation.Text,
-                observation.TimeStamp.ToString()
+                observation.TimeStamp.ToString(),
+                observation.PictureUrl
             ))
             .ToList();
     }
@@ -62,7 +64,8 @@ public class PostRepository : IPostRepository {
                 observation.PostId,
                 observation.Author.Name,
                 observation.Text,
-                observation.TimeStamp.ToString()
+                observation.TimeStamp.ToString(),
+                observation.PictureUrl
             ))
             .ToList();
     }
@@ -81,10 +84,9 @@ public class PostRepository : IPostRepository {
         return _context.Proposals
             .AsNoTracking()
             .Include(proposal => proposal.Author)
-            .Include(proposal => proposal.Taxon)
+            .Include(proposal => proposal.Taxon).ThenInclude(taxon => taxon.Parent)
             .Where(proposal => proposal.ObservationId == observationId)
             .OrderBy(proposal => proposal.PostId)
-            .AsEnumerable()
             .ToList();
     }
     public int CreateObservation(string author, string message, DateTime timestamp) {
@@ -105,14 +107,31 @@ public class PostRepository : IPostRepository {
         }
 
         var observation = new Observation(authorEntity, message,timestamp, null);
-
-
-
         
+        return 67;   
+    }
+    public List<Model.Taxon> GetTaxons() {
+    return _context.Taxons
+        .AsNoTracking()
+        .OrderBy(taxon => taxon.TaxonId)
+        .ToList();
         
-        return 67;
+    }
 
+public List<Model.Observation>
+    GetObservationsForFiltering(string? author = null) {
+        // Load all taxa so EF Core can connect each taxon with its ancestors.
+        _context.Taxons.Load();
 
-        
+        var query = _context.Observations
+            .Include(observation => observation.Author)
+            .Include(observation => observation.Taxon)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(author)) {
+            query = query.Where(observation => observation.Author.Name == author);
+        }
+
+        return query.OrderBy(observation => observation.PostId).ToList();
     }
 }

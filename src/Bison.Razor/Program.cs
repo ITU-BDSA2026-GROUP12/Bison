@@ -8,6 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+// Register an in-memory cache for session storage.
+builder.Services.AddDistributedMemoryCache();
+
+// Register session services before building the application.
+builder.Services.AddSession();
+
 // Use BISONDBPATH if provided, otherwise store the EF Core SQLite database in the system temp directory.
 var dbPath = Environment.GetEnvironmentVariable("BISONDBPATH") ?? Path.Combine(Path.GetTempPath(), "bison-ef.db");
 
@@ -33,8 +39,10 @@ builder.Services.AddAuthentication(options => {
 })
 .AddCookie()
 .AddGitHub(o => {
-    o.ClientId = builder.Configuration["authentication:github:clientId"];
-    o.ClientSecret = builder.Configuration["authentication:github:clientSecret"];
+    o.ClientId = builder.Configuration["authentication:github:clientId"]
+        ?? "";
+    o.ClientSecret = builder.Configuration["authentication:github:clientSecret"]
+        ?? "";
     o.CallbackPath = "/signin-github";
 });
 
@@ -46,6 +54,40 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<BisonDBContext>();
 
     context.Database.EnsureCreated();
+
+    // Open a connection to check whether the Posts table already contains the new optional PictureUrl column.
+    var connection = context.Database.GetDbConnection();
+    connection.Open();
+
+    try {
+        // Retrieve information about the existing columns.
+        using var command = connection.CreateCommand();
+        command.CommandText = "PRAGMA table_info('Posts');";
+
+        using var reader = command.ExecuteReader();
+
+        bool pictureColumnExists = false;
+
+        // Check if PictureUrl already exists in the database.
+        while (reader.Read()) {
+            if (reader.GetString(1) == "PictureUrl") {
+                pictureColumnExists = true;
+                break;
+            }
+        }
+
+        reader.Close();
+
+        // Add PictureUrl only if it does not already exist.
+        // NULL allows older observations to remain without pictures.
+        if (!pictureColumnExists) {
+            context.Database.ExecuteSqlRaw("ALTER TABLE Posts ADD COLUMN PictureUrl TEXT NULL;");
+        }
+    }
+    finally {
+        // Always close the connection, even if an error occurs.
+        connection.Close();
+    }
 
     DbInitializer.SeedDatabase(context);
 }

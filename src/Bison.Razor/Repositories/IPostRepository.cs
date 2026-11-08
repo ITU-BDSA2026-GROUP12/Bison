@@ -10,4 +10,6 @@ public interface IPostRepository {
     List<Comment> GetComments(int observationId);
     List<Proposal> GetProposals(int observationId);
     public int CreateObservation(string author, string message, DateTime timestamp);
+    List<Model.Taxon> GetTaxons();
+    List<Model.Observation> GetObservationsForFiltering(string? author = null);
 }
