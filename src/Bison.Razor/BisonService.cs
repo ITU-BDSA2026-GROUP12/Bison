@@ -10,7 +10,7 @@ public interface IObservationService
     public List<ObservationDTO> GetObservationsFromAuthor(string author, int page);
     public ObservationDetailsDTO? GetObservationDetails(int observationId);
 
-    public int CreateObervation(string author, string message);
+    public void CreateObervation(string author, string message);
     public List<Bison.Razor.Model.Taxon> GetTaxons();
     public List<ObservationDTO> GetTimelineObservations(int page, int? taxonId = null, string? author = null);
 }
@@ -27,9 +27,8 @@ public class ObservationService : IObservationService
         _taxonFilter = taxonFilter ?? new TaxonFilterService();
     }
 
-    public int CreateObervation(string author, string message) {
+    public void CreateObervation(string author, string message) {
         DateTime timestamp = DateTime.UtcNow;
-        return _repository.CreateObservation(author,message,timestamp);
     }
 
     public List<ObservationDTO> GetObservations(int page)

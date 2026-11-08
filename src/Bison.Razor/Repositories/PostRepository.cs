@@ -89,7 +89,7 @@ public class PostRepository : IPostRepository {
             .OrderBy(proposal => proposal.PostId)
             .ToList();
     }
-    public int CreateObservation(string author, string message, DateTime timestamp) {
+    public void CreateObservation(string author, string message, DateTime timestamp) {
         Model.Author authorEntity = null;
 
         // this loop basically just look for a existing author
@@ -107,8 +107,10 @@ public class PostRepository : IPostRepository {
         }
 
         var observation = new Observation(authorEntity, message,timestamp, null);
-        
-        return 67;   
+
+        _context.Observations.Add(observation);
+        _context.SaveChanges();
+      
     }
     public List<Model.Taxon> GetTaxons() {
     return _context.Taxons
