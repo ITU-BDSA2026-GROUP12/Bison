@@ -1,4 +1,4 @@
-using Model;
+using Bison.Razor.Model;
 using Bison.Razor;
 using Bison.Razor.Repositories;
 using Bison.Razor.DTOs;
@@ -96,9 +96,9 @@ public class ObservationService : IObservationService
         foreach (var comment in comments)
         {
             var dto = new CommentDTO(
-            comment.Author,
-            comment.Message,
-            UnixTimeStampToDateTimeString(comment.Timestamp)
+            comment.Author.Name,
+            comment.Text,
+            comment.TimeStamp.ToString()
              );
 
             commentDTOs.Add(dto);
@@ -109,9 +109,9 @@ public class ObservationService : IObservationService
         foreach (var proposal in proposals)
         {
             var dto = new ProposalDTO(
-                proposal.Author,
-                proposal.TaxonId,
-                UnixTimeStampToDateTimeString(proposal.Timestamp)
+                proposal.Author.Name,
+                proposal.Taxon.DwcTaxonId,
+                proposal.TimeStamp.ToString()
             );
             proposalDTOs.Add(dto);
         }
