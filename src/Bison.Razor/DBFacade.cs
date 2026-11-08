@@ -1,5 +1,5 @@
 using Microsoft.Data.Sqlite;
-using Model;
+using Bison.Razor.Model;
 
 namespace Bison.Razor;
 
@@ -165,10 +165,10 @@ public class DBFacade
         while (reader.Read()) {
             comments.Add(
                 new Comment(
-                    observationId,
-                    reader.GetString(0),
+                    new Author { Name = reader.GetString(0) },
                     reader.GetString(1),
-                    reader.GetInt64(2)
+                    DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(2)).UtcDateTime,
+                    observationId
                 )
             );
         }
@@ -201,10 +201,11 @@ public class DBFacade
         while (reader.Read()) {
             proposals.Add(
                 new Proposal(
+                    new Author { Name = reader.GetString(0) },
+                    string.Empty,
+                    DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(2)).UtcDateTime,
                     observationId,
-                    reader.GetString(0),
-                    reader.GetString(1),
-                    reader.GetInt64(2)
+                    new Taxon { DwcTaxonId = reader.GetString(1) }
                 )
             );
         }
@@ -212,6 +213,5 @@ public class DBFacade
         return proposals;
     }
 }
-
 
 

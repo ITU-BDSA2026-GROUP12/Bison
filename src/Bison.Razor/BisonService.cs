@@ -28,7 +28,7 @@ public class ObservationService : IObservationService
     }
 
     public void CreateObervation(string author, string message) {
-        DateTime timestamp = DateTime.UtcNow;
+        _repository.CreateObservation(author, message, DateTime.UtcNow);
     }
 
     public List<ObservationDTO> GetObservations(int page)
