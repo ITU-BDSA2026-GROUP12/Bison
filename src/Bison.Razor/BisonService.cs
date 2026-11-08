@@ -2,12 +2,15 @@ using Model;
 using Bison.Razor;
 using Bison.Razor.Repositories;
 using Bison.Razor.DTOs;
+using Humanizer;
 
 public interface IObservationService
 {
     public List<ObservationDTO> GetObservations(int page);
     public List<ObservationDTO> GetObservationsFromAuthor(string author, int page);
     public ObservationDetailsDTO? GetObservationDetails(int observationId);
+
+    public int CreateObervation(string author, string message);
 }
 
 public class ObservationService : IObservationService
@@ -17,6 +20,11 @@ public class ObservationService : IObservationService
     public ObservationService(IPostRepository repository)
     {
         _repository = repository;
+    }
+
+    public int CreateObervation(string author, string message) {
+        DateTime timestamp = DateTime.UtcNow;
+        return _repository.CreateObservation(author,message,timestamp);
     }
 
     public List<ObservationDTO> GetObservations(int page)

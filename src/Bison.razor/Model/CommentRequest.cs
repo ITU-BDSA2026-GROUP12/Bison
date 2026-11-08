@@ -1,9 +1,9 @@
-namespace Model
+namespace Bison.Razor.Model
 {
-    public record ProposalRequest(
+    public record CommentRequest(
         int ObservationId,
         string Author,
-        string TaxonId,
+        string Message,
         long Timestamp
         );
 }

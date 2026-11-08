@@ -1,4 +1,5 @@
-using Model;
+using Bison.Razor.Model;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Bison.Razor.Repositories;
@@ -73,12 +74,6 @@ public class PostRepository : IPostRepository {
             .Where(comment => comment.ObservationId == observationId)
             .OrderBy(comment => comment.PostId)
             .AsEnumerable()                                                     // Makes that time conversion happen in C#
-            .Select(comment => new Comment(
-                observationId,
-                comment.Author.Name,
-                comment.Text,
-                new DateTimeOffset(DateTime.SpecifyKind(comment.TimeStamp, DateTimeKind.Utc)).ToUnixTimeSeconds()   // UTC time
-            ))
             .ToList();
     }
 
@@ -90,12 +85,34 @@ public class PostRepository : IPostRepository {
             .Where(proposal => proposal.ObservationId == observationId)
             .OrderBy(proposal => proposal.PostId)
             .AsEnumerable()
-            .Select(proposal => new Proposal(
-                observationId,
-                proposal.Author.Name,
-                proposal.Taxon.VernacularName ?? proposal.Taxon.DwcTaxonId,
-                new DateTimeOffset(DateTime.SpecifyKind(proposal.TimeStamp, DateTimeKind.Utc)).ToUnixTimeSeconds()  // UTC time
-            ))
             .ToList();
+    }
+    public int CreateObservation(string author, string message, DateTime timestamp) {
+        Model.Author authorEntity = null;
+
+        // this loop basically just look for a existing author
+        foreach (var aut in _context.Authors) {
+            if(aut.Name == author) {
+                authorEntity = aut;
+                break;
+            }
+        }
+
+        if(authorEntity == null) {
+            authorEntity = new Model.Author{Name = author};
+
+    
+        }
+
+        var observation = new Observation(authorEntity, message,timestamp, null);
+
+
+
+        
+        
+        return 67;
+
+
+        
     }
 }

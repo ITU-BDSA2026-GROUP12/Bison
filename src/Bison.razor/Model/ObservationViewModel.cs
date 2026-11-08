@@ -1,4 +1,4 @@
-namespace Model
+namespace Bison.Razor.Model
 {
     public record ObservationViewModel(
         int ObservationId,
