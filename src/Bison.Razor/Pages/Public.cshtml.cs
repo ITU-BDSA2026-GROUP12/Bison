@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Model;
+using Bison.Razor.Model;
 using Bison.Razor.DTOs;
+using Bison.Razor.Repositories;
 
 namespace Bison.Razor.Pages;
 
@@ -54,6 +55,13 @@ public class PublicModel : PageModel
 
     public string description{get; set;}
     public ActionResult OnPost() {
+
+        if (!ModelState.IsValid) {
+            Observations = _service.GetObservations(1);
+            return Page();
+        }
+
+        _service.CreateObervation(User.Identity!.Name!, description);
             return RedirectToPage("Public");
     }
 
