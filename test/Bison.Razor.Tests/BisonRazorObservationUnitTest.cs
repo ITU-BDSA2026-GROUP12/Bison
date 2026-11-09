@@ -100,4 +100,24 @@ public class BisonRazorObservationUnitTest {
         // Assert
         Assert.NotEmpty(comments);
     }
+
+    [Fact]
+    public void ExistingObservationsHaveNoPictures() {
+        // Arrange
+        using var context = CreateContext();
+
+        IPostRepository repository = new PostRepository(context);
+        IObservationService service = new ObservationService(repository);
+
+        // Act
+        var observations = service.GetObservations(1);
+
+        // Assert
+        Assert.NotEmpty(observations);
+
+        Assert.All(
+            observations,
+            observation => Assert.Null(observation.PictureUrl)
+        );
+    }
 }

@@ -6,7 +6,7 @@
 }
 
 <div class=navigation>
-    @if (User.Identity.IsAuthenticated)
+    @if (User.Identity?.IsAuthenticated == true)
     {
         <div>
             <a href="/@(User.Identity.Name)">My Observations</a> |
@@ -21,12 +21,56 @@
             <a href="/Identity/Account/Register">Register</a>
             <a href="/Identity/Account/Login">Login</a>
         </div>
+
+        
+        
     }
 </div>
 
 
 <div>
+    @if(User.Identity.IsAuthenticated == false)
+    {
+        <h2> Log in to post a what you saw</h2>
+        
+    }
+    
+@if(User.Identity.IsAuthenticated == true)
+        {
+
+            <div class="observationbox">
+            <h3>What did you see, @(User.Identity.Name)?</h3>
+            <form method="post">
+            <input style="float: left" type="text" asp-for="description">
+            <input type="submit" value="Share">
+            </form>
+        </div>   
+        }
+</div>
+<div>
     <h2> Public Timeline </h2>
+    
+    <form method="get">
+        <label for="taxonId">Filter by taxon:</label>
+
+        <select name="taxonId"
+                id="taxonId"
+                onchange="this.form.submit()">
+
+            <option value="">All taxa</option>
+
+            @* Only display taxa with readable names. *@
+            @foreach (var taxon in Model.Taxons
+                .Where(t => !string.IsNullOrWhiteSpace(t.VernacularName)))
+            {
+                <option value="@taxon.TaxonId"
+                        selected="@(Model.SelectedTaxonId == taxon.TaxonId)">
+                    @taxon.VernacularName
+                </option>
+            }
+        </select>
+    </form>
+
 
     @if (Model.Observations?.Any() == true)
     {
@@ -43,6 +87,12 @@
                         </a>
                         <small>&mdash; @obs.Timestamp</small>
                     </p>
+                    @if (!string.IsNullOrWhiteSpace(obs.PictureUrl)) {
+                        <img src="@obs.PictureUrl"
+                            alt="Animal observed by @obs.Author"
+                            class="observation-picture"
+                            loading="lazy" />
+                    }
                 </li>
             }
         </ul>
@@ -51,4 +101,36 @@
     {
         <em>There are no observations so far.</em>
     }
+
+    <nav class="pagination" aria-label="Observation pages">
+
+        @* Previous page *@
+        @if (Model.CurrentPage > 1) {
+            <a href="/?page=@(Model.CurrentPage - 1)@(
+                Model.SelectedTaxonId.HasValue
+                    ? $"&taxonId={Model.SelectedTaxonId}"
+                    : "")"
+            class="page-button">
+                Previous
+            </a>
+        }
+        else {
+            <span class="page-button disabled">Previous</span>
+        }
+
+        @* Next page *@
+        @if (Model.HasNextPage) {
+            <a href="/?page=@(Model.CurrentPage + 1)@(
+                Model.SelectedTaxonId.HasValue
+                    ? $"&taxonId={Model.SelectedTaxonId}"
+                    : "")"
+            class="page-button">
+                Next
+            </a>
+        }
+        else {
+            <span class="page-button disabled">Next</span>
+        }
+
+    </nav>
 </div>

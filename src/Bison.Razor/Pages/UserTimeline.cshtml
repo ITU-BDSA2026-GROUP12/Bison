@@ -9,6 +9,17 @@
 <div>
     <h2> @routeName's Observations </h2>
 
+    @if(User.Identity.IsAuthenticated == true)
+    {
+        <div class="observationbox">
+            <h3>What did you see, @(User.Identity.Name)?</h3>
+            <form method="post">
+            <input style="float: left" type="text" asp-for="description">
+            <input type="submit" value="Share">
+            </form>
+        </div>   
+    }
+
     @if (Model.Observations?.Any() == true)
     {
         <ul id="messagelist" class="observations">
@@ -22,6 +33,12 @@
                         @ob.Message
                         <small>&mdash; @ob.Timestamp</small>
                     </p>
+                    @if (!string.IsNullOrWhiteSpace(ob.PictureUrl)) {
+                        <img src="@ob.PictureUrl"
+                            alt="Animal observed by @ob.Author"
+                            class="observation-picture"
+                            loading="lazy" />
+                    }
                 </li>
             }
         </ul>
@@ -31,3 +48,5 @@
         <em>There are no Observations so far.</em>
     }
 </div>
+
+

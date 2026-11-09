@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Model;
+using Bison.Razor.Model;
 using Bison.Razor.DTOs;
 
 namespace Bison.Razor.Pages;
@@ -21,5 +21,19 @@ public class UserTimelineModel : PageModel
     {
         Observations = _service.GetObservationsFromAuthor(author, page);
         return Page();
+    }
+
+    [BindProperty]
+
+    public string description{get; set;}
+    public ActionResult OnPost() {
+
+        if (!ModelState.IsValid) {
+            Observations = _service.GetObservations(1);
+            return Page();
+        }
+
+        _service.CreateObervation(User.Identity!.Name!, description);
+            return RedirectToPage("Public");
     }
 }

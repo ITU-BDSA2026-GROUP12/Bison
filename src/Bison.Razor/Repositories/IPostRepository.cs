@@ -1,6 +1,6 @@
 namespace Bison.Razor.Repositories;
 
-using global::Model;
+using Bison.Razor.Model;
 
 public interface IPostRepository {
 
@@ -9,4 +9,7 @@ public interface IPostRepository {
     List<ObservationViewModel> GetObservationsFromAuthor(string author, int page);
     List<Comment> GetComments(int observationId);
     List<Proposal> GetProposals(int observationId);
+    public void CreateObservation(string author, string message, DateTime timestamp);
+    List<Model.Taxon> GetTaxons();
+    List<Model.Observation> GetObservationsForFiltering(string? author = null);
 }
