@@ -9,6 +9,7 @@ using System;
 
 namespace PlaywrightTests;
 
+//Verify our website has expected title
 public class UnitTest1 : PageTest {
     [Fact]
     public async Task HasTitle() {
@@ -31,6 +32,7 @@ public class UnitTest1 : PageTest {
     }
 }
 
+//check the website for accessibility violations using Axe.
 public class AccessibilityTest : PageTest {
     [Fact(Skip = "Known accessibility issues on website. To be fixed.. maybe")]
 
@@ -45,8 +47,9 @@ public class AccessibilityTest : PageTest {
     }
 }
 
+//verify a user can register and confirm email
 public class RegistrationTest : PageTest {
-    //test that we can register a user
+
     [Fact(Skip = "Registration modifies database")]
     public async Task CanRegisterUser() {
 
@@ -84,5 +87,38 @@ public class RegistrationTest : PageTest {
             //I'm not sure how to do this, but I'm guessing we'll implement it soon and then I'll add it here
             //Until I know what to do, as long as the test has succeeded, I made it skippable.
         }
+    }
+}
+
+//verify an existing user can log in
+public class LoginTest : PageTest {
+
+    [Fact]
+    public async Task UserCanLogIn() {
+
+        //go to our website
+        await Page.GotoAsync("https://bdsagroup12bison-ade4hjeqa2f8agam.denmarkeast-01.azurewebsites.net/");
+
+        string email = "TestUser@itu.dk";
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).PressAsync("CapsLock");
+        await Page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).FillAsync("Test");
+        await Page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).PressAsync("CapsLock");
+        await Page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).FillAsync("TestUser");
+        await Page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).PressAsync("Alt+@");
+        await Page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).FillAsync("TestUser@itu.dk");
+        await Page.GetByRole(AriaRole.Textbox, new() { Name = "Password" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Textbox, new() { Name = "Password" }).PressAsync("CapsLock");
+        await Page.GetByRole(AriaRole.Textbox, new() { Name = "Password" }).FillAsync("Jojo???1");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+
+
+        //Assert that the user is logged in
+        await Expect(Page.GetByText($"Logout [{email}]")).ToBeVisibleAsync();
+
+        //Assert that the Login link is no longer visible
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Login", Exact = true })).ToBeHiddenAsync();
     }
 }
