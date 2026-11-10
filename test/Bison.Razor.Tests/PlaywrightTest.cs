@@ -10,7 +10,7 @@ using System;
 namespace PlaywrightTests;
 
 //Verify our website has expected title
-public class UnitTest1 : PageTest {
+public class NavigationTest : PageTest {
     [Fact]
     public async Task HasTitle() {
         //go to our website
