@@ -4,8 +4,7 @@ using Bison.Razor.Repositories;
 using Bison.Razor.DTOs;
 using Humanizer;
 
-public interface IObservationService
-{
+public interface IObservationService {
     public List<ObservationDTO> GetObservations(int page);
     public List<ObservationDTO> GetObservationsFromAuthor(string author, int page);
     public ObservationDetailsDTO? GetObservationDetails(int observationId);
@@ -15,14 +14,12 @@ public interface IObservationService
     public List<ObservationDTO> GetTimelineObservations(int page, int? taxonId = null, string? author = null);
 }
 
-public class ObservationService : IObservationService
-{
+public class ObservationService : IObservationService {
     private readonly IPostRepository _repository;
 
     private readonly ITaxonFilterService _taxonFilter;
 
-    public ObservationService(IPostRepository repository, ITaxonFilterService? taxonFilter = null)
-    {
+    public ObservationService(IPostRepository repository, ITaxonFilterService? taxonFilter = null) {
         _repository = repository;
         _taxonFilter = taxonFilter ?? new TaxonFilterService();
     }
@@ -31,42 +28,18 @@ public class ObservationService : IObservationService
         _repository.CreateObservation(author, message, DateTime.UtcNow);
     }
 
-    public List<ObservationDTO> GetObservations(int page)
-    {
-        //get our original observations so we can turn them into DTOs
-        var observations = _repository.GetObservations(page);
-
-        //empty list for the DTOs that will be sent to the view
-        var observationDTOs = new List<ObservationDTO>();
-
-        //convert each observation into a ObservationDTO
-        foreach (var observation in observations)
-        {
-            var dto = new ObservationDTO(
-                observation.ObservationId,
-                observation.Author,
-                observation.Message,
-                observation.Timestamp,
-                observation.PictureUrl
-            );
-
-            observationDTOs.Add(dto);
-        }
-
-        //return observationDTOs instead of original observations
-        return observationDTOs;
+    public List<ObservationDTO> GetObservations(int page) {
+        return _repository.GetObservations(page);
     }
 
-    public List<ObservationDTO> GetObservationsFromAuthor(string author, int page)
-    {
+    public List<ObservationDTO> GetObservationsFromAuthor(string author, int page) {
         //get observations for a specific author
         var observations = _repository.GetObservationsFromAuthor(author, page);
         //empty list for the DTOs 
         var observationDTOs = new List<ObservationDTO>();
 
         //Convert observation into ObservationDTO
-        foreach (var observation in observations)
-        {
+        foreach (var observation in observations) {
             var dto = new ObservationDTO(
                 observation.ObservationId,
                 observation.Author,
@@ -83,44 +56,17 @@ public class ObservationService : IObservationService
     }
 
     // Collects all information needed for the observation page.
-    public ObservationDetailsDTO? GetObservationDetails(int observationId)
-    {
+    public ObservationDetailsDTO? GetObservationDetails(int observationId) {
         //get observation from repository
         var observation = _repository.GetObservation(observationId);
 
-        if (observation == null)
-        {
+        if (observation == null) {
             return null;
         }
 
-        //get comments and proposals belonging to the observation
-        var comments = _repository.GetComments(observationId);
-        var proposals = _repository.GetProposals(observationId);
-
-        //convert comments to DTOs
-        var commentDTOs = new List<CommentDTO>();
-        foreach (var comment in comments)
-        {
-            var dto = new CommentDTO(
-            comment.Author.Name,
-            comment.Text,
-            comment.TimeStamp.ToString()
-             );
-
-            commentDTOs.Add(dto);
-        }
-
-        //convert proposals to DTOs
-        var proposalDTOs = new List<ProposalDTO>();
-        foreach (var proposal in proposals)
-        {
-            var dto = new ProposalDTO(
-                proposal.Author.Name,
-                proposal.Taxon.DwcTaxonId,
-                proposal.TimeStamp.ToString()
-            );
-            proposalDTOs.Add(dto);
-        }
+        //Get comments and proposals as DTO's
+        var commentDTOs = _repository.GetComments(observationId);
+        var proposalDTOs = _repository.GetProposals(observationId);
 
         //Combine observation, comments and proposals into one DTO
         return new ObservationDetailsDTO(
@@ -134,8 +80,7 @@ public class ObservationService : IObservationService
         );
     }
 
-    private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
-    {
+    private static string UnixTimeStampToDateTimeString(double unixTimeStamp) {
         // Unix timestamp is seconds past epoch
         DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         dateTime = dateTime.AddSeconds(unixTimeStamp);
