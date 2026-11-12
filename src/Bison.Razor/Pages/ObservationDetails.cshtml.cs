@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Model;
 using Bison.Razor.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bison.Razor.Pages;
 
@@ -30,6 +31,29 @@ public class ObservationDetailsModel : PageModel
             return NotFound();
         }
 
+        observationId = id.Value;
+
         return Page();
     }
+
+    // so this method is used to post.
+    [BindProperty]
+    public string description { get; set; }
+
+    [BindProperty]
+    public int observationId { get; set; }
+
+    public ActionResult OnPost() {
+
+        if (!ModelState.IsValid) {
+            Observation = _service.GetObservationDetails(observationId);
+            return Page();
+        }
+
+        _service.PostComment(User.Identity!.Name!, observationId, description);
+
+        return RedirectToPage(new { id = observationId });
+    }
+
+
 }

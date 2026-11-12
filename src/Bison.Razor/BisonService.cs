@@ -11,6 +11,7 @@ public interface IObservationService
     public ObservationDetailsDTO? GetObservationDetails(int observationId);
 
     public void CreateObervation(string author, string message);
+    public void PostComment(string author, int observationId, string message);
     public List<Bison.Razor.Model.Taxon> GetTaxons();
     public List<ObservationDTO> GetTimelineObservations(int page, int? taxonId = null, string? author = null);
 }
@@ -29,6 +30,10 @@ public class ObservationService : IObservationService
 
     public void CreateObervation(string author, string message) {
         _repository.CreateObservation(author, message, DateTime.UtcNow);
+    }
+
+    public void PostComment(string author, int observationId, string message) {
+        _repository.PostComment(author, observationId, message, DateTime.UtcNow);
     }
 
     public List<ObservationDTO> GetObservations(int page)
