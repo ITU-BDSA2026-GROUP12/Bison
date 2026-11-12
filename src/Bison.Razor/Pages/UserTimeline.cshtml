@@ -30,7 +30,9 @@
                         <strong>
                             <a href="/@ob.Author">@ob.Author</a>
                         </strong>
-                        @ob.Message
+                        <a href="/ob/@ob.ObservationId">
+                            @ob.Message
+                        </a>
                         <small>&mdash; @ob.Timestamp</small>
                     </p>
                     @if (!string.IsNullOrWhiteSpace(ob.PictureUrl)) {
