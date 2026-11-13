@@ -10,6 +10,7 @@ public interface IObservationService {
     public ObservationDetailsDTO? GetObservationDetails(int observationId);
 
     public void CreateObervation(string author, string message);
+    public void PostComment(string author, int observationId, string message);
     public List<Bison.Razor.Model.Taxon> GetTaxons();
     public List<ObservationDTO> GetTimelineObservations(int page, int? taxonId = null, string? author = null);
 }
@@ -32,26 +33,12 @@ public class ObservationService : IObservationService {
         return _repository.GetObservations(page);
     }
 
+    public void PostComment(string author, int observationId, string message) {
+        _repository.PostComment(author, observationId, message, DateTime.UtcNow);
+    }
+
     public List<ObservationDTO> GetObservationsFromAuthor(string author, int page) {
-        //get observations for a specific author
-        var observations = _repository.GetObservationsFromAuthor(author, page);
-        //empty list for the DTOs 
-        var observationDTOs = new List<ObservationDTO>();
-
-        //Convert observation into ObservationDTO
-        foreach (var observation in observations) {
-            var dto = new ObservationDTO(
-                observation.ObservationId,
-                observation.Author,
-                observation.Message,
-                observation.Timestamp,
-                observation.PictureUrl
-            );
-
-            observationDTOs.Add(dto);
-        }
-        //return observationDTOs instead of original observations
-        return observationDTOs;
+        return _repository.GetObservationsFromAuthor(author, page);
 
     }
 

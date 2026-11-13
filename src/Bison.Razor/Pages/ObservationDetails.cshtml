@@ -24,7 +24,17 @@
         }
 
     <h3>Comments</h3>
-
+    @if (User?.Identity?.IsAuthenticated == true)
+    {
+        <div class="observationbox">
+            <h3>Post Comment</h3>
+            <form method="post">
+                <input type="hidden" asp-for="observationId" />
+                <input style="float: left" type="text" asp-for="description">
+                <input type="submit" value="Share">
+            </form>
+        </div>
+    }
     @if (Model.Observation.Comments.Any()) {
         <ul>
             @foreach (var comment in Model.Observation.Comments) {
