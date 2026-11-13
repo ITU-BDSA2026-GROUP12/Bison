@@ -112,6 +112,34 @@ public class PostRepository : IPostRepository {
         _context.SaveChanges();
       
     }
+
+    public void PostComment(string author, int observationId, string message, DateTime timestamp) {
+        Model.Author authorEntity = null;
+
+        // this loop basically just look for a existing author
+        foreach (var aut in _context.Authors) {
+            if (aut.Name == author) {
+                authorEntity = aut;
+                break;
+            }
+        }
+
+        if (authorEntity == null) {
+            authorEntity = new Model.Author { Name = author };
+        }
+
+        //check if observation exists
+        var observation = _context.Observations.Find(observationId);
+        if (observation == null) {
+            throw new ArgumentException("Observation not found");
+        }
+
+        var comment = new Comment(authorEntity, message, timestamp, observationId);
+
+        _context.Comments.Add(comment);
+        _context.SaveChanges();
+    }
+
     public List<Model.Taxon> GetTaxons() {
     return _context.Taxons
         .AsNoTracking()
