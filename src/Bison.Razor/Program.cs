@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("BisonDBContextConnection") ?? throw new InvalidOperationException("Connection string 'BisonDBContextConnection' not found.");
 
 // Add services to the container.
 builder.Services.AddRazorPages();
