@@ -1,3 +1,4 @@
+using Bison.Razor.DTOs;
 using Bison.Razor.Model;
 
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ public class PostRepository : IPostRepository {
         _context = context;
     }
 
-    public ObservationViewModel? GetObservation(int observationId) {
+    public ObservationDTO? GetObservation(int observationId) {
         var observation = _context.Observations
             .AsNoTracking()                                                         // Don't keep track for later updates.
             .Include(observation => observation.Author)                             // Also retrieve author.
@@ -22,7 +23,7 @@ public class PostRepository : IPostRepository {
             return null;
         }
 
-        return new ObservationViewModel(
+        return new ObservationDTO(
             observation.PostId,
             observation.Author.Name,
             observation.Text,
@@ -31,7 +32,7 @@ public class PostRepository : IPostRepository {
         );
     }
 
-    public List<ObservationViewModel> GetObservations(int page) {
+    public List<ObservationDTO> GetObservations(int page) {
         page = Math.Max(page, 1);
 
         return _context.Observations
@@ -40,7 +41,7 @@ public class PostRepository : IPostRepository {
             .OrderBy(observation => observation.PostId)
             .Skip((page - 1) * 32)
             .Take(32)
-            .Select(observation => new ObservationViewModel(                    // Fetch only the observations actually needed (32 max).
+            .Select(observation => new ObservationDTO(                    // Fetch only the observations actually needed (32 max).
                 observation.PostId,
                 observation.Author.Name,
                 observation.Text,
@@ -50,7 +51,7 @@ public class PostRepository : IPostRepository {
             .ToList();
     }
 
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page) {
+    public List<ObservationDTO> GetObservationsFromAuthor(string author, int page) {
         page = Math.Max(page, 1);
 
         return _context.Observations
@@ -60,7 +61,7 @@ public class PostRepository : IPostRepository {
             .OrderBy(observation => observation.PostId)
             .Skip((page - 1) * 32)
             .Take(32)
-            .Select(observation => new ObservationViewModel(
+            .Select(observation => new ObservationDTO(
                 observation.PostId,
                 observation.Author.Name,
                 observation.Text,
@@ -70,47 +71,61 @@ public class PostRepository : IPostRepository {
             .ToList();
     }
 
-    public List<Comment> GetComments(int observationId) {
+    public List<CommentDTO> GetComments(int observationId) {
         return _context.Comments
             .AsNoTracking()
             .Include(comment => comment.Author)
             .Where(comment => comment.ObservationId == observationId)
             .OrderBy(comment => comment.PostId)
             .AsEnumerable()                                                     // Makes that time conversion happen in C#
+
+            .Select(comment => new CommentDTO(
+                comment.Author.Name,
+                comment.Text,
+                comment.TimeStamp.ToString()
+            ))
             .ToList();
     }
 
-    public List<Proposal> GetProposals(int observationId) {
+    public List<ProposalDTO> GetProposals(int observationId) {
         return _context.Proposals
             .AsNoTracking()
             .Include(proposal => proposal.Author)
             .Include(proposal => proposal.Taxon).ThenInclude(taxon => taxon.Parent)
             .Where(proposal => proposal.ObservationId == observationId)
             .OrderBy(proposal => proposal.PostId)
+            .AsEnumerable()
+            .Select(proposal => new ProposalDTO(
+            proposal.Author.Name,
+            proposal.Taxon.DwcTaxonId,
+            proposal.TimeStamp.ToString()
+            ))
             .ToList();
     }
+
+
     public void CreateObservation(string author, string message, DateTime timestamp) {
         Model.Author authorEntity = null;
 
         // this loop basically just look for a existing author
         foreach (var aut in _context.Authors) {
-            if(aut.Name == author) {
+            if (aut.Name == author) {
                 authorEntity = aut;
                 break;
             }
         }
 
-        if(authorEntity == null) {
-            authorEntity = new Model.Author{Name = author};
+        if (authorEntity == null) {
+            authorEntity = new Model.Author { Name = author };
 
-    
+
         }
 
-        var observation = new Observation(authorEntity, message,timestamp, null);
+        var observation = new Observation(authorEntity, message, timestamp, null);
 
         _context.Observations.Add(observation);
         _context.SaveChanges();
-      
+
     }
 
     public void PostComment(string author, int observationId, string message, DateTime timestamp) {
@@ -141,15 +156,15 @@ public class PostRepository : IPostRepository {
     }
 
     public List<Model.Taxon> GetTaxons() {
-    return _context.Taxons
-        .AsNoTracking()
-        .OrderBy(taxon => taxon.TaxonId)
-        .ToList();
-        
+        return _context.Taxons
+            .AsNoTracking()
+            .OrderBy(taxon => taxon.TaxonId)
+            .ToList();
+
     }
 
-public List<Model.Observation>
-    GetObservationsForFiltering(string? author = null) {
+    public List<Model.Observation>
+        GetObservationsForFiltering(string? author = null) {
         // Load all taxa so EF Core can connect each taxon with its ancestors.
         _context.Taxons.Load();
 
