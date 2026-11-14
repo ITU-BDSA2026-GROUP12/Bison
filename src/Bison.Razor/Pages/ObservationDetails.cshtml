@@ -24,14 +24,15 @@
         }
 
     <h3>Comments</h3>
+
     @if (User?.Identity?.IsAuthenticated == true)
     {
         <div class="observationbox">
             <h3>Post Comment</h3>
             <form method="post">
-                <input type="hidden" asp-for="observationId" />
-                <input style="float: left" type="text" asp-for="description">
-                <input type="submit" value="Share">
+                <input type="hidden" asp-for="ObservationId" required />
+                <input style="float: left" type="text" asp-for="Description">
+                <input type="submit" asp-page-handler="Comment" value="Post">
             </form>
         </div>
     }
@@ -54,12 +55,40 @@
 
     <h3>Proposals</h3>
 
+    @if (User?.Identity?.IsAuthenticated == true)
+    {
+        <div class="observationbox">
+            <h3>Propose Taxon</h3>
+            <form method="post">
+                <input type="hidden" asp-for="ObservationId" required />
+
+                <label for="taxonId">Taxon:</label>
+                <select asp-for="SelectedTaxonId">
+                    <option value="">All taxa</option>
+                    @* Only display taxa with readable names. *@
+                    @foreach (var taxon in Model.Taxons
+                        .Where(t => !string.IsNullOrWhiteSpace(t.VernacularName)))
+                    {
+                        <option value="@taxon.TaxonId">
+                            @taxon.VernacularName
+                        </option>
+                    }
+                </select>
+                
+                <input type="submit" asp-page-handler="Proposal" value="Post">
+            </form>
+        </div>
+    }
+
+    <!--<form method="get">
+    </form>-->
+
     @if (Model.Observation.Proposals.Any()) {
         <ul>
             @foreach (var proposal in Model.Observation.Proposals) {
                 <li>
                     <strong>@proposal.Author</strong>
-                    proposed @proposal.TaxonId
+                    proposed @(Model.Taxons.FirstOrDefault(t => t.DwcTaxonId == proposal.TaxonId)?.VernacularName ?? "Unknown Vernacular Name")
                     <small>
                         &mdash; @proposal.Timestamp
                     </small>

@@ -155,6 +155,39 @@ public class PostRepository : IPostRepository {
         _context.SaveChanges();
     }
 
+    public void PostProposal(string author, int observationId, int taxonId, string message, DateTime timestamp) {
+        Model.Author authorEntity = null;
+
+        // this loop basically just look for a existing author
+        foreach (var aut in _context.Authors) {
+            if (aut.Name == author) {
+                authorEntity = aut;
+                break;
+            }
+        }
+
+        if (authorEntity == null) {
+            authorEntity = new Model.Author { Name = author };
+        }
+
+        //check if observation exists
+        Observation? observation = _context.Observations.Find(observationId);
+        if (observation == null) {
+            throw new ArgumentException("Observation not found");
+        }
+
+        //check if taxon exists
+        Taxon? taxon = _context.Taxons.Find(taxonId);
+        if (taxon == null) {
+            throw new ArgumentException("Taxon not found");
+        }
+
+        var proposal = new Proposal(authorEntity, message, timestamp, observationId, taxon);
+
+        _context.Proposals.Add(proposal);
+        _context.SaveChanges();
+    }
+
     public List<Model.Taxon> GetTaxons() {
         return _context.Taxons
             .AsNoTracking()
