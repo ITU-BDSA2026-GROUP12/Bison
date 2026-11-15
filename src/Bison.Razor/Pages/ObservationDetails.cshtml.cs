@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Model;
+using Bison.Razor.Model;
 using Bison.Razor.DTOs;
 using Microsoft.AspNetCore.Authorization;
 
@@ -11,6 +11,8 @@ public class ObservationDetailsModel : PageModel
     private readonly IObservationService _service;
 
     public ObservationDetailsDTO? Observation { get; set; }
+
+    public List<Taxon> Taxons { get; set; } = new();
 
     public ObservationDetailsModel(IObservationService service)
     {
@@ -31,29 +33,53 @@ public class ObservationDetailsModel : PageModel
             return NotFound();
         }
 
-        observationId = id.Value;
+        ObservationId = id.Value;
+
+        // Get taxa for the dropdown.
+        Taxons = _service.GetTaxons();
 
         return Page();
     }
 
-    // so this method is used to post.
     [BindProperty]
-    public string description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     [BindProperty]
-    public int observationId { get; set; }
+    public int ObservationId { get; set; }
 
-    public ActionResult OnPost() {
+    [BindProperty]
+    public int SelectedTaxonId { get; set; }
+
+    public ActionResult OnPostComment() {
 
         if (!ModelState.IsValid) {
-            Observation = _service.GetObservationDetails(observationId);
+            Observation = _service.GetObservationDetails(ObservationId);
+            Taxons = _service.GetTaxons();
+
             return Page();
         }
 
-        _service.PostComment(User.Identity!.Name!, observationId, description);
+        _service.PostComment(User.Identity!.Name!, ObservationId, Description);
 
-        return RedirectToPage(new { id = observationId });
+        return RedirectToPage(new { id = ObservationId });
     }
 
+    public ActionResult OnPostProposal() {
+
+        //a bit messy way to get rid of Description from ModelState.
+        //But it's better than making Description nullable in my opinion.
+        ModelState.Remove(nameof(Description));
+        if (!ModelState.IsValid) {
+
+            Observation = _service.GetObservationDetails(ObservationId);
+            Taxons = _service.GetTaxons();
+
+            return Page();
+        }
+
+        _service.PostProposal(User.Identity!.Name!, ObservationId, SelectedTaxonId, string.Empty);
+
+        return RedirectToPage(new { id = ObservationId });
+    }
 
 }
