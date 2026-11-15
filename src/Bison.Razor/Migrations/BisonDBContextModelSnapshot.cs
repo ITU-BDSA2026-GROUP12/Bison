@@ -15,7 +15,7 @@ namespace Bison.Razor.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
 
             modelBuilder.Entity("ApplicationUser", b =>
                 {
@@ -40,6 +40,10 @@ namespace Bison.Razor.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedEmail")
@@ -302,6 +306,9 @@ namespace Bison.Razor.Migrations
             modelBuilder.Entity("Bison.Razor.Model.Observation", b =>
                 {
                     b.HasBaseType("Bison.Razor.Model.Post");
+
+                    b.Property<string>("PictureUrl")
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("TaxonId")
                         .HasColumnType("INTEGER");
