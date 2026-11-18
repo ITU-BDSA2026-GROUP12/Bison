@@ -26,24 +26,27 @@ public class PublicModel : PageModel
     // for now we just tell ASP.NET which page we are on. you do it by /?page=(page number)
 
     public ActionResult OnGet([FromQuery] int page = 1, [FromQuery] int? taxonId = null) {
-        // Keep the current page within valid bounds.
-        CurrentPage = Math.Max(1, page);
-        
         // Get taxa for the dropdown.
         Taxons = _service.GetTaxons();
         SelectedTaxonId = taxonId;
 
+        const int pageSize = 32;
+
+        int observationCount = _service.GetTimelineObservationCount(taxonId);
+
+        TotalPages = Math.Max(1, (int)Math.Ceiling(observationCount / (double)pageSize));
+
+        // Keep the current page within valid bounds.
+        CurrentPage = Math.Clamp(page, 1, TotalPages);
+
         // Retrieve observations for the current page.
         Observations = _service.GetTimelineObservations(
-            CurrentPage,
+            CurrentPage, 
             taxonId
         );
 
         // Check whether another page exists.
-        HasNextPage = _service.GetTimelineObservations(
-            CurrentPage + 1,
-            taxonId
-        ).Any();
+        HasNextPage = CurrentPage < TotalPages;
 
         return Page();
     }
@@ -53,7 +56,7 @@ public class PublicModel : PageModel
 
     [BindProperty]
 
-    public string description{get; set;}
+    public string description{get; set;} = string.Empty;
     public ActionResult OnPost() {
 
         if (!ModelState.IsValid) {
@@ -64,6 +67,35 @@ public class PublicModel : PageModel
         _service.CreateObervation(User.Identity!.Name!, description);
             return RedirectToPage("Public");
     }
+    public int TotalPages { get; set; } = 1;
+    public IEnumerable<int?> VisiblePages {
+        get {
+            int start = Math.Max(1, CurrentPage - 2);
+            int end = Math.Min(TotalPages, CurrentPage + 2);
 
+            // Always show the first page.
+            yield return 1;
+
+            // Show an ellipsis (...) if pages are skipped.
+            if (start > 2) {
+                yield return null;
+            }
+
+            // Show the pages around the current page.
+            for (int page = Math.Max(2, start); page <= Math.Min(TotalPages - 1, end); page++) {
+                yield return page;
+            }
+
+            // Show an ellipsis (...) before the last page.
+            if (end < TotalPages - 1) {
+                yield return null;
+            }
+
+            // Always show the last page.
+            if (TotalPages > 1) {
+                yield return TotalPages;
+            }
+        }
+    }
 }
 
