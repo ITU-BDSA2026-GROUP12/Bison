@@ -14,10 +14,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
-        
-    # Playwright stuff (yippee)
-    - name: Ensure browsers are installed
-      run: pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps
     
     # Dafny stuff
     - name: Setup Dafny
