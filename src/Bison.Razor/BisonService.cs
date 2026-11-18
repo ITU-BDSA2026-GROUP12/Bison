@@ -1,8 +1,6 @@
-using Bison.Razor.Model;
 using Bison.Razor;
 using Bison.Razor.Repositories;
 using Bison.Razor.DTOs;
-using Humanizer;
 
 public interface IObservationService {
     public List<ObservationDTO> GetObservations(int page);
