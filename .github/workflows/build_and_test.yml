@@ -38,13 +38,6 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    
-    # Playwright install
-    - name: Install Playwright Browsers
-      run: |
-        cd test/Bison.Tests
-        dotnet build
-        push bin/Debug/net8.0/playwright.psl install --with-deps
 
     # Run tests
     - name: Test
