@@ -15,11 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
+    <ProjectReference Include="..\Bison.Razor\Bison.Razor.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Taxonomy\Taxonomy.csproj" />
+    <Using Include="Xunit" />
   </ItemGroup>
 
 </Project>
