@@ -1,17 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Model\Model.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CsvHelper" Version="33.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource
-        Include="Resources\joined.csv"
-        LogicalName="Taxonomy.joined.csv" />
+    <EmbeddedResource Include="Resources\joined.csv" LogicalName="Taxonomy.joined.csv" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -1,9 +1,9 @@
 using System.Globalization;
 using System.Reflection;
 using CsvHelper;
-using Model;
+using Bison.Razor.Model;
 
-namespace Taxonomy;
+namespace Bison.Razor.Taxonomy;
 
 public sealed class TaxonomyStore {
     private const string TaxonomyResourceName = "Taxonomy.joined.csv";
