@@ -106,9 +106,9 @@ public class PostRepository : IPostRepository {
             .ToList();
     }
 
-
     public void CreateObservation(string author, string message, DateTime timestamp, string License) {
-        Model.Author authorEntity = null;
+        Model.Author? authorEntity = null;
+
 
         // this loop basically just look for a existing author
         foreach (var aut in _context.Authors) {
@@ -132,7 +132,7 @@ public class PostRepository : IPostRepository {
     }
 
     public void PostComment(string author, int observationId, string message, DateTime timestamp) {
-        Model.Author authorEntity = null;
+        Model.Author? authorEntity = null;
 
         // this loop basically just look for a existing author
         foreach (var aut in _context.Authors) {
@@ -159,7 +159,7 @@ public class PostRepository : IPostRepository {
     }
 
     public void PostProposal(string author, int observationId, int taxonId, string message, DateTime timestamp) {
-        Model.Author authorEntity = null;
+        Model.Author? authorEntity = null;
 
         // this loop basically just look for a existing author
         foreach (var aut in _context.Authors) {
@@ -214,5 +214,15 @@ public class PostRepository : IPostRepository {
         }
 
         return query.OrderBy(observation => observation.PostId).ToList();
+    }
+
+    public int CountObservations(string? author = null) {
+        var query = _context.Observations.AsNoTracking().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(author)) {
+            query = query.Where(o => o.Author.Name == author);
+        }
+
+        return query.Count();
     }
 }

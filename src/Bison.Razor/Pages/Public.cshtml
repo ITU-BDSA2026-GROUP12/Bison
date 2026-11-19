@@ -29,14 +29,18 @@
 
 
 <div>
-    @if (User.Identity.IsAuthenticated == false)
+
+    @if (User.Identity?.IsAuthenticated != true)
+
     {
         <h2> Log in to post a what you saw</h2>
         
     }
     
-    @if (User.Identity.IsAuthenticated == true)
+
+    @if (User.Identity?.IsAuthenticated == true)
     {
+
 
         <div class="observationbox">
             <h3>What did you see, @(User.Identity.Name)?</h3>
@@ -115,15 +119,18 @@
         <em>There are no observations so far.</em>
     }
 
+    @{
+        string taxonQuery = Model.SelectedTaxonId.HasValue ? $"&taxonId={Model.SelectedTaxonId.Value}" : "";
+    }
+
     <nav class="pagination" aria-label="Observation pages">
 
         @* Previous page *@
+
         @if (Model.CurrentPage > 1)
         {
-            <a href="/?page=@(Model.CurrentPage - 1)@(
-               Model.SelectedTaxonId.HasValue
-                   ? $"&taxonId={Model.SelectedTaxonId}"
-                   : "")" class="page-button">
+            <a href="@($"/?page={Model.CurrentPage - 1}{taxonQuery}")" class="page-button">
+
                 Previous
             </a>
         }
@@ -132,13 +139,34 @@
             <span class="page-button disabled">Previous</span>
         }
 
+        @* Numbered pagination *@
+        <div class="page-numbers">
+            @foreach (int? pageNumber in Model.VisiblePages)
+            {
+                if (pageNumber == null)
+                {
+                    <span class="page-ellipsis" aria-hidden="true">...</span>
+                }
+                else if (pageNumber == Model.CurrentPage)
+                {
+                    <span class="page-number active" aria-current="page">
+                        @pageNumber
+                    </span>
+                }
+                else
+                {
+                    <a href="@($"/?page={pageNumber}{taxonQuery}")" class="page-number" aria-label="Go to page @pageNumber">
+                        @pageNumber
+                    </a>
+                }
+            }
+        </div>
+
         @* Next page *@
         @if (Model.HasNextPage)
         {
-            <a href="/?page=@(Model.CurrentPage + 1)@(
-               Model.SelectedTaxonId.HasValue
-                   ? $"&taxonId={Model.SelectedTaxonId}"
-                   : "")" class="page-button">
+            <a href="@($"/?page={Model.CurrentPage + 1}{taxonQuery}")" class="page-button">
+
                 Next
             </a>
         }

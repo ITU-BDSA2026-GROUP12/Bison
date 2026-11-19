@@ -327,3 +327,37 @@ ul.nav li a:hover {
     background-color: #f5f5f5;
     cursor: default;
 }
+
+.page-numbers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.page-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    padding: 8px 4px;
+    border-radius: 5px;
+    color: #333;
+    text-decoration: none;
+}
+
+a.page-number:hover {
+    background-color: #eee;
+}
+
+.page-number.active {
+    background-color: #cc6e6e;
+    color: white;
+    font-weight: bold;
+}
+
+.page-ellipsis {
+    padding: 8px 4px;
+    color: #777;
+}

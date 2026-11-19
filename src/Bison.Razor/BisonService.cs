@@ -1,8 +1,6 @@
-using Bison.Razor.Model;
 using Bison.Razor;
 using Bison.Razor.Repositories;
 using Bison.Razor.DTOs;
-using Humanizer;
 
 public interface IObservationService {
     public List<ObservationDTO> GetObservations(int page);
@@ -14,6 +12,7 @@ public interface IObservationService {
     public void PostProposal(string author, int observationId, int taxonId, string message);
     public List<Bison.Razor.Model.Taxon> GetTaxons();
     public List<ObservationDTO> GetTimelineObservations(int page, int? taxonId = null, string? author = null);
+    int GetTimelineObservationCount(int? taxonId = null, string? author = null);
 }
 
 public class ObservationService : IObservationService {
@@ -120,5 +119,25 @@ public class ObservationService : IObservationService {
                 o.License
             ))
             .ToList();
+    }
+
+    public int GetTimelineObservationCount(int? taxonId = null, string? author = null) {
+        // Count directly in the database if the filter is off.
+        if (taxonId == null) {
+            return _repository.CountObservations(author);
+        }
+
+        var selectedTaxon = _repository.GetTaxons().FirstOrDefault(t => t.TaxonId == taxonId.Value);
+
+        if (selectedTaxon == null) {
+            return 0;
+        }
+
+        var observations = _repository.GetObservationsForFiltering(author);
+
+        var candidates = observations.Where(o => o.Taxon != null).ToList();
+
+        // Same filtering logic as the timeline.
+        return _taxonFilter.FilterByTaxon(selectedTaxon, candidates).Count();
     }
 }
