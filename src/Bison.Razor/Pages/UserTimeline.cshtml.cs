@@ -5,35 +5,34 @@ using Bison.Razor.DTOs;
 
 namespace Bison.Razor.Pages;
 
-public class UserTimelineModel : PageModel
-{
+public class UserTimelineModel : PageModel {
     private readonly IObservationService _service;
     public List<ObservationDTO>? Observations { get; set; }
 
-    public UserTimelineModel(IObservationService service)
-    {
+    public UserTimelineModel(IObservationService service) {
         _service = service;
     }
 
     // this method gets called everytime a person sends a http get request
     // for now we just tell ASP.NET which page we are on. you do it by /?page=(page number)
-    public ActionResult OnGet(string author, [FromQuery] int page = 1)
-    {
+    public ActionResult OnGet(string author, [FromQuery] int page = 1) {
         Observations = _service.GetObservationsFromAuthor(author, page);
         return Page();
     }
 
     [BindProperty]
 
-    public string description{get; set;}
+    public string description { get; set; }
     public ActionResult OnPost() {
 
         if (!ModelState.IsValid) {
             Observations = _service.GetObservations(1);
             return Page();
         }
-
-        _service.CreateObervation(User.Identity!.Name!, description);
-            return RedirectToPage("Public");
+        _service.CreateObervation(User.Identity!.Name!, description, License);
+        return RedirectToPage("Public");
     }
+
+    [BindProperty]
+    public string? License { get; set; }
 }

@@ -9,46 +9,58 @@
 <div>
     <h2> @routeName's Observations </h2>
 
-    @if(User.Identity.IsAuthenticated == true)
+    @if (User.Identity.IsAuthenticated == true)
     {
         <div class="observationbox">
             <h3>What did you see, @(User.Identity.Name)?</h3>
             <form method="post">
-            <input style="float: left" type="text" asp-for="description">
-            <input type="submit" value="Share">
-            </form>
-        </div>   
-    }
+                <input style="float: left" type="text" asp-for="description">
 
-    @if (Model.Observations?.Any() == true)
-    {
-        <ul id="messagelist" class="observations">
-            @foreach (var ob in Model.Observations)
-            {
-                <li>
-                    <p>
-                        <strong>
-                            <a href="/@ob.Author">@ob.Author</a>
-                        </strong>
-                        <a href="/ob/@ob.ObservationId">
-                            @ob.Message
-                        </a>
-                        <small>&mdash; @ob.Timestamp</small>
-                    </p>
-                    @if (!string.IsNullOrWhiteSpace(ob.PictureUrl)) {
-                        <img src="@ob.PictureUrl"
-                            alt="Animal observed by @ob.Author"
-                            class="observation-picture"
-                            loading="lazy" />
-                    }
-                </li>
-            }
-        </ul>
-    }
-    else
-    {
-        <em>There are no Observations so far.</em>
-    }
-</div>
+                <div style="clear: both;">
+                    <label for="license">
+                        How may other people use your picture?
+                    </label>
+
+                    <select name="license" id="license" required>
+                        <option value="" disabled selected>Select a license</option>
+                        <option value="CC0 1.0">CC0 1.0 - No restrictions</option>
+                        <option value="CC BY 4.0">CC BY 4.0 - Credit required</option>
+                        <option value="CC BY-ND 4.0">CC BY-ND 4.0 - No sharing adaptations</option>
+                        <option value="CC BY-NC 4.0">CC BY-NC 4.0 - Non-commercial use only</option>
+                    </select>
+
+                    <input type="submit" value="Share">
+                </form>
+            </div>
+        }
+
+        @if (Model.Observations?.Any() == true)
+        {
+            <ul id="messagelist" class="observations">
+                @foreach (var ob in Model.Observations)
+                {
+                    <li>
+                        <p>
+                            <strong>
+                                <a href="/@ob.Author">@ob.Author</a>
+                            </strong>
+                            <a href="/ob/@ob.ObservationId">
+                                @ob.Message
+                            </a>
+                            <small>&mdash; @ob.Timestamp</small>
+                        </p>
+                        @if (!string.IsNullOrWhiteSpace(ob.PictureUrl))
+                        {
+                            <img src="@ob.PictureUrl" alt="Animal observed by @ob.Author" class="observation-picture" loading="lazy" />
+                        }
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <em>There are no Observations so far.</em>
+        }
+    </div>
 
 

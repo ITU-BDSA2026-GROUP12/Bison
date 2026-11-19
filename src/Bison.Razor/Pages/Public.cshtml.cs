@@ -6,8 +6,7 @@ using Bison.Razor.Repositories;
 
 namespace Bison.Razor.Pages;
 
-public class PublicModel : PageModel
-{
+public class PublicModel : PageModel {
     private readonly IObservationService _service;
     public List<ObservationDTO>? Observations { get; set; }
     public List<Model.Taxon> Taxons { get; set; } = new();
@@ -15,8 +14,7 @@ public class PublicModel : PageModel
     public int CurrentPage { get; set; } = 1;
     public bool HasNextPage { get; set; }
 
-    public PublicModel(IObservationService service)
-    {
+    public PublicModel(IObservationService service) {
         _service = service;
     }
 
@@ -28,7 +26,7 @@ public class PublicModel : PageModel
     public ActionResult OnGet([FromQuery] int page = 1, [FromQuery] int? taxonId = null) {
         // Keep the current page within valid bounds.
         CurrentPage = Math.Max(1, page);
-        
+
         // Get taxa for the dropdown.
         Taxons = _service.GetTaxons();
         SelectedTaxonId = taxonId;
@@ -52,8 +50,7 @@ public class PublicModel : PageModel
     // so this method is used to post.
 
     [BindProperty]
-
-    public string description{get; set;}
+    public string description { get; set; }
     public ActionResult OnPost() {
 
         if (!ModelState.IsValid) {
@@ -61,9 +58,14 @@ public class PublicModel : PageModel
             return Page();
         }
 
-        _service.CreateObervation(User.Identity!.Name!, description);
-            return RedirectToPage("Public");
+        Console.WriteLine("LICENSE: " + License);
+
+        _service.CreateObervation(User.Identity!.Name!, description, License);
+        return RedirectToPage("Public");
     }
+
+    [BindProperty]
+    public string? License { get; set; }
 
 }
 
