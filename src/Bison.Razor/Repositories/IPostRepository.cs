@@ -16,4 +16,5 @@ public interface IPostRepository {
     public void PostProposal(string author, int observationId, int taxonId, string message, DateTime timestamp);
     List<Model.Taxon> GetTaxons();
     List<Model.Observation> GetObservationsForFiltering(string? author = null);
+    int CountObservations(string? author = null);
 }

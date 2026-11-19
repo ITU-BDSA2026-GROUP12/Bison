@@ -33,12 +33,7 @@ builder.Services.AddScoped<IObservationService, ObservationService>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ITaxonFilterService, TaxonFilterService>();
 
-builder.Services.AddAuthentication(options => {
-    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = "GitHub";
-})
-.AddCookie()
+builder.Services.AddAuthentication()
 .AddGitHub(o => {
     o.ClientId = builder.Configuration["authentication:github:clientId"]
         ?? "";
