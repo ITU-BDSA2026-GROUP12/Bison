@@ -66,8 +66,6 @@ public class PublicModel : PageModel {
             return Page();
         }
 
-        Console.WriteLine("LICENSE: " + License);
-
         _service.CreateObervation(User.Identity!.Name!, description, License);
         return RedirectToPage("Public");
     }
