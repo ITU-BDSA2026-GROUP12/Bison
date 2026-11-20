@@ -5,5 +5,6 @@ public record ObservationDTO(
     string Author,
     string Message,
     string Timestamp,
-    string? PictureUrl = null
+    string? PictureUrl = null,
+    string? License = null
 );

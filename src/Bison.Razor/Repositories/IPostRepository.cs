@@ -11,7 +11,7 @@ public interface IPostRepository {
     List<ObservationDTO> GetObservationsFromAuthor(string author, int page);
     List<CommentDTO> GetComments(int observationId);
     List<ProposalDTO> GetProposals(int observationId);
-    public void CreateObservation(string author, string message, DateTime timestamp);
+    public void CreateObservation(string author, string message, DateTime timestamp, string License);
     public void PostComment(string author, int observationId, string message, DateTime timestamp);
     public void PostProposal(string author, int observationId, int taxonId, string message, DateTime timestamp);
     List<Model.Taxon> GetTaxons();

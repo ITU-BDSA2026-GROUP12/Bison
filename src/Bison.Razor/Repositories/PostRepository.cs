@@ -28,7 +28,8 @@ public class PostRepository : IPostRepository {
             observation.Author.Name,
             observation.Text,
             observation.TimeStamp.ToString(),
-            observation.PictureUrl
+            observation.PictureUrl,
+            observation.License
         );
     }
 
@@ -46,7 +47,8 @@ public class PostRepository : IPostRepository {
                 observation.Author.Name,
                 observation.Text,
                 observation.TimeStamp.ToString(),
-                observation.PictureUrl
+                observation.PictureUrl,
+                observation.License
             ))
             .ToList();
     }
@@ -66,7 +68,8 @@ public class PostRepository : IPostRepository {
                 observation.Author.Name,
                 observation.Text,
                 observation.TimeStamp.ToString(),
-                observation.PictureUrl
+                observation.PictureUrl,
+                observation.License
             ))
             .ToList();
     }
@@ -103,9 +106,9 @@ public class PostRepository : IPostRepository {
             .ToList();
     }
 
-
-    public void CreateObservation(string author, string message, DateTime timestamp) {
+    public void CreateObservation(string author, string message, DateTime timestamp, string License) {
         Model.Author? authorEntity = null;
+
 
         // this loop basically just look for a existing author
         foreach (var aut in _context.Authors) {
@@ -121,7 +124,7 @@ public class PostRepository : IPostRepository {
 
         }
 
-        var observation = new Observation(authorEntity, message, timestamp, null);
+        var observation = new Observation(authorEntity, message, timestamp, null, License);
 
         _context.Observations.Add(observation);
         _context.SaveChanges();

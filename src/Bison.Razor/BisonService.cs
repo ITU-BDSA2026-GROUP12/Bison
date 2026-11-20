@@ -7,7 +7,7 @@ public interface IObservationService {
     public List<ObservationDTO> GetObservationsFromAuthor(string author, int page);
     public ObservationDetailsDTO? GetObservationDetails(int observationId);
 
-    public void CreateObervation(string author, string message);
+    public void CreateObervation(string author, string message, string License);
     public void PostComment(string author, int observationId, string message);
     public void PostProposal(string author, int observationId, int taxonId, string message);
     public List<Bison.Razor.Model.Taxon> GetTaxons();
@@ -25,8 +25,8 @@ public class ObservationService : IObservationService {
         _taxonFilter = taxonFilter ?? new TaxonFilterService();
     }
 
-    public void CreateObervation(string author, string message) {
-        _repository.CreateObservation(author, message, DateTime.UtcNow);
+    public void CreateObervation(string author, string message, string License) {
+        _repository.CreateObservation(author, message, DateTime.UtcNow, License);
     }
 
     public List<ObservationDTO> GetObservations(int page) {
@@ -36,7 +36,7 @@ public class ObservationService : IObservationService {
     public void PostComment(string author, int observationId, string message) {
         _repository.PostComment(author, observationId, message, DateTime.UtcNow);
     }
-    
+
     public void PostProposal(string author, int observationId, int taxonId, string message) {
         _repository.PostProposal(author, observationId, taxonId, message, DateTime.UtcNow);
     }
@@ -67,7 +67,8 @@ public class ObservationService : IObservationService {
             observation.Timestamp,
             commentDTOs,
             proposalDTOs,
-            observation.PictureUrl
+            observation.PictureUrl,
+            observation.License
         );
     }
 
@@ -114,7 +115,8 @@ public class ObservationService : IObservationService {
                 o.Author.Name,
                 o.Text,
                 o.TimeStamp.ToString(),
-                o.PictureUrl
+                o.PictureUrl,
+                o.License
             ))
             .ToList();
     }

@@ -16,12 +16,17 @@
             &mdash; @Model.Observation.Timestamp
         </small>
     </p>
-    @if (!string.IsNullOrWhiteSpace(Model.Observation.PictureUrl)) {
-            <img src="@Model.Observation.PictureUrl"
-                alt="Animal observed by @Model.Observation.Author"
-                class="observation-picture"
-                loading="lazy" />
-        }
+    @if (!string.IsNullOrWhiteSpace(Model.Observation.PictureUrl))
+    {
+        <img src="@Model.Observation.PictureUrl" alt="Animal observed by @Model.Observation.Author"
+             class="observation-picture" loading="lazy" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.Observation.License))
+    {
+        <p>License: @Model.Observation.License</p>
+    }
+
 
     <h3>Comments</h3>
 
@@ -36,9 +41,11 @@
             </form>
         </div>
     }
-    @if (Model.Observation.Comments.Any()) {
+    @if (Model.Observation.Comments.Any())
+    {
         <ul>
-            @foreach (var comment in Model.Observation.Comments) {
+            @foreach (var comment in Model.Observation.Comments)
+            {
                 <li>
                     <strong>@comment.Author</strong>
                     @comment.Message
@@ -49,7 +56,8 @@
             }
         </ul>
     }
-    else {
+    else
+    {
         <p>No comments.</p>
     }
 
@@ -83,9 +91,11 @@
     <!--<form method="get">
     </form>-->
 
-    @if (Model.Observation.Proposals.Any()) {
+    @if (Model.Observation.Proposals.Any())
+    {
         <ul>
-            @foreach (var proposal in Model.Observation.Proposals) {
+            @foreach (var proposal in Model.Observation.Proposals)
+            {
                 <li>
                     <strong>@proposal.Author</strong>
                     proposed @(Model.Taxons.FirstOrDefault(t => t.DwcTaxonId == proposal.TaxonId)?.VernacularName ?? "Unknown Vernacular Name")
@@ -96,7 +106,8 @@
             }
         </ul>
     }
-    else {
+    else
+    {
         <p>No proposals.</p>
     }
 </div>

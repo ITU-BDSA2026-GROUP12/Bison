@@ -6,8 +6,7 @@ using Bison.Razor.Repositories;
 
 namespace Bison.Razor.Pages;
 
-public class PublicModel : PageModel
-{
+public class PublicModel : PageModel {
     private readonly IObservationService _service;
     public List<ObservationDTO>? Observations { get; set; }
     public List<Model.Taxon> Taxons { get; set; } = new();
@@ -15,8 +14,7 @@ public class PublicModel : PageModel
     public int CurrentPage { get; set; } = 1;
     public bool HasNextPage { get; set; }
 
-    public PublicModel(IObservationService service)
-    {
+    public PublicModel(IObservationService service) {
         _service = service;
     }
 
@@ -26,6 +24,9 @@ public class PublicModel : PageModel
     // for now we just tell ASP.NET which page we are on. you do it by /?page=(page number)
 
     public ActionResult OnGet([FromQuery] int page = 1, [FromQuery] int? taxonId = null) {
+        // Keep the current page within valid bounds.
+        CurrentPage = Math.Max(1, page);
+
         // Get taxa for the dropdown.
         Taxons = _service.GetTaxons();
         SelectedTaxonId = taxonId;
@@ -41,7 +42,7 @@ public class PublicModel : PageModel
 
         // Retrieve observations for the current page.
         Observations = _service.GetTimelineObservations(
-            CurrentPage, 
+            CurrentPage,
             taxonId
         );
 
@@ -56,7 +57,8 @@ public class PublicModel : PageModel
 
     [BindProperty]
 
-    public string description{get; set;} = string.Empty;
+    public string description { get; set; } = string.Empty;
+
     public ActionResult OnPost() {
 
         if (!ModelState.IsValid) {
@@ -64,14 +66,15 @@ public class PublicModel : PageModel
             return Page();
         }
 
-        _service.CreateObervation(User.Identity!.Name!, description);
-            return RedirectToPage("Public");
+        _service.CreateObervation(User.Identity!.Name!, description, License);
+        return RedirectToPage("Public");
     }
     public int TotalPages { get; set; } = 1;
     public IEnumerable<int?> VisiblePages {
         get {
             int start = Math.Max(1, CurrentPage - 2);
             int end = Math.Min(TotalPages, CurrentPage + 2);
+
 
             // Always show the first page.
             yield return 1;
@@ -97,5 +100,11 @@ public class PublicModel : PageModel
             }
         }
     }
+
+    [BindProperty]
+    public string? License { get; set; }
+
 }
+
+
 
