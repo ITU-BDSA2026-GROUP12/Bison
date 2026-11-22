@@ -1,0 +1,43 @@
+﻿@page "/AboutMe"
+@model Bison.Razor.Pages.AboutMe
+@{
+    ViewData["Title"] = "Bison";
+    Layout = "Shared/_Layout";
+}
+
+<div>
+    <h2> Your stored information </h2>
+
+    <div>
+        <p>Name: @Model.Author!.Name</p>
+        <p>Email: @Model.Author!.Email</p>
+    </div>
+
+    @if (Model.Observations?.Any() == true)
+    {
+        <h3> Your observations </h3>
+        <ul id="messagelist" class="observations">
+            @foreach (var ob in Model.Observations)
+            {
+                <li>
+                    <p>
+                        <a href="/ob/@ob.ObservationId">
+                            @ob.Message
+                        </a>
+                        <small>&mdash; @ob.Timestamp</small>
+                    </p>
+                    @if (!string.IsNullOrWhiteSpace(ob.PictureUrl))
+                    {
+                        <img src="@ob.PictureUrl" alt="Animal observed by you" class="observation-picture" loading="lazy" />
+                    }
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <em>There are no Observations so far.</em>
+    }
+</div>
+
+

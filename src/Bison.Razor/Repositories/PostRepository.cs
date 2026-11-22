@@ -225,4 +225,20 @@ public class PostRepository : IPostRepository {
 
         return query.Count();
     }
+
+    public AuthorDTO? GetAuthor(string authorName) {
+        var author = _context.Authors
+            .AsNoTracking()
+            .FirstOrDefault(author => author.Name == authorName);
+
+        if (author == null) {
+            return null;
+        }
+
+        return new AuthorDTO(
+            author.AuthorId,
+            author.Name,
+            author.Email
+        );
+    }
 }

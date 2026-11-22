@@ -13,6 +13,7 @@ public interface IObservationService {
     public List<Bison.Razor.Model.Taxon> GetTaxons();
     public List<ObservationDTO> GetTimelineObservations(int page, int? taxonId = null, string? author = null);
     int GetTimelineObservationCount(int? taxonId = null, string? author = null);
+    public AuthorDTO? GetAuthor(string authorName);
 }
 
 public class ObservationService : IObservationService {
@@ -139,5 +140,12 @@ public class ObservationService : IObservationService {
 
         // Same filtering logic as the timeline.
         return _taxonFilter.FilterByTaxon(selectedTaxon, candidates).Count();
+    }
+
+    public AuthorDTO? GetAuthor(string authorName) {
+        //get author from repository
+        var author = _repository.GetAuthor(authorName);
+
+        return author ?? null;
     }
 }
