@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Bison.Razor.DTOs;
+using Bison.Razor.Model;
 
 namespace Bison.Razor.Pages;
 
@@ -9,6 +10,8 @@ public class AboutMe : PageModel {
     public AuthorDTO? Author { get; set; }
     public List<ObservationDTO>? Observations { get; set; }
     public List<CommentDTO>? Comments { get; set; }
+    public List<ProposalDTO>? Proposals { get; set; }
+    public List<Taxon> Taxons { get; set; } = new();
 
     public AboutMe(IObservationService service) {
         _service = service;
@@ -18,6 +21,9 @@ public class AboutMe : PageModel {
         Author = _service.GetAuthor(User.Identity!.Name!);
         Observations = _service.GetObservationsFromAuthor(User.Identity!.Name!, page);
         Comments = _service.GetCommentsByAuthor(User.Identity!.Name!);
+        Proposals = _service.GetProposalsByAuthor(User.Identity!.Name!);
+        Taxons = _service.GetTaxons();
+        
         return Page();
     }
 }

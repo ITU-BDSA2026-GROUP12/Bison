@@ -58,6 +58,27 @@
     {
         <em>You have made no comments so far.</em>
     }
+
+    <h3> Your proposals </h3>
+    @if (Model.Proposals?.Any() == true)
+    {
+        <ul>
+            @foreach (var c in Model.Proposals)
+            {
+                <li>
+                    <p>
+                        @(Model.Taxons.FirstOrDefault(t => t.DwcTaxonId == c.TaxonId)?.VernacularName ?? "Unknown Vernacular Name")
+                        <small>&mdash; @c.Timestamp</small>
+                    </p>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <em>You have made no comments so far.</em>
+    }
+
 </div>
 
 

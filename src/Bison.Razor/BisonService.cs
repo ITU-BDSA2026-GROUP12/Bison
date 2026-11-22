@@ -15,6 +15,7 @@ public interface IObservationService {
     int GetTimelineObservationCount(int? taxonId = null, string? author = null);
     public AuthorDTO? GetAuthor(string authorName);
     public List<CommentDTO>? GetCommentsByAuthor(string authorName);
+    public List<ProposalDTO>? GetProposalsByAuthor(string authorName);
 }
 
 public class ObservationService : IObservationService {
@@ -156,4 +157,12 @@ public class ObservationService : IObservationService {
 
         return comments ?? null;
     }
+
+    public List<ProposalDTO>? GetProposalsByAuthor(string authorName) {
+        //get proposals from repository
+        var proposals = _repository.GetProposalsByAuthor(authorName);
+
+        return proposals ?? null;
+    }
+
 }

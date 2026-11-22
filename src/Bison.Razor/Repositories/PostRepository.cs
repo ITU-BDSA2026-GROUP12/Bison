@@ -257,4 +257,21 @@ public class PostRepository : IPostRepository {
             ))
             .ToList();
     }
+
+    public List<ProposalDTO>? GetProposalsByAuthor(string authorName) {
+        return _context.Proposals
+            .AsNoTracking()
+            .Include(proposal => proposal.Author)
+            .Include(proposal => proposal.Taxon).ThenInclude(taxon => taxon.Parent)
+            .Where(proposal => proposal.Author.Name == authorName)
+            .OrderBy(proposal => proposal.PostId)
+            .AsEnumerable()
+            .Select(proposal => new ProposalDTO(
+            proposal.Author.Name,
+            //proposal.Taxon.DwcTaxonId,
+            proposal.Taxon.DwcTaxonId,
+            proposal.TimeStamp.ToString()
+            ))
+            .ToList();
+    }
 }

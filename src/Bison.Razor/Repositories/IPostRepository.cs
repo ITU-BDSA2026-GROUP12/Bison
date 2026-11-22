@@ -19,4 +19,5 @@ public interface IPostRepository {
     int CountObservations(string? author = null);
     AuthorDTO? GetAuthor(string authorName);
     List<CommentDTO>? GetCommentsByAuthor(string authorName);
+    List<ProposalDTO>? GetProposalsByAuthor(string authorName);
 }
