@@ -6,16 +6,16 @@
 }
 
 <div>
-    <h2> Your stored information </h2>
+    <h2> Your Stored Information </h2>
 
     <div>
         <p>Name: @Model.Author!.Name</p>
         <p>Email: @Model.Author!.Email</p>
     </div>
 
+    <h3> Your Observations </h3>
     @if (Model.Observations?.Any() == true)
     {
-        <h3> Your observations </h3>
         <ul id="messagelist" class="observations">
             @foreach (var ob in Model.Observations)
             {
@@ -39,7 +39,7 @@
         <em>There are no Observations so far.</em>
     }
 
-    <h3> Your comments </h3>
+    <h3> Your Comments </h3>
     @if (Model.Comments?.Any() == true)
     {
         <ul>
@@ -59,7 +59,7 @@
         <em>You have made no comments so far.</em>
     }
 
-    <h3> Your proposals </h3>
+    <h3> Your Proposals </h3>
     @if (Model.Proposals?.Any() == true)
     {
         <ul>
