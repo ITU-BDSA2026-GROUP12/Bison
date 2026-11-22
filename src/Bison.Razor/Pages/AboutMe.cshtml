@@ -38,6 +38,26 @@
     {
         <em>There are no Observations so far.</em>
     }
+
+    <h3> Your comments </h3>
+    @if (Model.Comments?.Any() == true)
+    {
+        <ul>
+            @foreach (var c in Model.Comments)
+            {
+                <li>
+                    <p>
+                        @c.Message
+                        <small>&mdash; @c.Timestamp</small>
+                    </p>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <em>You have made no comments so far.</em>
+    }
 </div>
 
 

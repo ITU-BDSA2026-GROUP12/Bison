@@ -241,4 +241,20 @@ public class PostRepository : IPostRepository {
             author.Email
         );
     }
+
+    public List<CommentDTO>? GetCommentsByAuthor(string authorName) {
+        return _context.Comments
+            .AsNoTracking()
+            .Include(comment => comment.Author)
+            .Where(comment => comment.Author.Name == authorName)
+            .OrderBy(comment => comment.PostId)
+            .AsEnumerable()
+
+            .Select(comment => new CommentDTO(
+                comment.Author.Name,
+                comment.Text,
+                comment.TimeStamp.ToString()
+            ))
+            .ToList();
+    }
 }

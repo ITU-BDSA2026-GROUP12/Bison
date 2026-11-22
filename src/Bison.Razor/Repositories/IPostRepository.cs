@@ -18,4 +18,5 @@ public interface IPostRepository {
     List<Model.Observation> GetObservationsForFiltering(string? author = null);
     int CountObservations(string? author = null);
     AuthorDTO? GetAuthor(string authorName);
+    List<CommentDTO>? GetCommentsByAuthor(string authorName);
 }

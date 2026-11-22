@@ -14,6 +14,7 @@ public interface IObservationService {
     public List<ObservationDTO> GetTimelineObservations(int page, int? taxonId = null, string? author = null);
     int GetTimelineObservationCount(int? taxonId = null, string? author = null);
     public AuthorDTO? GetAuthor(string authorName);
+    public List<CommentDTO>? GetCommentsByAuthor(string authorName);
 }
 
 public class ObservationService : IObservationService {
@@ -147,5 +148,12 @@ public class ObservationService : IObservationService {
         var author = _repository.GetAuthor(authorName);
 
         return author ?? null;
+    }
+
+    public List<CommentDTO>? GetCommentsByAuthor(string authorName) {
+        //get comments from repository
+        var comments = _repository.GetCommentsByAuthor(authorName);
+
+        return comments ?? null;
     }
 }
