@@ -16,7 +16,23 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 
 // Use BISONDBPATH if provided, otherwise store the EF Core SQLite database in the system temp directory.
-var dbPath = Environment.GetEnvironmentVariable("BISONDBPATH") ?? Path.Combine(Path.GetTempPath(), "bison-ef.db");
+var dbPath = Environment.GetEnvironmentVariable("BISONDBPATH");
+
+if (string.IsNullOrEmpty(dbPath))
+{
+    var home = Environment.GetEnvironmentVariable("HOME");
+
+    // Azure App Service sets HOME to something like C:\home
+    if (!string.IsNullOrEmpty(home) &&
+        (home.Contains("home", StringComparison.OrdinalIgnoreCase)))
+    {
+        dbPath = Path.Combine(home, "data", "bison-ef.db");
+    }
+    else
+    {
+        dbPath = Path.Combine(Path.GetTempPath(), "bison-ef.db");
+    }
+}
 
 builder.Services.AddDbContext<BisonDBContext>(options => options.UseSqlite($"Data Source={dbPath}"));
 
