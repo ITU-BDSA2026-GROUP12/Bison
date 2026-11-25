@@ -225,4 +225,53 @@ public class PostRepository : IPostRepository {
 
         return query.Count();
     }
+
+    public AuthorDTO? GetAuthor(string authorName) {
+        var author = _context.Authors
+            .AsNoTracking()
+            .FirstOrDefault(author => author.Name == authorName);
+
+        if (author == null) {
+            return null;
+        }
+
+        return new AuthorDTO(
+            author.AuthorId,
+            author.Name,
+            author.Email
+        );
+    }
+
+    public List<CommentDTO>? GetCommentsByAuthor(string authorName) {
+        return _context.Comments
+            .AsNoTracking()
+            .Include(comment => comment.Author)
+            .Where(comment => comment.Author.Name == authorName)
+            .OrderBy(comment => comment.PostId)
+            .AsEnumerable()
+
+            .Select(comment => new CommentDTO(
+                comment.Author.Name,
+                comment.Text,
+                comment.TimeStamp.ToString()
+            ))
+            .ToList();
+    }
+
+    public List<ProposalDTO>? GetProposalsByAuthor(string authorName) {
+        return _context.Proposals
+            .AsNoTracking()
+            .Include(proposal => proposal.Author)
+            .Include(proposal => proposal.Taxon).ThenInclude(taxon => taxon.Parent)
+            .Where(proposal => proposal.Author.Name == authorName)
+            .OrderBy(proposal => proposal.PostId)
+            .AsEnumerable()
+            .Select(proposal => new ProposalDTO(
+            proposal.Author.Name,
+            //proposal.Taxon.DwcTaxonId,
+            proposal.Taxon.DwcTaxonId,
+            proposal.TimeStamp.ToString()
+            ))
+            .ToList();
+    }
 }

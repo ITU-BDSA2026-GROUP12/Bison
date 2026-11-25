@@ -1,0 +1,84 @@
+﻿@page "/AboutMe"
+@model Bison.Razor.Pages.AboutMe
+@{
+    ViewData["Title"] = "Bison";
+    Layout = "Shared/_Layout";
+}
+
+<div>
+    <h2> Your Stored Information </h2>
+
+    <div>
+        <p>Name: @Model.Author!.Name</p>
+        <p>Email: @Model.Author!.Email</p>
+    </div>
+
+    <h3> Your Observations </h3>
+    @if (Model.Observations?.Any() == true)
+    {
+        <ul id="messagelist" class="observations">
+            @foreach (var ob in Model.Observations)
+            {
+                <li>
+                    <p>
+                        <a href="/ob/@ob.ObservationId">
+                            @ob.Message
+                        </a>
+                        <small>&mdash; @ob.Timestamp</small>
+                    </p>
+                    @if (!string.IsNullOrWhiteSpace(ob.PictureUrl))
+                    {
+                        <img src="@ob.PictureUrl" alt="Animal observed by you" class="observation-picture" loading="lazy" />
+                    }
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <em>There are no Observations so far.</em>
+    }
+
+    <h3> Your Comments </h3>
+    @if (Model.Comments?.Any() == true)
+    {
+        <ul>
+            @foreach (var c in Model.Comments)
+            {
+                <li>
+                    <p>
+                        @c.Message
+                        <small>&mdash; @c.Timestamp</small>
+                    </p>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <em>You have made no comments so far.</em>
+    }
+
+    <h3> Your Proposals </h3>
+    @if (Model.Proposals?.Any() == true)
+    {
+        <ul>
+            @foreach (var c in Model.Proposals)
+            {
+                <li>
+                    <p>
+                        @(Model.Taxons.FirstOrDefault(t => t.DwcTaxonId == c.TaxonId)?.VernacularName ?? "Unknown Vernacular Name")
+                        <small>&mdash; @c.Timestamp</small>
+                    </p>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <em>You have made no comments so far.</em>
+    }
+
+</div>
+
+

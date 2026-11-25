@@ -17,4 +17,7 @@ public interface IPostRepository {
     List<Model.Taxon> GetTaxons();
     List<Model.Observation> GetObservationsForFiltering(string? author = null);
     int CountObservations(string? author = null);
+    AuthorDTO? GetAuthor(string authorName);
+    List<CommentDTO>? GetCommentsByAuthor(string authorName);
+    List<ProposalDTO>? GetProposalsByAuthor(string authorName);
 }
