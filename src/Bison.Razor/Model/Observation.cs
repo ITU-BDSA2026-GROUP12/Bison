@@ -11,6 +11,8 @@ public class Observation : Post {
 
     public string? PictureUrl { get; set; }
 
+    public bool IsPinned { get; set; } = false;
+
     public Observation() { }
 
     public Observation(Author author, String text, DateTime timestamp, Taxon? taxon = null, string? license = null) : base(author, text, timestamp) {

@@ -6,5 +6,6 @@ public record ObservationDTO(
     string Message,
     string Timestamp,
     string? PictureUrl = null,
-    string? License = null
+    string? License = null,
+    bool IsPinned = false
 );

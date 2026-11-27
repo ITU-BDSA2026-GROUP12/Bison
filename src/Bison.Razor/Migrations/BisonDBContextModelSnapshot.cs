@@ -307,6 +307,12 @@ namespace Bison.Razor.Migrations
                 {
                     b.HasBaseType("Bison.Razor.Model.Post");
 
+                    b.Property<bool>("IsPinned")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("License")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("PictureUrl")
                         .HasColumnType("TEXT");
 
