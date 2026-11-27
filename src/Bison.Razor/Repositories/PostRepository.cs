@@ -13,6 +13,18 @@ public class PostRepository : IPostRepository {
         _context = context;
     }
 
+    private static ObservationDTO ToObservationDTO(Observation observation) {
+        return new ObservationDTO(
+            observation.PostId,
+            observation.Author.Name,
+            observation.Text,
+            observation.TimeStamp.ToString(),
+            observation.PictureUrl,
+            observation.License,
+            observation.IsPinned
+        );
+    }
+
     public ObservationDTO? GetObservation(int observationId) {
         var observation = _context.Observations
             .AsNoTracking()                                                         // Don't keep track for later updates.
@@ -23,14 +35,7 @@ public class PostRepository : IPostRepository {
             return null;
         }
 
-        return new ObservationDTO(
-            observation.PostId,
-            observation.Author.Name,
-            observation.Text,
-            observation.TimeStamp.ToString(),
-            observation.PictureUrl,
-            observation.License
-        );
+        return ToObservationDTO(observation);
     }
 
     public List<ObservationDTO> GetObservations(int page) {
@@ -48,7 +53,8 @@ public class PostRepository : IPostRepository {
                 observation.Text,
                 observation.TimeStamp.ToString(),
                 observation.PictureUrl,
-                observation.License
+                observation.License,
+                observation.IsPinned
             ))
             .ToList();
     }
@@ -69,7 +75,8 @@ public class PostRepository : IPostRepository {
                 observation.Text,
                 observation.TimeStamp.ToString(),
                 observation.PictureUrl,
-                observation.License
+                observation.License,
+                observation.IsPinned
             ))
             .ToList();
     }
