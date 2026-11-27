@@ -7,6 +7,7 @@ public class Author
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public List<Post> Posts { get; set; } = new();
+    public List<Favorite> Favorites { get; set; } = new();
 
     public Author() {}
 
@@ -23,5 +24,14 @@ public class Author
     {
         Posts.Add(post);
     }
+
+
+    // this is method where the favorite is added to the list of favorites for the author
+    internal void AddFavorite(Favorite favorite)
+    {
+        Favorites.Add(favorite);
+    }
+
+
 
 }

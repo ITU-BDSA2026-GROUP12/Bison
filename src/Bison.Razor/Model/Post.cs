@@ -14,6 +14,8 @@ public abstract class Post
 
     public Author Author { get; set; } = null!;
 
+    public bool IsFavorite { get; set; } = false;
+
     protected Post() {}
     
     protected Post(Author author, String text, DateTime timestamp)
