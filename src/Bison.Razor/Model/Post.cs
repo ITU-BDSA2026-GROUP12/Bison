@@ -14,7 +14,7 @@ public abstract class Post
 
     public Author Author { get; set; } = null!;
 
-    public bool IsFavorite { get; set; } = false;
+    public bool IsPinned { get; set; } = false;
 
     protected Post() {}
     

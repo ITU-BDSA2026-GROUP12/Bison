@@ -46,7 +46,6 @@ public class ObservationService : IObservationService {
 
     public List<ObservationDTO> GetObservationsFromAuthor(string author, int page) {
         return _repository.GetObservationsFromAuthor(author, page);
-
     }
 
     // Collects all information needed for the observation page.
