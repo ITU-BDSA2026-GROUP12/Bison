@@ -28,6 +28,17 @@
                         </a>
                         <small>&mdash; @ob.Timestamp</small>
                     </p>
+                    <form method="post" asp-page-handler="TogglePin">
+            <input type="hidden"
+                   name="observationId"
+                   value="@ob.ObservationId" />
+
+            <button type="submit">
+                @(ob.IsPinned ? "📌 Unpin" : "📌 Pin")
+            </button>
+                    </form>
+
+
                     @if (!string.IsNullOrWhiteSpace(ob.PictureUrl))
                     {
                         <img src="@ob.PictureUrl" alt="Animal observed by you" class="observation-picture" loading="lazy" />
@@ -80,6 +91,8 @@
     {
         <em>You have made no comments so far.</em>
     }
+
+
 
 </div>
 

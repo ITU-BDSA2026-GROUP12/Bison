@@ -30,7 +30,7 @@ public class PostRepository : IPostRepository {
             observation.TimeStamp.ToString(),
             observation.PictureUrl,
             observation.License,
-            observation.IsFavorite
+            observation.IsPinned
         );
     }
 
@@ -49,7 +49,8 @@ public class PostRepository : IPostRepository {
                 observation.Text,
                 observation.TimeStamp.ToString(),
                 observation.PictureUrl,
-                observation.License
+                observation.License,
+                observation.IsPinned
 
             ))
             .ToList();
@@ -71,7 +72,8 @@ public class PostRepository : IPostRepository {
                 observation.Text,
                 observation.TimeStamp.ToString(),
                 observation.PictureUrl,
-                observation.License
+                observation.License,
+                observation.IsPinned
             ))
             .ToList();
     }
@@ -275,5 +277,9 @@ public class PostRepository : IPostRepository {
             proposal.TimeStamp.ToString()
             ))
             .ToList();
+    }
+
+    public void TogglePinnedObservation(string username, int observationId) {
+        var observation = _context.Observations.Include(o => o.Author).FirstOrDefault(o => o.PostId == observationId && o.Author.Name == username);
     }
 }

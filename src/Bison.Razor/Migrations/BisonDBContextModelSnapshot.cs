@@ -113,6 +113,9 @@ namespace Bison.Razor.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsPinned")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("PostType")
                         .IsRequired()
                         .HasMaxLength(13)
@@ -306,6 +309,9 @@ namespace Bison.Razor.Migrations
             modelBuilder.Entity("Bison.Razor.Model.Observation", b =>
                 {
                     b.HasBaseType("Bison.Razor.Model.Post");
+
+                    b.Property<string>("License")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PictureUrl")
                         .HasColumnType("TEXT");

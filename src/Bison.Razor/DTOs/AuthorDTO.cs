@@ -5,6 +5,5 @@ namespace Bison.Razor.DTOs;
 public record AuthorDTO(
     int AuthorId,
     string Name,
-    string Email,
-    HashSet<Favorite> Favorites
+    string Email
 );

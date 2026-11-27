@@ -20,4 +20,5 @@ public interface IPostRepository {
     AuthorDTO? GetAuthor(string authorName);
     List<CommentDTO>? GetCommentsByAuthor(string authorName);
     List<ProposalDTO>? GetProposalsByAuthor(string authorName);
+    public void TogglePinnedObservation(string username, int observationId);
 }

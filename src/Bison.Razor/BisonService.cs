@@ -1,6 +1,7 @@
 using Bison.Razor;
 using Bison.Razor.Repositories;
 using Bison.Razor.DTOs;
+using SQLitePCL;
 
 public interface IObservationService {
     public List<ObservationDTO> GetObservations(int page);
@@ -17,6 +18,9 @@ public interface IObservationService {
     public AuthorDTO? GetAuthor(string authorName);
     public List<CommentDTO>? GetCommentsByAuthor(string authorName);
     public List<ProposalDTO>? GetProposalsByAuthor(string authorName);
+    public void TogglePinnedObservation(string authorName, int observationId);
+
+
 }
 
 public class ObservationService : IObservationService {
@@ -164,5 +168,11 @@ public class ObservationService : IObservationService {
 
         return proposals ?? null;
     }
+
+    public void TogglePinnedObservation(string authorName, int observationId)
+{
+    _repository.TogglePinnedObservation(authorName, observationId);
+}
+    
 
 }

@@ -13,7 +13,6 @@ public class BisonDBContext : IdentityDbContext<ApplicationUser> {
     public DbSet<Proposal> Proposals => Set<Proposal>();
     public DbSet<Author> Authors => Set<Author>();
     public DbSet<Taxon> Taxons => Set<Taxon>();
-    public DbSet<Favorite> Favorites => Set<Favorite>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
@@ -66,19 +65,6 @@ public class BisonDBContext : IdentityDbContext<ApplicationUser> {
             .HasForeignKey(proposal => proposal.TaxonId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        //// Favorite -> Author post
-        //modelBuilder.Entity<Favorite>()
-        //    .HasOne(favorite => favorite.Author)
-        //    .WithMany(author => author.Favorites)
-        //    .HasForeignKey(favorite => favorite.AuthorId)
-        //    .OnDelete(DeleteBehavior.Restrict);
-        //
-        //// Favorite -> Post
-        //modelBuilder.Entity<Favorite>()
-        //    .HasOne(favorite => favorite.Post)
-        //    .WithMany(post => post.Favorites)
-        //    .HasForeignKey(favorite => favorite.PostId)
-        //    .OnDelete(DeleteBehavior.Restrict);
 
         // DwcTaxonId is the value the Entity Framework (EF) should store, as dwc_TaxonID is only a compatibility alias for DbInitializer.
         modelBuilder.Entity<Taxon>().Ignore(taxon => taxon.dwc_TaxonID);

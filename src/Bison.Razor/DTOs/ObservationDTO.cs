@@ -1,3 +1,6 @@
+using System.Security.Cryptography.X509Certificates;
+using NuGet.Protocol.Plugins;
+
 namespace Bison.Razor.DTOs;
 
 public record ObservationDTO(
@@ -6,5 +9,7 @@ public record ObservationDTO(
     string Message,
     string Timestamp,
     string? PictureUrl = null,
-    string? License = null
+    string? License = null,
+    bool IsPinned = false
 );
+

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Bison.Razor.DTOs;
 using Bison.Razor.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bison.Razor.Pages;
 
@@ -12,6 +13,7 @@ public class AboutMe : PageModel {
     public List<CommentDTO>? Comments { get; set; }
     public List<ProposalDTO>? Proposals { get; set; }
     public List<Taxon> Taxons { get; set; } = new();
+
 
     public AboutMe(IObservationService service) {
         _service = service;
@@ -26,4 +28,16 @@ public class AboutMe : PageModel {
         
         return Page();
     }
+
+    public IActionResult OnPostTogglePin(int observationId)
+{
+    _service.TogglePinnedObservation(
+        User.Identity!.Name!,
+        observationId);
+
+    return RedirectToPage();
+}
+
+
+    
 }
