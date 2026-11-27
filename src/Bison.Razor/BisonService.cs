@@ -5,6 +5,7 @@ using Bison.Razor.DTOs;
 public interface IObservationService {
     public List<ObservationDTO> GetObservations(int page);
     public List<ObservationDTO> GetObservationsFromAuthor(string author, int page);
+ 
     public ObservationDetailsDTO? GetObservationDetails(int observationId);
 
     public void CreateObervation(string author, string message, string License);
