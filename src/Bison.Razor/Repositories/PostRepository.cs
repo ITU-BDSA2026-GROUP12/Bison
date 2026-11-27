@@ -47,15 +47,8 @@ public class PostRepository : IPostRepository {
             .OrderBy(observation => observation.PostId)
             .Skip((page - 1) * 32)
             .Take(32)
-            .Select(observation => new ObservationDTO(                    // Fetch only the observations actually needed (32 max).
-                observation.PostId,
-                observation.Author.Name,
-                observation.Text,
-                observation.TimeStamp.ToString(),
-                observation.PictureUrl,
-                observation.License,
-                observation.IsPinned
-            ))
+            .AsEnumerable()
+            .Select(ToObservationDTO)
             .ToList();
     }
 
@@ -69,15 +62,8 @@ public class PostRepository : IPostRepository {
             .OrderBy(observation => observation.PostId)
             .Skip((page - 1) * 32)
             .Take(32)
-            .Select(observation => new ObservationDTO(
-                observation.PostId,
-                observation.Author.Name,
-                observation.Text,
-                observation.TimeStamp.ToString(),
-                observation.PictureUrl,
-                observation.License,
-                observation.IsPinned
-            ))
+            .AsEnumerable()
+            .Select(ToObservationDTO)
             .ToList();
     }
 
