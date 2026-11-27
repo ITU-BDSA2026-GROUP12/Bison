@@ -29,7 +29,8 @@ public class PostRepository : IPostRepository {
             observation.Text,
             observation.TimeStamp.ToString(),
             observation.PictureUrl,
-            observation.License
+            observation.License,
+            observation.IsFavorite
         );
     }
 
@@ -49,6 +50,7 @@ public class PostRepository : IPostRepository {
                 observation.TimeStamp.ToString(),
                 observation.PictureUrl,
                 observation.License
+
             ))
             .ToList();
     }
