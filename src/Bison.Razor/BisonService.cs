@@ -5,17 +5,17 @@ using Bison.Razor.DTOs;
 public interface IObservationService {
     public List<ObservationDTO> GetObservations(int page);
     public List<ObservationDTO> GetObservationsFromAuthor(string author, int page);
+    public List<ObservationDTO> GetTimelineObservations(int page, int? taxonId = null, string? author = null);
     public ObservationDetailsDTO? GetObservationDetails(int observationId);
-
+    public List<CommentDTO>? GetCommentsByAuthor(string authorName);
+    public List<ProposalDTO>? GetProposalsByAuthor(string authorName);
+    public List<Bison.Razor.Model.Taxon> GetTaxons();
+    public AuthorDTO? GetAuthor(string authorName);
+    int GetTimelineObservationCount(int? taxonId = null, string? author = null);
     public void CreateObervation(string author, string message, string License);
     public void PostComment(string author, int observationId, string message);
     public void PostProposal(string author, int observationId, int taxonId, string message);
-    public List<Bison.Razor.Model.Taxon> GetTaxons();
-    public List<ObservationDTO> GetTimelineObservations(int page, int? taxonId = null, string? author = null);
-    int GetTimelineObservationCount(int? taxonId = null, string? author = null);
-    public AuthorDTO? GetAuthor(string authorName);
-    public List<CommentDTO>? GetCommentsByAuthor(string authorName);
-    public List<ProposalDTO>? GetProposalsByAuthor(string authorName);
+    public void TogglePinnedObservation(string author, int observationId);  
 }
 
 public class ObservationService : IObservationService {
@@ -46,7 +46,10 @@ public class ObservationService : IObservationService {
 
     public List<ObservationDTO> GetObservationsFromAuthor(string author, int page) {
         return _repository.GetObservationsFromAuthor(author, page);
+    }
 
+    public void TogglePinnedObservation(string author, int observationId){
+    _repository.TogglePinnedObservation(author, observationId);
     }
 
     // Collects all information needed for the observation page.
@@ -110,7 +113,8 @@ public class ObservationService : IObservationService {
 
         // Paginate AFTER filtering.
         return filtered
-            .OrderBy(o => o.PostId)
+            .OrderByDescending(o => o.IsPinned)
+            .ThenByDescending(o => o.PostId)
             .Skip((page - 1) * 32)
             .Take(32)
             .Select(o => new ObservationDTO(
@@ -119,7 +123,8 @@ public class ObservationService : IObservationService {
                 o.Text,
                 o.TimeStamp.ToString(),
                 o.PictureUrl,
-                o.License
+                o.License,
+                o.IsPinned
             ))
             .ToList();
     }

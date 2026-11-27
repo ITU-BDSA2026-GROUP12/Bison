@@ -44,7 +44,8 @@ public class PostRepository : IPostRepository {
         return _context.Observations
             .AsNoTracking()
             .Include(observation => observation.Author)
-            .OrderBy(observation => observation.PostId)
+            .OrderByDescending(observation => observation.IsPinned)
+            .ThenByDescending(observation => observation.PostId)
             .Skip((page - 1) * 32)
             .Take(32)
             .AsEnumerable()
@@ -59,7 +60,8 @@ public class PostRepository : IPostRepository {
             .AsNoTracking()
             .Include(observation => observation.Author)
             .Where(observation => observation.Author.Name == author)
-            .OrderBy(observation => observation.PostId)
+            .OrderByDescending(observation => observation.IsPinned)
+            .ThenByDescending(observation => observation.PostId)
             .Skip((page - 1) * 32)
             .Take(32)
             .AsEnumerable()
@@ -184,6 +186,26 @@ public class PostRepository : IPostRepository {
         _context.SaveChanges();
     }
 
+    public void TogglePinnedObservation(string author, int observationId) {
+        var observation = _context.Observations
+            .Include(o => o.Author)
+            .FirstOrDefault(o => o.PostId == observationId);
+
+        if (observation == null)
+        {
+            return;
+        }
+
+        if (observation.Author.Name != author)
+        {
+            return;
+        }
+
+        observation.IsPinned = !observation.IsPinned;
+
+        _context.SaveChanges();
+    }
+
     public List<Model.Taxon> GetTaxons() {
         return _context.Taxons
             .AsNoTracking()
@@ -206,7 +228,10 @@ public class PostRepository : IPostRepository {
             query = query.Where(observation => observation.Author.Name == author);
         }
 
-        return query.OrderBy(observation => observation.PostId).ToList();
+        return query
+            .OrderByDescending(observation => observation.IsPinned)
+            .ThenByDescending(observation => observation.PostId)
+            .ToList();
     }
 
     public int CountObservations(string? author = null) {

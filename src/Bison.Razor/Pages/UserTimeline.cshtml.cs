@@ -34,4 +34,19 @@ public class UserTimelineModel : PageModel {
 
     [BindProperty]
     public string? License { get; set; }
+
+    public IActionResult OnPostTogglePin(int id)
+{
+    if (User.Identity?.Name == null)
+    {
+        return RedirectToPage();
+    }
+
+    _service.TogglePinnedObservation(
+        User.Identity.Name,
+        id
+    );
+
+    return RedirectToPage();
+}
 }

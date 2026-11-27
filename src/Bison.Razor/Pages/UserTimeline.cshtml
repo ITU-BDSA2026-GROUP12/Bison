@@ -44,15 +44,35 @@
                             <strong>
                                 <a href="/@ob.Author">@ob.Author</a>
                             </strong>
+
                             <a href="/ob/@ob.ObservationId">
                                 @ob.Message
                             </a>
+
                             <small>&mdash; @ob.Timestamp</small>
+
+                            @if (ob.IsPinned)
+                            {
+                                <span>📌</span>
+                            }
+
+                            @if (User.Identity?.Name == ob.Author)
+                            {
+                                <form method="post" class="pin-form">
+                                    <input type="hidden"
+                                        name="id"
+                                        value="@ob.ObservationId" />
+
+                                    <button asp-page-handler="TogglePin"
+                                        type="submit"
+                                        class="pin-button"
+                                        style="float:right;border:none;background:none;padding:0;"
+                                        title="@(ob.IsPinned ? "Unpin observation" : "Pin observation")">
+                                        📌
+                                    </button>
+                                </form>
+                            }
                         </p>
-                        @if (!string.IsNullOrWhiteSpace(ob.PictureUrl))
-                        {
-                            <img src="@ob.PictureUrl" alt="Animal observed by @ob.Author" class="observation-picture" loading="lazy" />
-                        }
                     </li>
                 }
             </ul>
