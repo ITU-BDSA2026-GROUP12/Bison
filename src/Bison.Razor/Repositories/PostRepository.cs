@@ -44,8 +44,9 @@ public class PostRepository : IPostRepository {
         return _context.Observations
             .AsNoTracking()
             .Include(observation => observation.Author)
-            .OrderByDescending(observation => observation.IsPinned)
-            .ThenByDescending(observation => observation.PostId)
+            //.OrderByDescending(observation => observation.IsPinned)
+            //.ThenByDescending(observation => observation.PostId)
+            .OrderBy(observation => observation.PostId)
             .Skip((page - 1) * 32)
             .Take(32)
             .AsEnumerable()
