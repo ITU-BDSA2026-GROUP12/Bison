@@ -1,6 +1,8 @@
-using Bison.Razor;
-using Bison.Razor.Repositories;
-using Bison.Razor.DTOs;
+using Bison.Core.Model;
+using Bison.Infrastructure.DTOs;
+using Bison.Infrastructure.Repositories;
+
+namespace Bison.Infrastructure.Services;
 
 public interface IObservationService {
     public List<ObservationDTO> GetObservations(int page);
@@ -9,7 +11,7 @@ public interface IObservationService {
     public ObservationDetailsDTO? GetObservationDetails(int observationId);
     public List<CommentDTO>? GetCommentsByAuthor(string authorName);
     public List<ProposalDTO>? GetProposalsByAuthor(string authorName);
-    public List<Bison.Razor.Model.Taxon> GetTaxons();
+    public List<Taxon> GetTaxons();
     public AuthorDTO? GetAuthor(string authorName);
     int GetTimelineObservationCount(int? taxonId = null, string? author = null);
     public void CreateObervation(string author, string message, string License);
@@ -85,7 +87,7 @@ public class ObservationService : IObservationService {
         return dateTime.ToString("dd-MM-yyyy HH:mm:ss");
     }
 
-    public List<Bison.Razor.Model.Taxon> GetTaxons() {
+    public List<Bison.Core.Model.Taxon> GetTaxons() {
         return _repository.GetTaxons();
     }
 

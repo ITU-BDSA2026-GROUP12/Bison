@@ -1,6 +1,6 @@
-using Bison.Razor;
-using Bison.Infastructure.Repositories;
-using Bison.Infastructure.Database
+using Bison.Infrastructure.Repositories;
+using Bison.Infrastructure.Database;
+using Bison.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;

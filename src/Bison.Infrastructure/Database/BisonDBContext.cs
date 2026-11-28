@@ -2,7 +2,7 @@ using Bison.Core.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace Bison.Infastructure.Database;
+namespace Bison.Infrastructure.Database;
 
 public class BisonDBContext : IdentityDbContext<ApplicationUser> {
     public BisonDBContext(DbContextOptions<BisonDBContext> options) : base(options) {}

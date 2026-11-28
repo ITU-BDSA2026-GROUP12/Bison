@@ -1,10 +1,10 @@
 
 using Bison.Core.Model;
 using Microsoft.EntityFrameworkCore;
-using Bison.Infastructure.DTOs;
-using Bison.Infastructure.Database;
+using Bison.Infrastructure.DTOs;
+using Bison.Infrastructure.Database;
 
-namespace Bison.Infastructure.Repositories;
+namespace Bison.Infrastructure.Repositories;
 
 public class PostRepository : IPostRepository {
 

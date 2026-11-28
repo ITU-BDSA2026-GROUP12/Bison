@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Bison.Razor.Model;
-using Bison.Razor.DTOs;
+using Bison.Core.Model;
+using Bison.Infrastructure.DTOs;
+using Bison.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Bison.Razor.Pages;

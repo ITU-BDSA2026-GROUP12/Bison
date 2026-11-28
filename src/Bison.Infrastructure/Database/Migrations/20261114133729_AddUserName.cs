@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Bison.Razor.Migrations
+namespace Bison.Infrastructure.Database.Migrations
 {
     /// <inheritdoc />
     public partial class AddUserName : Migration

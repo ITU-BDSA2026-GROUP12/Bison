@@ -2,8 +2,8 @@ namespace Bison.Infrastructure.Repositories;
 
 using Bison.Core.Model;
 
-using Bison.Infastructure.DTOs;
-using Bison.Infastructure.Database;
+using Bison.Infrastructure.DTOs;
+using Bison.Infrastructure.Database;
 
 public interface IPostRepository {
 

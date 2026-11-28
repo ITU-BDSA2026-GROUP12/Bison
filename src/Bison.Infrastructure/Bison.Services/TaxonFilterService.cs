@@ -1,7 +1,7 @@
-using Bison.Razor.Model;
+using Bison.Core.Model;
 using DafnyAdapters;
 
-namespace Bison.Razor;
+namespace Bison.Infrastructure.Services;
 
 public interface ITaxonFilterService {
     List<Observation> FilterByTaxon(Taxon root, IEnumerable<Observation> observations);

@@ -1,4 +1,4 @@
-namespace Bison.Razor;
+namespace Bison.Infrastructure.Database;
 using Bison.Core.Model;
 
 public static class DbInitializer

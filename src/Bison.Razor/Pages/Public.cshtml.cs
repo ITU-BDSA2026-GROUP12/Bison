@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Bison.Razor.Model;
-using Bison.Razor.DTOs;
-using Bison.Razor.Repositories;
+using Bison.Core.Model;
+using Bison.Infrastructure.DTOs;
+using Bison.Infrastructure.Repositories;
+using Bison.Infrastructure.Services;
 
 namespace Bison.Razor.Pages;
 
 public class PublicModel : PageModel {
     private readonly IObservationService _service;
     public List<ObservationDTO>? Observations { get; set; }
-    public List<Model.Taxon> Taxons { get; set; } = new();
+    public List<Taxon> Taxons { get; set; } = new();
     public int? SelectedTaxonId { get; set; }
     public int CurrentPage { get; set; } = 1;
     public bool HasNextPage { get; set; }

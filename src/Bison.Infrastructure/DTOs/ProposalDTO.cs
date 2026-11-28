@@ -1,4 +1,4 @@
-namespace Bison.Infastructure.DTOs;
+namespace Bison.Infrastructure.DTOs;
 
 public record ProposalDTO(
     string Author,
