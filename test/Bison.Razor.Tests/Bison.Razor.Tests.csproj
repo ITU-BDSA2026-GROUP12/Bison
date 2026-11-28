@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="PlaywrightTests/**/*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Bison.Razor\Bison.Razor.csproj" />
   </ItemGroup>
 

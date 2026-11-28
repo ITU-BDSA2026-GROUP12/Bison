@@ -1,4 +1,4 @@
-/*  We will return to you later, MARK MY WORDS!
+ // We will return to you later, MARK MY WORDS!
 using System.Text.RegularExpressions;
 using Microsoft.Playwright;
 using Microsoft.Playwright.Xunit;
@@ -9,13 +9,17 @@ using System;
 
 
 namespace PlaywrightTests;
+ 
 
 //Verify our website has expected title
 public class NavigationTest : PageTest {
+
+    string testurl = "http://localhost:5273";
+    string url = "https://bdsagroup12bison-ade4hjeqa2f8agam.denmarkeast-01.azurewebsites.net/";
     [Fact]
     public async Task HasTitle() {
         //go to our website
-        await Page.GotoAsync("https://bdsagroup12bison-ade4hjeqa2f8agam.denmarkeast-01.azurewebsites.net/");
+        await Page.GotoAsync(testurl);
 
         //Title should include Bison
         await Expect(Page).ToHaveTitleAsync(new Regex("Bison"));
@@ -23,7 +27,7 @@ public class NavigationTest : PageTest {
 
     [Fact]
     public async Task GetStartedLink() {
-        await Page.GotoAsync("https://bdsagroup12bison-ade4hjeqa2f8agam.denmarkeast-01.azurewebsites.net/");
+        await Page.GotoAsync(testurl);
 
         //click the get Login link.
         await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
@@ -35,10 +39,12 @@ public class NavigationTest : PageTest {
 
 //check the website for accessibility violations using Axe.
 public class AccessibilityTest : PageTest {
-    [Fact(Skip = "Known accessibility issues on website. To be fixed.. maybe")]
+    string testurl = "http://localhost:5273";
+    string url = "https://bdsagroup12bison-ade4hjeqa2f8agam.denmarkeast-01.azurewebsites.net/";
+    [Fact (Skip ="Skipped because of no landmark, since we use div inside our cshtml. We should use nav intead. Tbh its no big deal")]
 
     public async Task WebsiteHasNoAccessibilityViolations() {
-        await Page.GotoAsync("https://bdsagroup12bison-ade4hjeqa2f8agam.denmarkeast-01.azurewebsites.net/");
+        await Page.GotoAsync(url);
 
         //run Axe accessibility analysis
         var result = await Page.RunAxe();
@@ -50,29 +56,26 @@ public class AccessibilityTest : PageTest {
 
 //verify a user can register and confirm email
 public class RegistrationTest : PageTest {
+    string testurl = "http://localhost:5273";
+    string url = "https://bdsagroup12bison-ade4hjeqa2f8agam.denmarkeast-01.azurewebsites.net/";
 
-    [Fact(Skip = "Registration modifies database")]
+
+    [Fact]
     public async Task CanRegisterUser() {
 
         try {
             //go to our website
-            await Page.GotoAsync("https://bdsagroup12bison-ade4hjeqa2f8agam.denmarkeast-01.azurewebsites.net/");
+            await Page.GotoAsync($"{testurl}/Identity/Account/Register");
 
-            //click Register button and Email
-            await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).ClickAsync();
-
-            string email = $"test-{Guid.NewGuid():N}@example.com";
+            string email = $"test-{Guid.NewGuid():N}@itu.dk";
 
             //Fill in Email
             await Page.GetByRole(AriaRole.Textbox, new() { Name = "Email" }).FillAsync(email);
 
             //fill in password
             await Page.GetByRole(AriaRole.Textbox, new() { Name = "Password", Exact = true }).ClickAsync();
-            await Page.GetByRole(AriaRole.Textbox, new() { Name = "Password", Exact = true }).PressAsync("CapsLock");
             await Page.GetByRole(AriaRole.Textbox, new() { Name = "Password", Exact = true }).FillAsync("Jojo???1");
             await Page.GetByRole(AriaRole.Textbox, new() { Name = "Confirm Password" }).ClickAsync();
-            await Page.GetByRole(AriaRole.Textbox, new() { Name = "Confirm Password" }).PressAsync("CapsLock");
             await Page.GetByRole(AriaRole.Textbox, new() { Name = "Confirm Password" }).FillAsync("Jojo???1");
 
             //Register and confirm
@@ -89,16 +92,19 @@ public class RegistrationTest : PageTest {
             //Until I know what to do, as long as the test has succeeded, I made it skippable.
         }
     }
+
 }
 
 //verify an existing user can log in
 public class LoginTest : PageTest {
+    string testurl = "http://localhost:5273";
+    string url = "https://bdsagroup12bison-ade4hjeqa2f8agam.denmarkeast-01.azurewebsites.net/";
 
-    [Fact (Skip = "Login modifies database")]
+    [Fact (Skip = "later")]
     public async Task UserCanLogIn() {
 
         //go to our website
-        await Page.GotoAsync("https://bdsagroup12bison-ade4hjeqa2f8agam.denmarkeast-01.azurewebsites.net/");
+        await Page.GotoAsync($"{testurl}/Identity/Account/Login");
 
         string email = "TestUser@itu.dk";
 
@@ -123,4 +129,3 @@ public class LoginTest : PageTest {
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Login", Exact = true })).ToBeHiddenAsync();
     }
 }
-*/
