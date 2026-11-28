@@ -1,8 +1,9 @@
-namespace Bison.Razor.Repositories;
+namespace Bison.Infastructure.Repositories;
 
-using Bison.Razor.Model;
+using Bison.Core.Model;
 
-using Bison.Razor.DTOs;
+using Bison.Infastructure.DTOs;
+using Bison.Infastructure.Database;
 
 public interface IPostRepository {
 
@@ -12,8 +13,8 @@ public interface IPostRepository {
     List<CommentDTO> GetComments(int observationId);
     List<ProposalDTO> GetProposals(int observationId);
 
-    List<Model.Taxon> GetTaxons();
-    List<Model.Observation> GetObservationsForFiltering(string? author = null);
+    List<Taxon> GetTaxons();
+    List<Observation> GetObservationsForFiltering(string? author = null);
     int CountObservations(string? author = null);
     AuthorDTO? GetAuthor(string authorName);
     List<CommentDTO>? GetCommentsByAuthor(string authorName);

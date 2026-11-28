@@ -1,4 +1,4 @@
-namespace Bison.Razor.DTOs;
+namespace Bison.Infastructure.DTOs;
 
 public record AuthorDTO(
     int AuthorId,

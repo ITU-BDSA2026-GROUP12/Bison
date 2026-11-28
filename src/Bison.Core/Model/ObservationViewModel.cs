@@ -1,5 +1,5 @@
-namespace Bison.Razor.Model
-{
+namespace Bison.Core.Model;
+
     public record ObservationViewModel(
         int ObservationId,
         string Author,
@@ -7,4 +7,3 @@ namespace Bison.Razor.Model
         string Timestamp,
         string? PictureUrl = null
     );
-}

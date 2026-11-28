@@ -1,4 +1,4 @@
-namespace Bison.Razor.DTOs;
+namespace Bison.Infastructure.DTOs;
 
 //contains all information needed to display observation page
 public record ObservationDetailsDTO(

@@ -1,9 +1,8 @@
-namespace Bison.Razor.Model
-{
+namespace Bison.Core.Model;
+
     public record CommentRequest(
         int ObservationId,
         string Author,
         string Message,
         long Timestamp
         );
-}

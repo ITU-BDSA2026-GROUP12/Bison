@@ -1,9 +1,10 @@
-using Bison.Razor.DTOs;
-using Bison.Razor.Model;
 
+using Bison.Core.Model;
 using Microsoft.EntityFrameworkCore;
+using Bison.Infastructure.DTOs;
+using Bison.Infastructure.Database;
 
-namespace Bison.Razor.Repositories;
+namespace Bison.Infastructure.Repositories;
 
 public class PostRepository : IPostRepository {
 
@@ -103,7 +104,7 @@ public class PostRepository : IPostRepository {
     }
 
     public void CreateObservation(string author, string message, DateTime timestamp, string License) {
-        Model.Author? authorEntity = null;
+        Author? authorEntity = null;
 
 
         // this loop basically just look for a existing author
@@ -115,7 +116,7 @@ public class PostRepository : IPostRepository {
         }
 
         if (authorEntity == null) {
-            authorEntity = new Model.Author { Name = author };
+            authorEntity = new Author { Name = author };
 
 
         }
@@ -128,7 +129,7 @@ public class PostRepository : IPostRepository {
     }
 
     public void PostComment(string author, int observationId, string message, DateTime timestamp) {
-        Model.Author? authorEntity = null;
+        Author? authorEntity = null;
 
         // this loop basically just look for a existing author
         foreach (var aut in _context.Authors) {
@@ -139,7 +140,7 @@ public class PostRepository : IPostRepository {
         }
 
         if (authorEntity == null) {
-            authorEntity = new Model.Author { Name = author };
+            authorEntity = new Author { Name = author };
         }
 
         //check if observation exists
