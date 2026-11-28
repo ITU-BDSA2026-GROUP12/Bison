@@ -1,4 +1,4 @@
-namespace Bison.Infastructure.Repositories;
+namespace Bison.Infrastructure.Repositories;
 
 using Bison.Core.Model;
 

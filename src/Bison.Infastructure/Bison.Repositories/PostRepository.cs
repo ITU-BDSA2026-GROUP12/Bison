@@ -156,7 +156,7 @@ public class PostRepository : IPostRepository {
     }
 
     public void PostProposal(string author, int observationId, int taxonId, string message, DateTime timestamp) {
-        Model.Author? authorEntity = null;
+        Author? authorEntity = null;
 
         // this loop basically just look for a existing author
         foreach (var aut in _context.Authors) {
@@ -167,7 +167,7 @@ public class PostRepository : IPostRepository {
         }
 
         if (authorEntity == null) {
-            authorEntity = new Model.Author { Name = author };
+            authorEntity = new Author { Name = author };
         }
 
         //check if observation exists
@@ -208,7 +208,7 @@ public class PostRepository : IPostRepository {
         _context.SaveChanges();
     }
 
-    public List<Model.Taxon> GetTaxons() {
+    public List<Taxon> GetTaxons() {
         return _context.Taxons
             .AsNoTracking()
             .OrderBy(taxon => taxon.TaxonId)
@@ -216,7 +216,7 @@ public class PostRepository : IPostRepository {
 
     }
 
-    public List<Model.Observation>
+    public List<Observation>
         GetObservationsForFiltering(string? author = null) {
         // Load all taxa so EF Core can connect each taxon with its ancestors.
         _context.Taxons.Load();
