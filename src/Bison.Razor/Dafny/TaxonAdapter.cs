@@ -1,4 +1,4 @@
-using BisonTaxon = Bison.Razor.Model.Taxon;
+using BisonTaxon = Bison.Core.Model.Taxon;
 
 namespace DafnyAdapters;
 

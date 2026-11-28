@@ -1,4 +1,4 @@
-using BisonObservation = Bison.Razor.Model.Observation;
+using BisonObservation = Bison.Core.Model.Observation;
 
 namespace DafnyAdapters;
 //wraps a bison observation so that it can be used by the dafny filter
