@@ -31,4 +31,8 @@
         <HintPath>Dafny/lib/DafnyRuntime.dll</HintPath>
     </Reference>
 </ItemGroup>
+
+<ItemGroup>
+  <ProjectReference Include="..\Bison.Core\Bison.Core.csproj" />
+</ItemGroup>
 </Project>
